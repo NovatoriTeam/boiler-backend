@@ -8,7 +8,6 @@ export class ConfigService {
   get getJwtSecret() {
     const string = this.configService.get('JWT_USER_SECRET');
 
-    console.log(string);
     return string;
   }
 }

@@ -5,7 +5,6 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { map, Observable } from 'rxjs';
-import { instanceToPlain } from 'class-transformer';
 
 @Injectable()
 export class Interceptor implements NestInterceptor {
@@ -18,10 +17,12 @@ export class Interceptor implements NestInterceptor {
 
     return next.handle().pipe(
       map((data) => {
+        console.log(data);
         return {
           status: 200,
-          data: data ? instanceToPlain(data, { groups: [user?.role] }) : data,
-        }
+          data: data[0],
+          count: data[1],
+        };
       }),
     );
   }

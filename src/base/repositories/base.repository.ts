@@ -1,15 +1,17 @@
-import { BaseEntity } from './base.entity';
+import { BaseEntity } from '../entities/base.entity';
 import { DeepPartial, Repository } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { BaseRepositoryContract } from './interfaces/base-repository.contract';
+import { BaseRepositoryContract } from '../contracts/base-repository.contract';
 
 export class BaseRepository<EntityType extends BaseEntity>
   implements BaseRepositoryContract<EntityType>
 {
   constructor(private baseRepository: Repository<EntityType>) {}
 
-  async findAll() {
-    return await this.baseRepository.find();
+  async findAll(applyQueryParametersFilter: any) {
+    const query: any = {};
+    applyQueryParametersFilter.toQuery(query);
+    return await this.baseRepository.findAndCount(query);
   }
 
   async findOne(id: number) {

@@ -10,13 +10,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dtos/create-user.dto';
-import { UpdateUserDto } from './dtos/update-user.dto';
 import { Public } from '../auth/guards/auth/public.key';
 import { Response } from 'express';
 import { Roles } from '../auth/guards/auth/roles.key';
 import { AuthGuard } from '../auth/guards/auth/auth.guard';
+import { ApiTags } from '@nestjs/swagger';
+import { CreateUserDto, UpdateUserDto } from 'boiler-shareds';
 
+@ApiTags('users')
 @UseGuards(AuthGuard)
 @Controller('users')
 export class UsersController {

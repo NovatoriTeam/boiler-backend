@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { UsersRepository } from './repositories/users.repository';
-import { CreateUserDto } from './dtos/create-user.dto';
-import { UpdateUserDto } from './dtos/update-user.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { CreateUserDto, UpdateUserDto } from 'boiler-shareds';
 
 @Injectable()
 export class UsersService {
