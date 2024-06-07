@@ -88,11 +88,6 @@ module.exports = {
             importNames: ['Logger'],
             message: 'Please use @devsbb/logger instead.',
           },
-
-          {
-            name: '@nestjs/config',
-            message: 'Please use @app/common/config instead.',
-          },
         ],
         // Allow every other nestjs package
         patterns: ['@nestjs/(?!config)'],

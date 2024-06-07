@@ -5,9 +5,8 @@ import { ConfigService as NestConfigService } from '@nestjs/config';
 export class ConfigService {
   constructor(private configService: NestConfigService) {}
 
-  get getJwtSecret() {
-    const string = this.configService.get('JWT_USER_SECRET');
-
-    return string;
+  get getJwtSecret(): string {
+    const jwtUserSecret: string = this.configService.get('JWT_USER_SECRET');
+    return jwtUserSecret;
   }
 }

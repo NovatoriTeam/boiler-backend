@@ -1,5 +1,5 @@
-import { BaseEntity } from '../entities/base.entity';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { BaseEntity } from '../entities/base.entity';
 
 export interface BaseRepositoryContract<EntityType extends BaseEntity> {
   findAll: (pagination: any) => Promise<[EntityType[], number]>;

@@ -1,7 +1,7 @@
 import { IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
 import { FilterType } from '../types/filter.type';
-import { SortType } from '../types/sort.type';
 import { SearchType } from '../types/search.type';
+import { SortType } from '../types/sort.type';
 
 export class QueryParametersDto {
   @IsOptional()

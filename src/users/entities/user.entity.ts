@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   Entity,
@@ -7,7 +8,6 @@ import {
 } from 'typeorm';
 import { Product } from '../../products/entities/product.entity';
 import { Role } from '../../roles/entities/roles.entity';
-import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('users')
 export class User {

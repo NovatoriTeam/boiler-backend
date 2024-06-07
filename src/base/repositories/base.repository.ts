@@ -1,37 +1,48 @@
-import { BaseEntity } from '../entities/base.entity';
-import { DeepPartial, Repository } from 'typeorm';
+import {
+  DeepPartial,
+  FindManyOptions,
+  Repository,
+  SelectQueryBuilder,
+  UpdateResult,
+} from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { BaseRepositoryContract } from '../contracts/base-repository.contract';
+import { BaseEntity } from '../entities/base.entity';
 
 export class BaseRepository<EntityType extends BaseEntity>
   implements BaseRepositoryContract<EntityType>
 {
   constructor(private baseRepository: Repository<EntityType>) {}
 
-  async findAll(applyQueryParametersFilter: any) {
-    const query: any = {};
+  async findAll(
+    applyQueryParametersFilter: any,
+  ): Promise<[EntityType[], number]> {
+    const query: FindManyOptions<EntityType> = {};
     applyQueryParametersFilter.toQuery(query);
     return await this.baseRepository.findAndCount(query);
   }
 
-  async findOne(id: number) {
-    const query = this.baseRepository
+  async findOne(id: number): Promise<EntityType> {
+    const query: SelectQueryBuilder<EntityType> = this.baseRepository
       .createQueryBuilder()
       .where('id = :id', { id });
 
     return await query.getOneOrFail();
   }
 
-  async create(data: DeepPartial<EntityType>) {
-    const item = this.baseRepository.create(data);
+  async create(data: DeepPartial<EntityType>): Promise<EntityType> {
+    const item: EntityType = this.baseRepository.create(data);
     return await this.baseRepository.save(item);
   }
 
-  async update(id: number, data: QueryDeepPartialEntity<EntityType>) {
+  async update(
+    id: number,
+    data: QueryDeepPartialEntity<EntityType>,
+  ): Promise<UpdateResult> {
     return await this.baseRepository.update(id, data);
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<UpdateResult> {
     return await this.baseRepository.softDelete(id);
   }
 }

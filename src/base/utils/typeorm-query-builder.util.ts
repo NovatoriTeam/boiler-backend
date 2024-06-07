@@ -1,20 +1,20 @@
-import { QueryBuilderType } from '../enums/query-builder.type';
 import {
   Brackets,
   DeleteQueryBuilder,
   SelectQueryBuilder,
   UpdateQueryBuilder,
 } from 'typeorm';
+import { QueryBuilderType } from '../enums/query-builder.type';
 import { FilterType } from '../types/filter.type';
-import { SortType } from '../types/sort.type';
 import { SearchType } from '../types/search.type';
+import { SortType } from '../types/sort.type';
 
 export class TypeormQueryBuilderUtil {
   public static applyWhereConditions(
     query: QueryBuilderType,
     filter: FilterType,
     alias: string,
-  ) {
+  ): void {
     for (const key in filter) {
       if (Array.isArray(filter[key])) {
         (query as SelectQueryBuilder<any>).andWhere(
@@ -34,11 +34,12 @@ export class TypeormQueryBuilderUtil {
     query: QueryBuilderType,
     sort: SortType,
     alias: string,
-  ) {
+  ): void {
     for (const key in sort) {
       (query as SelectQueryBuilder<any>).addOrderBy(
         this.conditionalyGenerateAlias(alias, key),
-        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         sort[key].toUpperCase(),
       );
     }
@@ -48,7 +49,7 @@ export class TypeormQueryBuilderUtil {
     query: QueryBuilderType,
     filteredRelations: string[],
     alias?: string,
-  ) {
+  ): void {
     for (const item of filteredRelations) {
       (query as SelectQueryBuilder<any>).leftJoinAndSelect(
         this.conditionalyGenerateAlias(alias, item),
@@ -61,7 +62,7 @@ export class TypeormQueryBuilderUtil {
     query: QueryBuilderType,
     search: SearchType,
     alias?: string,
-  ) {
+  ): void {
     query.andWhere(
       new Brackets((query) => {
         for (const key in search) {
@@ -79,13 +80,13 @@ export class TypeormQueryBuilderUtil {
   public static applyPagination(
     query: QueryBuilderType,
     pagination: { limit: number; offset: number },
-  ) {
+  ): void {
     (query as SelectQueryBuilder<any>)
       .limit(pagination.limit)
       .offset(pagination.offset);
   }
 
-  public static isQueryBuilder(query: QueryBuilderType) {
+  public static isQueryBuilder(query: QueryBuilderType): boolean {
     return (
       query instanceof SelectQueryBuilder ||
       query instanceof UpdateQueryBuilder ||
@@ -93,7 +94,7 @@ export class TypeormQueryBuilderUtil {
     );
   }
 
-  private static conditionalyGenerateAlias(alias: string, key: string) {
+  private static conditionalyGenerateAlias(alias: string, key: string): string {
     return alias ? `${alias}.${key}` : key;
   }
 }
