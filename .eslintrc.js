@@ -19,7 +19,6 @@ module.exports = {
   rules: {
     'prettier/prettier': 'error',
     '@typescript-eslint/interface-name-prefix': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     'no-return-await': 'off',
@@ -33,6 +32,14 @@ module.exports = {
     'jest/no-identical-title': 'error',
     'jest/prefer-to-have-length': 'warn',
     'jest/valid-expect': 'error',
+    "@typescript-eslint/explicit-function-return-type": ["error"],
+    "@typescript-eslint/typedef": [
+      "error",
+      {
+        "variableDeclaration": true,
+        "variableDeclarationIgnoreFunction": false
+      }
+    ],
     // allow usage of Class.name as tests name
     'jest/valid-title': 'off',
     // expect usage of expect methods per test case
