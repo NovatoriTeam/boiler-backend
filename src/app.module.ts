@@ -8,9 +8,6 @@ import { ConfigModule } from './config/config.module';
 import { ProductsModule } from './products/products.module';
 import { RolesModule } from './roles/roles.module';
 import { TasksModule } from './tasks/tasks.module';
-import { TestModule } from './test/test.module';
-import { DiscoveryService } from '@nestjs/core';
-import { MetadataScanner } from '@nestjs/core/metadata-scanner';
 
 @Module({
   imports: [
@@ -30,7 +27,6 @@ import { MetadataScanner } from '@nestjs/core/metadata-scanner';
     ProductsModule,
     RolesModule,
     TasksModule,
-    TestModule,
   ],
   controllers: [AppController],
   providers: [AppService],

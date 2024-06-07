@@ -1,14 +1,14 @@
 import { QueryBuilderType } from '../enums/query-builder.type';
-import { In, Like } from 'typeorm';
-import { TypeormQueryBuilderHelper } from './typeorm-query-builder.helper';
+import { TypeormQueryBuilderUtil } from '../utils/typeorm-query-builder.util';
 import { QueryOptionsInterface } from '../interfaces/query-options.interface';
 import { QueryParametersDto } from '../dtos/query-parameters.dto';
 import { SortType } from '../types/sort.type';
 import { FilterType } from '../types/filter.type';
 import { FilterableTypeEnum } from '../enums/filterable-type.enum';
 import { SearchType } from '../types/search.type';
+import { TypeormFindUtil } from '../utils/typeorm-find.util';
 
-export class QueryHelper {
+export class QueryProcessor {
   private readonly queryParameters: QueryParametersDto;
   private readonly options: QueryOptionsInterface;
   private readonly alias?: string;
@@ -26,6 +26,7 @@ export class QueryHelper {
   public toQuery(query: QueryBuilderType) {
     const { sort, filter, limit, offset, relation, search } =
       this.queryParameters;
+
     if (sort) this.applySortQuery(query, sort);
     if (filter) this.applyFilterQuery(query, filter);
     if (relation) this.applyRelationQuery(query, relation);
@@ -36,40 +37,25 @@ export class QueryHelper {
 
   private applySortQuery(query: QueryBuilderType, sort: SortType) {
     this.filterSortOptions(sort);
-    if (TypeormQueryBuilderHelper.isQueryBuilder(query)) {
-      TypeormQueryBuilderHelper.addOrderBy(query, sort, this.alias);
+    if (TypeormQueryBuilderUtil.isQueryBuilder(query)) {
+      TypeormQueryBuilderUtil.addOrderBy(query, sort, this.alias);
     } else {
-      Object.assign(query, {
-        order: {
-          ...query.order,
-          ...sort,
-        },
-      });
+      TypeormFindUtil.addOrderBy(query, sort);
     }
   }
 
   private applyFilterQuery(query: QueryBuilderType, filter: FilterType) {
     this.filterFilterOptions(filter);
-    if (TypeormQueryBuilderHelper.isQueryBuilder(query)) {
-      TypeormQueryBuilderHelper.applyWhereConditions(query, filter, this.alias);
+    if (TypeormQueryBuilderUtil.isQueryBuilder(query)) {
+      TypeormQueryBuilderUtil.applyWhereConditions(query, filter, this.alias);
     } else {
-      this.transformToInConditionsIfNecessary(filter);
-      Object.assign(query, {
-        where: {
-          ...query.where,
-          ...filter,
-        },
-      });
+      TypeormFindUtil.applyWhereConditions(query, filter);
     }
   }
 
   private filterSortOptions(sort: SortType) {
-    const objectKeys = Object.keys(sort);
-    const lastKey = objectKeys[objectKeys.length - 1];
     for (const key in sort) {
-      if (!this.options[key]?.sortable && key !== lastKey) {
-        delete sort[key];
-      }
+      if (!this.options[key]?.sortable) delete sort[key];
     }
   }
 
@@ -108,17 +94,8 @@ export class QueryHelper {
   }
 
   private filterSearchOptions(search: SearchType) {
-    console.log(search);
     for (const key in search) {
       if (!this.options[key]?.searchable) delete search[key];
-    }
-  }
-
-  private transformToInConditionsIfNecessary(filter: FilterType) {
-    for (const key in filter) {
-      if (Array.isArray(filter[key])) {
-        filter[key] = In(filter[key] as string[]);
-      }
     }
   }
 
@@ -127,49 +104,33 @@ export class QueryHelper {
     pagination?: { offset: number; limit: number },
   ) {
     if (pagination) {
-      if (TypeormQueryBuilderHelper.isQueryBuilder(query)) {
-        TypeormQueryBuilderHelper.applyPagination(query, pagination);
+      if (TypeormQueryBuilderUtil.isQueryBuilder(query)) {
+        TypeormQueryBuilderUtil.applyPagination(query, pagination);
       } else {
-        Object.assign(query, {
-          limit: pagination.limit,
-          take: pagination.offset,
-        });
+        TypeormFindUtil.applyPagination(query, pagination);
       }
     }
   }
 
   private applyRelationQuery(query: QueryBuilderType, relation: string) {
     const filteredRelations = this.filterRelationOptions(relation);
-    if (TypeormQueryBuilderHelper.isQueryBuilder(query)) {
-      TypeormQueryBuilderHelper.applyJoins(
-        query,
-        filteredRelations,
-        this.alias,
-      );
+    if (TypeormQueryBuilderUtil.isQueryBuilder(query)) {
+      TypeormQueryBuilderUtil.applyJoins(query, filteredRelations, this.alias);
     } else {
-      Object.assign(query, {
-        relations: query.relations
-          ? [...query.relation, ...relation]
-          : [relation],
-      });
+      TypeormFindUtil.applyJoins(query, relation);
     }
   }
 
   private applySearchQuery(query: QueryBuilderType, search: SearchType) {
     this.filterSearchOptions(search);
-    if (TypeormQueryBuilderHelper.isQueryBuilder(query)) {
-      TypeormQueryBuilderHelper.applyLikeSearchWhereCondition(
+    if (TypeormQueryBuilderUtil.isQueryBuilder(query)) {
+      TypeormQueryBuilderUtil.applyLikeSearchWhereCondition(
         query,
         search,
         this.alias,
       );
     } else {
-      for (const key in search) {
-        Object.assign(query, {
-          ...query.where,
-          [key]: Like(`%${search[key]}%`),
-        });
-      }
+      TypeormFindUtil.applyLikeSearchWhereCondition(query, search);
     }
   }
 }

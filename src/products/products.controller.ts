@@ -26,23 +26,23 @@ export class ProductsController extends BaseController<
   }
 
   @UseInterceptors(
-    new FilterInterceptor(
-      {
-        price: {
-          sortable: true,
-          searchable: true,
-        },
-        shop: {
-          sortable: true,
-          searchable: true,
-        },
-        name: {
-          sortable: true,
-          searchable: true,
-        },
-      },
-      'product',
-    ),
+        new FilterInterceptor(
+          {
+            price: {
+              sortable: true,
+              searchable: true,
+            },
+            shop: {
+              sortable: true,
+              searchable: true,
+            },
+            name: {
+              sortable: true,
+              searchable: true,
+            },
+          },
+          'product',
+        ),
   )
   @ApiResponse({ isArray: true, type: Product })
   @Get()

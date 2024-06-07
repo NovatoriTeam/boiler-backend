@@ -9,7 +9,7 @@ import { FilterType } from '../types/filter.type';
 import { SortType } from '../types/sort.type';
 import { SearchType } from '../types/search.type';
 
-export class TypeormQueryBuilderHelper {
+export class TypeormQueryBuilderUtil {
   public static applyWhereConditions(
     query: QueryBuilderType,
     filter: FilterType,
