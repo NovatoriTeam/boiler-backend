@@ -17,10 +17,7 @@ export class FilterInterceptor implements NestInterceptor {
     private alias: string,
   ) {}
 
-  intercept(
-    context: ExecutionContext,
-    next: CallHandler<any>,
-  ): Observable<any> | Promise<Observable<any>> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const request: { query: QueryParametersDto } = context
       .switchToHttp()
       .getRequest();
@@ -42,7 +39,7 @@ export class FilterInterceptor implements NestInterceptor {
     );
   }
 
-  private transformData(data: any): any {
+  private transformData(data: unknown): { status: number } {
     const obj: { status: number } = { status: 200 };
     if (Array.isArray(data)) {
       Object.assign(obj, {

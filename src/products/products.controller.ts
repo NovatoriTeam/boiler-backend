@@ -46,7 +46,9 @@ export class ProductsController extends BaseController<
   )
   @ApiResponse({ isArray: true, type: Product })
   @Get()
-  async findAll(@Req() req: any): Promise<[Product[], number]> {
+  async findAll(
+    @Req() req: { queryHelper: { toQuery: () => void } },
+  ): Promise<[Product[], number]> {
     return await super.findAll(req);
   }
 

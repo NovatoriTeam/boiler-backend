@@ -17,12 +17,12 @@ export class TypeormQueryBuilderUtil {
   ): void {
     for (const key in filter) {
       if (Array.isArray(filter[key])) {
-        (query as SelectQueryBuilder<any>).andWhere(
+        (query as SelectQueryBuilder<never>).andWhere(
           `${this.conditionalyGenerateAlias(alias, key)} in (:value)`,
           { value: filter[key] },
         );
       } else {
-        (query as SelectQueryBuilder<any>).andWhere(
+        (query as SelectQueryBuilder<never>).andWhere(
           `${this.conditionalyGenerateAlias(alias, key)} = :value`,
           { value: filter[key] },
         );
@@ -36,7 +36,7 @@ export class TypeormQueryBuilderUtil {
     alias: string,
   ): void {
     for (const key in sort) {
-      (query as SelectQueryBuilder<any>).addOrderBy(
+      (query as SelectQueryBuilder<never>).addOrderBy(
         this.conditionalyGenerateAlias(alias, key),
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
@@ -51,7 +51,7 @@ export class TypeormQueryBuilderUtil {
     alias?: string,
   ): void {
     for (const item of filteredRelations) {
-      (query as SelectQueryBuilder<any>).leftJoinAndSelect(
+      (query as SelectQueryBuilder<never>).leftJoinAndSelect(
         this.conditionalyGenerateAlias(alias, item),
         item,
       );
@@ -81,7 +81,7 @@ export class TypeormQueryBuilderUtil {
     query: QueryBuilderType,
     pagination: { limit: number; offset: number },
   ): void {
-    (query as SelectQueryBuilder<any>)
+    (query as SelectQueryBuilder<never>)
       .limit(pagination.limit)
       .offset(pagination.offset);
   }

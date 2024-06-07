@@ -8,15 +8,16 @@ import {
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { BaseRepositoryContract } from '../contracts/base-repository.contract';
 import { BaseEntity } from '../entities/base.entity';
+import { QueryBuilderType } from '../enums/query-builder.type';
 
 export class BaseRepository<EntityType extends BaseEntity>
   implements BaseRepositoryContract<EntityType>
 {
   constructor(private baseRepository: Repository<EntityType>) {}
 
-  async findAll(
-    applyQueryParametersFilter: any,
-  ): Promise<[EntityType[], number]> {
+  async findAll(applyQueryParametersFilter: {
+    toQuery: (query: QueryBuilderType) => void;
+  }): Promise<[EntityType[], number]> {
     const query: FindManyOptions<EntityType> = {};
     applyQueryParametersFilter.toQuery(query);
     return await this.baseRepository.findAndCount(query);

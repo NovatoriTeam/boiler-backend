@@ -20,7 +20,7 @@ module.exports = {
     'prettier/prettier': 'error',
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-explicit-any': ['error'],
     'no-return-await': 'off',
     '@typescript-eslint/return-await': ['error', 'always'],
     '@typescript-eslint/no-unused-vars': [
@@ -32,13 +32,13 @@ module.exports = {
     'jest/no-identical-title': 'error',
     'jest/prefer-to-have-length': 'warn',
     'jest/valid-expect': 'error',
-    "@typescript-eslint/explicit-function-return-type": ["error"],
-    "@typescript-eslint/typedef": [
-      "error",
+    '@typescript-eslint/explicit-function-return-type': ['error'],
+    '@typescript-eslint/typedef': [
+      'error',
       {
-        "variableDeclaration": true,
-        "variableDeclarationIgnoreFunction": false
-      }
+        variableDeclaration: true,
+        variableDeclarationIgnoreFunction: false,
+      },
     ],
     // allow usage of Class.name as tests name
     'jest/valid-title': 'off',
@@ -94,4 +94,19 @@ module.exports = {
       },
     ],
   },
+  overrides: [
+    {
+      files: ['*.ts'],
+      rules: {
+        '@typescript-eslint/ban-types': [
+          'error',
+          {
+            types: {
+              SelectQueryBuilder: false,
+            },
+          },
+        ],
+      },
+    },
+  ],
 };
