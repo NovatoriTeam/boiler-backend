@@ -7,6 +7,7 @@ import {
 import { instanceToPlain, plainToInstance } from 'class-transformer';
 import { Observable, map } from 'rxjs';
 import { QueryParametersDto } from '../dtos/query-parameters.dto';
+import { QueryHelperInterface } from '../interfaces/query-helper.interface';
 import { QueryOptionsInterface } from '../interfaces/query-options.interface';
 import { QueryProcessor } from '../processors/query.processor';
 
@@ -26,7 +27,7 @@ export class FilterInterceptor implements NestInterceptor {
       request.query,
     );
 
-    const helper: QueryProcessor = new QueryProcessor(
+    const helper: QueryHelperInterface = new QueryProcessor(
       queryParameters,
       this.options,
       this.alias,

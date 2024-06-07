@@ -1,9 +1,9 @@
-import { QueryBuilderType } from '../enums/query-builder.type';
+import { QueryHelperInterface } from '../interfaces/query-helper.interface';
 
 export interface BaseServiceContract<EntityType, CreateDto, UpdateDto> {
-  findAll: (applyQueryFilters: {
-    toQuery: (query: QueryBuilderType) => void;
-  }) => Promise<[EntityType[], number]>;
+  findAll: (
+    applyQueryFilters: QueryHelperInterface,
+  ) => Promise<[EntityType[], number]>;
   findOne: (id: number) => Promise<EntityType>;
   create: (data: CreateDto) => Promise<EntityType>;
   update: (id: number, data: UpdateDto) => void;

@@ -9,6 +9,7 @@ import {
 import { ApiResponse } from '@nestjs/swagger';
 import { BaseController } from '../base/base.controller';
 import { FilterInterceptor } from '../base/interceptors/filter.interceptor';
+import { RequestInterface } from '../base/interfaces/request.interface';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
 import { Product } from './entities/product.entity';
@@ -46,9 +47,7 @@ export class ProductsController extends BaseController<
   )
   @ApiResponse({ isArray: true, type: Product })
   @Get()
-  async findAll(
-    @Req() req: { queryHelper: { toQuery: () => void } },
-  ): Promise<[Product[], number]> {
+  async findAll(@Req() req: RequestInterface): Promise<[Product[], number]> {
     return await super.findAll(req);
   }
 

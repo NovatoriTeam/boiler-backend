@@ -2,7 +2,7 @@ import { Param, Req } from '@nestjs/common';
 import { UpdateResult } from 'typeorm';
 import { BaseService } from './base.service';
 import { BaseEntity } from './entities/base.entity';
-import { QueryBuilderType } from './enums/query-builder.type';
+import { RequestInterface } from './interfaces/request.interface';
 
 export abstract class BaseController<
   EntityType extends BaseEntity,
@@ -12,9 +12,7 @@ export abstract class BaseController<
 > {
   protected constructor(private readonly baseService: ServiceType) {}
 
-  async findAll(
-    @Req() req: { queryHelper: { toQuery: (query: QueryBuilderType) => void } },
-  ): Promise<[EntityType[], number]> {
+  async findAll(@Req() req: RequestInterface): Promise<[EntityType[], number]> {
     return await this.baseService.findAll(req.queryHelper);
   }
 

@@ -2,7 +2,7 @@ import { DeepPartial, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { BaseServiceContract } from './contracts/base-service.contract';
 import { BaseEntity } from './entities/base.entity';
-import { QueryBuilderType } from './enums/query-builder.type';
+import { QueryHelperInterface } from './interfaces/query-helper.interface';
 import { BaseRepository } from './repositories/base.repository';
 
 export class BaseService<EntityType extends BaseEntity, CreateDto, UpdateDto>
@@ -10,9 +10,9 @@ export class BaseService<EntityType extends BaseEntity, CreateDto, UpdateDto>
 {
   constructor(private readonly baseRepo: BaseRepository<EntityType>) {}
 
-  async findAll(applyQueryFilers: {
-    toQuery: (query: QueryBuilderType) => void;
-  }): Promise<[EntityType[], number]> {
+  async findAll(
+    applyQueryFilers: QueryHelperInterface,
+  ): Promise<[EntityType[], number]> {
     return await this.baseRepo.findAll(applyQueryFilers);
   }
 
