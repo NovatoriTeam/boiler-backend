@@ -6,13 +6,13 @@ import {
   Req,
   UseInterceptors,
 } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
+import { BaseController } from '../base/base.controller';
+import { FilterInterceptor } from '../base/interceptors/filter.interceptor';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
-import { BaseController } from '../base/base.controller';
 import { Product } from './entities/product.entity';
 import { ProductsService } from './products.service';
-import { FilterInterceptor } from '../base/interceptors/filter.interceptor';
-import { ApiResponse } from '@nestjs/swagger';
 
 @Controller('products')
 export class ProductsController extends BaseController<
@@ -26,23 +26,23 @@ export class ProductsController extends BaseController<
   }
 
   @UseInterceptors(
-        new FilterInterceptor(
-          {
-            price: {
-              sortable: true,
-              searchable: true,
-            },
-            shop: {
-              sortable: true,
-              searchable: true,
-            },
-            name: {
-              sortable: true,
-              searchable: true,
-            },
-          },
-          'product',
-        ),
+    new FilterInterceptor(
+      {
+        price: {
+          sortable: true,
+          searchable: true,
+        },
+        shop: {
+          sortable: true,
+          searchable: true,
+        },
+        name: {
+          sortable: true,
+          searchable: true,
+        },
+      },
+      'product',
+    ),
   )
   @ApiResponse({ isArray: true, type: Product })
   @Get()

@@ -1,8 +1,8 @@
-import { BaseServiceContract } from './contracts/base-service.contract';
-import { BaseRepository } from './repositories/base.repository';
-import { BaseEntity } from './entities/base.entity';
 import { DeepPartial } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { BaseServiceContract } from './contracts/base-service.contract';
+import { BaseEntity } from './entities/base.entity';
+import { BaseRepository } from './repositories/base.repository';
 
 export class BaseService<EntityType extends BaseEntity, CreateDto, UpdateDto>
   implements BaseServiceContract<EntityType, CreateDto, UpdateDto>

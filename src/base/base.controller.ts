@@ -1,6 +1,6 @@
-import { Param, Query, Req } from '@nestjs/common';
-import { BaseEntity } from './entities/base.entity';
+import { Param, Req } from '@nestjs/common';
 import { BaseService } from './base.service';
+import { BaseEntity } from './entities/base.entity';
 
 export abstract class BaseController<
   EntityType extends BaseEntity,
