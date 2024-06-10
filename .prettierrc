@@ -5,7 +5,4 @@
   "singleQuote": true,
   "printWidth": 80,
   "bracketSpacing": true,
-  "plugins": [
-    "prettier-plugin-organize-imports"
-  ]
 }
