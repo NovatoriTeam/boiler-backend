@@ -1,8 +1,7 @@
-import * as process from 'node:process';
 import * as dotenv from 'dotenv';
+import * as process from 'node:process';
 import { DatabaseConfigInterface } from './interfaces/database-config.interface';
 import { JwtConfigInterface } from './interfaces/jwt-config.interface';
-
 dotenv.config();
 
 export const databaseConfig: DatabaseConfigInterface = {
