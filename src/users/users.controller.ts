@@ -9,13 +9,14 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { Public } from '../auth/guards/auth/public.key';
-import { Response } from 'express';
-import { Roles } from '../auth/guards/auth/roles.key';
-import { AuthGuard } from '../auth/guards/auth/auth.guard';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto, UpdateUserDto } from 'boiler-shareds';
+import { Response } from 'express';
+import { DeleteResult, UpdateResult } from 'typeorm';
+import { AuthGuard } from '../auth/guards/auth/auth.guard';
+import { Public } from '../auth/guards/auth/public.key';
+import { User } from './entities/user.entity';
+import { UsersService } from './users.service';
 
 @ApiTags('users')
 @UseGuards(AuthGuard)
@@ -25,12 +26,12 @@ export class UsersController {
 
   @Public()
   @Get()
-  async findAll() {
+  async findAll(): Promise<User[]> {
     return await this.usersService.findAll();
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<User> {
     return await this.usersService.findOne(Number(id));
   }
 
@@ -38,20 +39,22 @@ export class UsersController {
   async create(
     @Body() createUserDto: CreateUserDto,
     @Res({ passthrough: true }) res: Response,
-  ) {
-    const accessToken = await this.usersService.create(createUserDto);
+  ): Promise<{ accessToken: string }> {
+    const accessToken: string = await this.usersService.create(createUserDto);
     res.cookie('accessToken', accessToken);
     return { accessToken };
   }
 
-  @Roles({ name: 'admin' })
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<UpdateResult> {
     return await this.usersService.update(Number(id), updateUserDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string): Promise<DeleteResult> {
     return await this.usersService.remove(Number(id));
   }
 }

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { ProductsRepository } from './repositories/products.repository';
+import { BaseService } from '../base/base.service';
 import { CreateProductDto } from './dtos/create-product.dto';
 import { UpdateProductDto } from './dtos/update-product.dto';
-import { BaseService } from '../base/base.service';
 import { Product } from './entities/product.entity';
+import { ProductsRepository } from './repositories/products.repository';
 
 @Injectable()
 export class ProductsService extends BaseService<

@@ -1,11 +1,11 @@
-import { QueryBuilderType } from '../enums/query-builder.type';
-import { SortType } from '../types/sort.type';
-import { FilterType } from '../types/filter.type';
 import { In, Like } from 'typeorm';
+import { QueryBuilderType } from '../enums/query-builder.type';
+import { FilterType } from '../types/filter.type';
 import { SearchType } from '../types/search.type';
+import { SortType } from '../types/sort.type';
 
 export class TypeormFindUtil {
-  public static addOrderBy(query: QueryBuilderType, sort: SortType) {
+  public static addOrderBy(query: QueryBuilderType, sort: SortType): void {
     Object.assign(query, {
       order: {
         ...query.order,
@@ -17,7 +17,7 @@ export class TypeormFindUtil {
   public static applyWhereConditions(
     query: QueryBuilderType,
     filter: FilterType,
-  ) {
+  ): void {
     this.transformToInConditionsIfNecessary(filter);
     Object.assign(query, {
       where: {
@@ -30,14 +30,14 @@ export class TypeormFindUtil {
   public static applyPagination(
     query: QueryBuilderType,
     pagination: { limit: number; offset: number },
-  ) {
+  ): void {
     Object.assign(query, {
       limit: pagination.limit,
       take: pagination.offset,
     });
   }
 
-  public static applyJoins(query: QueryBuilderType, relation: string) {
+  public static applyJoins(query: QueryBuilderType, relation: string): void {
     Object.assign(query, {
       relations: query.relations
         ? [...query.relation, ...relation]
@@ -45,7 +45,10 @@ export class TypeormFindUtil {
     });
   }
 
-  public static applyLikeSearchWhereCondition(query: QueryBuilderType, search: SearchType) {
+  public static applyLikeSearchWhereCondition(
+    query: QueryBuilderType,
+    search: SearchType,
+  ): void {
     for (const key in search) {
       Object.assign(query, {
         ...query.where,
@@ -54,7 +57,7 @@ export class TypeormFindUtil {
     }
   }
 
-  private static transformToInConditionsIfNecessary(filter: FilterType) {
+  private static transformToInConditionsIfNecessary(filter: FilterType): void {
     for (const key in filter) {
       if (Array.isArray(filter[key])) {
         filter[key] = In(filter[key] as string[]);

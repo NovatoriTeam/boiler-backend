@@ -4,11 +4,12 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import { map, Observable } from 'rxjs';
-import { QueryProcessor } from '../processors/query.processor';
-import { QueryOptionsInterface } from '../interfaces/query-options.interface';
 import { instanceToPlain, plainToInstance } from 'class-transformer';
+import { Observable, map } from 'rxjs';
 import { QueryParametersDto } from '../dtos/query-parameters.dto';
+import { QueryHelperInterface } from '../interfaces/query-helper.interface';
+import { QueryOptionsInterface } from '../interfaces/query-options.interface';
+import { QueryProcessor } from '../processors/query.processor';
 
 @Injectable()
 export class FilterInterceptor implements NestInterceptor {
@@ -17,14 +18,16 @@ export class FilterInterceptor implements NestInterceptor {
     private alias: string,
   ) {}
 
-  intercept(
-    context: ExecutionContext,
-    next: CallHandler<any>,
-  ): Observable<any> | Promise<Observable<any>> {
-    const request = context.switchToHttp().getRequest();
-    const queryParameters = plainToInstance(QueryParametersDto, request.query);
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
+    const request: { query: QueryParametersDto } = context
+      .switchToHttp()
+      .getRequest();
+    const queryParameters: QueryParametersDto = plainToInstance(
+      QueryParametersDto,
+      request.query,
+    );
 
-    const helper = new QueryProcessor(
+    const helper: QueryHelperInterface = new QueryProcessor(
       queryParameters,
       this.options,
       this.alias,
@@ -37,8 +40,8 @@ export class FilterInterceptor implements NestInterceptor {
     );
   }
 
-  private transformData(data: any): any {
-    const obj = { status: 200 };
+  private transformData(data: unknown): { status: number } {
+    const obj: { status: number } = { status: 200 };
     if (Array.isArray(data)) {
       Object.assign(obj, {
         data: instanceToPlain(data) ?? data,
