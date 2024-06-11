@@ -37,7 +37,7 @@ export class QueryProcessor {
   }
 
   private applySortQuery(query: QueryBuilderType, sort: SortType): void {
-    this.filterSortOptions(sort);
+    this.validateSortOptions(sort);
     if (TypeormQueryBuilderUtil.isQueryBuilder(query)) {
       TypeormQueryBuilderUtil.addOrderBy(query, sort, this.alias);
     } else {
@@ -46,7 +46,7 @@ export class QueryProcessor {
   }
 
   private applyFilterQuery(query: QueryBuilderType, filter: FilterType): void {
-    this.filterFilterOptions(filter);
+    this.validateFilterOptions(filter);
     if (TypeormQueryBuilderUtil.isQueryBuilder(query)) {
       TypeormQueryBuilderUtil.applyWhereConditions(query, filter, this.alias);
     } else {
@@ -54,56 +54,60 @@ export class QueryProcessor {
     }
   }
 
-  private filterSortOptions(sort: SortType): void {
+  private validateSortOptions(sort: SortType): void {
     for (const key in sort) {
-      if (!this.options[key]?.includes(QueryOptionsEnum.Sortable))
-        delete sort[key];
+      const isFieldSortable: boolean = this.options[key]?.includes(
+        QueryOptionsEnum.Sortable,
+      );
+      if (!isFieldSortable) delete sort[key];
     }
   }
 
-  private filterFilterOptions(filter: FilterType): void {
+  private validateFilterOptions(filter: FilterType): void {
     for (const key in filter) {
-      if (
-        !this.options[key].includes(FilterableTypeEnum.Exact) ||
-        !this.options[key].includes(FilterableTypeEnum.Exists)
-      ) {
+      const filterValue: string = filter[key] as string;
+      const arrayOfFilters: string[] = filterValue?.split(',') || [];
+      const hasPermissionForExactFiltering: boolean = this.options[
+        key
+      ].includes(FilterableTypeEnum.Exact);
+      const hasPermissionForExistsFiltering: boolean = this.options[
+        key
+      ].includes(FilterableTypeEnum.Exists);
+      const hasMultipleFilters: boolean = arrayOfFilters.length > 1;
+
+      if (!hasPermissionForExactFiltering && !hasPermissionForExistsFiltering) {
         delete filter[key];
         continue;
       }
-      const arrayOfFilters: string[] = (filter[key] as string).split?.(',');
-      if (
-        arrayOfFilters.length > 1 &&
-        !this.options[key].includes(FilterableTypeEnum.Exists)
-      ) {
+      if (hasMultipleFilters && !hasPermissionForExistsFiltering) {
         delete filter[key];
-      } else if (
-        !this.options[key].includes(FilterableTypeEnum.Exact) &&
-        arrayOfFilters.length < 2
-      ) {
+      } else if (hasPermissionForExactFiltering && !hasMultipleFilters) {
         delete filter[key];
       }
 
-      if (arrayOfFilters.length > 1 && filter[key]) {
+      if (hasMultipleFilters && filter[key]) {
         filter[key] = (filter[key] as string)?.split(',');
       }
     }
   }
 
-  private filterRelationOptions(relation: string): string[] {
+  private validateRelationOptions(relation: string): string[] {
     const relationFields: string[] = relation?.split(',');
     for (let i: number = 0; i < relationFields.length; i++) {
-      if (
-        !this.options[relationFields[i]]?.includes(QueryOptionsEnum.Relatable)
-      )
-        relationFields.splice(i, 1);
+      const isFieldRelatable: boolean = this.options[
+        relationFields[i]
+      ]?.includes(QueryOptionsEnum.Relatable);
+      if (!isFieldRelatable) relationFields.splice(i, 1);
     }
     return relationFields;
   }
 
   private filterSearchOptions(search: SearchType): void {
     for (const key in search) {
-      if (!this.options[key]?.includes(QueryOptionsEnum.Searchable))
-        delete search[key];
+      const isFieldSearchable: boolean = this.options[key]?.includes(
+        QueryOptionsEnum.Searchable,
+      );
+      if (!isFieldSearchable) delete search[key];
     }
   }
 
@@ -121,7 +125,7 @@ export class QueryProcessor {
   }
 
   private applyRelationQuery(query: QueryBuilderType, relation: string): void {
-    const filteredRelations: string[] = this.filterRelationOptions(relation);
+    const filteredRelations: string[] = this.validateRelationOptions(relation);
     if (TypeormQueryBuilderUtil.isQueryBuilder(query)) {
       TypeormQueryBuilderUtil.applyJoins(query, filteredRelations, this.alias);
     } else {
