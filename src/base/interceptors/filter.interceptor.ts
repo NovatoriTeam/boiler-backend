@@ -5,7 +5,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { instanceToPlain, plainToInstance } from 'class-transformer';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { QueryParametersDto } from '../dtos/query-parameters.dto';
 import { QueryHelperInterface } from '../interfaces/query-helper.interface';
 import { QueryOptionsInterface } from '../interfaces/query-options.interface';
@@ -33,11 +33,7 @@ export class FilterInterceptor implements NestInterceptor {
       this.alias,
     );
     request['queryHelper'] = helper;
-    return next.handle().pipe(
-      map((data) => {
-        return this.transformData(data);
-      }),
-    );
+    return next.handle();
   }
 
   private transformData(data: unknown): { status: number } {

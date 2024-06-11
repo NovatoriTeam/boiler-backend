@@ -1,6 +1,7 @@
 import { QueryParametersDto } from '../dtos/query-parameters.dto';
 import { FilterableTypeEnum } from '../enums/filterable-type.enum';
 import { QueryBuilderType } from '../enums/query-builder.type';
+import { QueryOptionsEnum } from '../enums/query-options.enum';
 import { QueryOptionsInterface } from '../interfaces/query-options.interface';
 import { FilterType } from '../types/filter.type';
 import { SearchType } from '../types/search.type';
@@ -55,24 +56,28 @@ export class QueryProcessor {
 
   private filterSortOptions(sort: SortType): void {
     for (const key in sort) {
-      if (!this.options[key]?.sortable) delete sort[key];
+      if (!this.options[key]?.includes(QueryOptionsEnum.Sortable))
+        delete sort[key];
     }
   }
 
   private filterFilterOptions(filter: FilterType): void {
     for (const key in filter) {
-      if (!this.options[key].filterable) {
+      if (
+        !this.options[key].includes(FilterableTypeEnum.Exact) ||
+        !this.options[key].includes(FilterableTypeEnum.Exists)
+      ) {
         delete filter[key];
         continue;
       }
       const arrayOfFilters: string[] = (filter[key] as string).split?.(',');
       if (
         arrayOfFilters.length > 1 &&
-        this.options[key].filterable.type !== FilterableTypeEnum.Exists
+        !this.options[key].includes(FilterableTypeEnum.Exists)
       ) {
         delete filter[key];
       } else if (
-        this.options[key].filterable.type !== FilterableTypeEnum.Exact &&
+        !this.options[key].includes(FilterableTypeEnum.Exact) &&
         arrayOfFilters.length < 2
       ) {
         delete filter[key];
@@ -87,7 +92,9 @@ export class QueryProcessor {
   private filterRelationOptions(relation: string): string[] {
     const relationFields: string[] = relation?.split(',');
     for (let i: number = 0; i < relationFields.length; i++) {
-      if (!this.options[relationFields[i]]?.relatable)
+      if (
+        !this.options[relationFields[i]]?.includes(QueryOptionsEnum.Relatable)
+      )
         relationFields.splice(i, 1);
     }
     return relationFields;
@@ -95,7 +102,8 @@ export class QueryProcessor {
 
   private filterSearchOptions(search: SearchType): void {
     for (const key in search) {
-      if (!this.options[key]?.searchable) delete search[key];
+      if (!this.options[key]?.includes(QueryOptionsEnum.Searchable))
+        delete search[key];
     }
   }
 
