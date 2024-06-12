@@ -4,10 +4,9 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import { instanceToPlain, plainToInstance } from 'class-transformer';
-import { Observable, map } from 'rxjs';
+import { plainToInstance } from 'class-transformer';
+import { Observable } from 'rxjs';
 import { QueryParametersDto } from '../dtos/query-parameters.dto';
-import { QueryHelperInterface } from '../interfaces/query-helper.interface';
 import { QueryOptionsInterface } from '../interfaces/query-options.interface';
 import { QueryProcessor } from '../processors/query.processor';
 
@@ -27,31 +26,12 @@ export class FilterInterceptor implements NestInterceptor {
       request.query,
     );
 
-    const helper: QueryHelperInterface = new QueryProcessor(
+    const helper: QueryProcessor = new QueryProcessor(
       queryParameters,
       this.options,
       this.alias,
     );
     request['queryHelper'] = helper;
-    return next.handle().pipe(
-      map((data) => {
-        return this.transformData(data);
-      }),
-    );
-  }
-
-  private transformData(data: unknown): { status: number } {
-    const obj: { status: number } = { status: 200 };
-    if (Array.isArray(data)) {
-      Object.assign(obj, {
-        data: instanceToPlain(data) ?? data,
-        count: data[1],
-      });
-    } else {
-      Object.assign(obj, {
-        data: instanceToPlain(data) ?? data,
-      });
-    }
-    return obj;
+    return next.handle();
   }
 }

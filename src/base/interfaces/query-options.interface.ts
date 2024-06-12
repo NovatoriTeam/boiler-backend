@@ -1,12 +1,6 @@
 import { FilterableTypeEnum } from '../enums/filterable-type.enum';
+import { QueryOptionsEnum } from '../enums/query-options.enum';
 
-export class QueryOptionsInterface {
-  [key: string]: {
-    filterable?: {
-      type: FilterableTypeEnum;
-    };
-    sortable?: boolean;
-    searchable?: boolean;
-    relatable?: boolean;
-  };
+export interface QueryOptionsInterface {
+  [key: string]: (QueryOptionsEnum | FilterableTypeEnum)[];
 }
