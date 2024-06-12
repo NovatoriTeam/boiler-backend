@@ -8,6 +8,8 @@ import {
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { BaseController } from '../base/base.controller';
+import { FilterableTypeEnum } from '../base/enums/filterable-type.enum';
+import { QueryOptionsEnum } from '../base/enums/query-options.enum';
 import { FilterInterceptor } from '../base/interceptors/filter.interceptor';
 import { RequestInterface } from '../base/interfaces/request.interface';
 import { CreateProductDto } from './dtos/create-product.dto';
@@ -29,18 +31,13 @@ export class ProductsController extends BaseController<
   @UseInterceptors(
     new FilterInterceptor(
       {
-        price: {
-          sortable: true,
-          searchable: true,
-        },
-        shop: {
-          sortable: true,
-          searchable: true,
-        },
-        name: {
-          sortable: true,
-          searchable: true,
-        },
+        shop: [
+          QueryOptionsEnum.Sortable,
+          QueryOptionsEnum.Searchable,
+          FilterableTypeEnum.Exact,
+        ],
+        price: [QueryOptionsEnum.Sortable, QueryOptionsEnum.Searchable],
+        user: [QueryOptionsEnum.Relatable],
       },
       'product',
     ),

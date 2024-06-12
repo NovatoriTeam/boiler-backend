@@ -1,22 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { BaseEntity } from '../../base/entities/base.entity';
 import { User } from '../../users/entities/user.entity';
 
 @Entity('products')
-export class Product {
-  @ApiProperty({ type: Number })
-  @PrimaryGeneratedColumn()
-  id!: number;
-
+export class Product extends BaseEntity {
   @ApiProperty({ type: Number })
   @Column()
   name!: string;
@@ -37,13 +25,4 @@ export class Product {
   @ManyToOne(() => User, (user) => user.products)
   @JoinColumn({ name: 'userId' })
   user: User;
-
-  @CreateDateColumn()
-  createdAt!: Date;
-
-  @UpdateDateColumn()
-  updatedAt!: Date;
-
-  @DeleteDateColumn()
-  deletedAt!: Date;
 }
