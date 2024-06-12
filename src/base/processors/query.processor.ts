@@ -81,7 +81,7 @@ export class QueryProcessor {
       }
       if (hasMultipleFilters && !hasPermissionForExistsFiltering) {
         delete filter[key];
-      } else if (hasPermissionForExactFiltering && !hasMultipleFilters) {
+      } else if (hasPermissionForExactFiltering && hasMultipleFilters) {
         delete filter[key];
       }
 
