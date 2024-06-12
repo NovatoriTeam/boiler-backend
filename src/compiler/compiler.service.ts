@@ -1,31 +1,49 @@
 import { Injectable } from '@nestjs/common';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { compilerConfig } from '../config/config';
-
-interface CompilerRequestBody {
-  language: string;
-  stdin: string;
-  files: [{ name: string; content: string }];
-}
+import { CompilerCodeParamsInterface } from './interfaces/compiler-code-params.interface';
+import { CompilerCodeResponseInterface } from './interfaces/compiler-code-response.interface';
+import { CompilerCodeInterface } from './interfaces/compiler-code.interface';
+import { CompilerRequestBodyInterface } from './interfaces/compiler-request-body.interface';
 
 @Injectable()
 export class CompilerService {
-  async compileCode(code: string): Promise<AxiosResponse> {
+  async compileCode(
+    data: CompilerCodeParamsInterface,
+  ): Promise<CompilerCodeInterface> {
     const { url, apiHost, apiKey } = compilerConfig;
-    const requestBody: CompilerRequestBody = {
-      language: 'nodejs',
+    const requestBody: CompilerRequestBodyInterface = this.getRequestBody(data);
+    const response: { data: CompilerCodeResponseInterface } = await axios.post(
+      url,
+      requestBody,
+      {
+        headers: { 'X-RapidAPI-Key': apiKey, 'X-RapidAPI-Host': apiHost },
+      },
+    );
+
+    const returnable: CompilerCodeInterface = {
+      output: JSON.parse(JSON.stringify(response.data.stdout)),
+      error: response.data.exception,
+    };
+
+    return returnable;
+  }
+
+  private getRequestBody(
+    data: CompilerCodeParamsInterface,
+  ): CompilerRequestBodyInterface {
+    const { language, fileName, extension, code } = data;
+    const requestBody: CompilerRequestBodyInterface = {
+      language,
       stdin: 'Peter',
       files: [
         {
-          name: 'script.js',
+          name: `${fileName}.${extension}`,
           content: code,
         },
       ],
     };
-    const response: AxiosResponse = await axios.post(url, requestBody, {
-      headers: { 'X-RapidAPI-Key': apiKey, 'X-RapidAPI-Host': apiHost },
-    });
 
-    return response;
+    return requestBody;
   }
 }
