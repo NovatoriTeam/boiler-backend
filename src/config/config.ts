@@ -1,7 +1,9 @@
 import * as process from 'node:process';
 import * as dotenv from 'dotenv';
+import { CompilerConfigInterface } from './interfaces/compiler-config.interface';
 import { DatabaseConfigInterface } from './interfaces/database-config.interface';
 import { JwtConfigInterface } from './interfaces/jwt-config.interface';
+
 dotenv.config();
 
 export const databaseConfig: DatabaseConfigInterface = {
@@ -14,4 +16,10 @@ export const databaseConfig: DatabaseConfigInterface = {
 
 export const jwtConfig: JwtConfigInterface = {
   jwtSecret: process.env.JWT_USER_SECRET,
+};
+
+export const compilerConfig: CompilerConfigInterface = {
+  url: process.env.COMPILER_API_URL,
+  apiKey: process.env.COMPILER_API_KEY,
+  apiHost: process.env.COMPILER_API_HOST,
 };
