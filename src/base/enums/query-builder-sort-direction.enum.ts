@@ -1,4 +1,4 @@
 export enum QueryBuilderSortDirectionEnum {
-  ASC = 'asc',
-  DESC = 'desc',
+  ASC = 'ASC',
+  DESC = 'DESC',
 }

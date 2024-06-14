@@ -37,11 +37,11 @@ export class TypeormFindUtil {
     });
   }
 
-  public static applyJoins(query: QueryBuilderType, relation: string): void {
+  public static applyJoins(query: QueryBuilderType, relations: string[]): void {
     Object.assign(query, {
       relations: query.relations
-        ? [...query.relation, ...relation]
-        : [relation],
+        ? [...query.relation, ...relations]
+        : relations,
     });
   }
 

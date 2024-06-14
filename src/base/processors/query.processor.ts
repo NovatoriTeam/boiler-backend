@@ -25,12 +25,12 @@ export class QueryProcessor {
   }
 
   public toQuery(query: QueryBuilderType): void {
-    const { sort, filter, limit, offset, relation, search } =
+    const { sort, filter, limit, offset, relations, search } =
       this.queryParameters;
 
     if (sort) this.applySortQuery(query, sort);
     if (filter) this.applyFilterQuery(query, filter);
-    if (relation) this.applyRelationQuery(query, relation);
+    if (relations) this.applyRelationQuery(query, relations);
     if (search) this.applySearchQuery(query, search);
     if ((limit || offset) && !search)
       this.applyPaginationQuery(query, { limit, offset });
@@ -91,15 +91,14 @@ export class QueryProcessor {
     }
   }
 
-  private validateRelationOptions(relation: string): string[] {
-    const relationFields: string[] = relation?.split(',');
-    for (let i: number = 0; i < relationFields.length; i++) {
-      const isFieldRelatable: boolean = this.options[
-        relationFields[i]
-      ]?.includes(QueryOptionsEnum.Relatable);
-      if (!isFieldRelatable) relationFields.splice(i, 1);
+  private validateRelationOptions(relations: string[]): string[] {
+    for (let i: number = 0; i < relations.length; i++) {
+      const isFieldRelatable: boolean = this.options[relations[i]]?.includes(
+        QueryOptionsEnum.Relatable,
+      );
+      if (!isFieldRelatable) relations.splice(i, 1);
     }
-    return relationFields;
+    return relations;
   }
 
   private filterSearchOptions(search: SearchType): void {
@@ -124,12 +123,15 @@ export class QueryProcessor {
     }
   }
 
-  private applyRelationQuery(query: QueryBuilderType, relation: string): void {
-    const filteredRelations: string[] = this.validateRelationOptions(relation);
+  private applyRelationQuery(
+    query: QueryBuilderType,
+    relations: string[],
+  ): void {
+    const filteredRelations: string[] = this.validateRelationOptions(relations);
     if (TypeormQueryBuilderUtil.isQueryBuilder(query)) {
       TypeormQueryBuilderUtil.applyJoins(query, filteredRelations, this.alias);
     } else {
-      TypeormFindUtil.applyJoins(query, relation);
+      TypeormFindUtil.applyJoins(query, relations);
     }
   }
 
