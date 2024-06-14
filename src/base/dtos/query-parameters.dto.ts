@@ -1,7 +1,9 @@
-import { IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsArray, IsNumber, IsObject, IsOptional } from 'class-validator';
 import { FilterType } from '../types/filter.type';
 import { SearchType } from '../types/search.type';
 import { SortType } from '../types/sort.type';
+import { ToArray } from '../utils/to-array';
 
 export class QueryParametersDto {
   @IsOptional()
@@ -13,8 +15,9 @@ export class QueryParametersDto {
   offset!: number;
 
   @IsOptional()
-  @IsString()
-  relation!: string;
+  @IsArray()
+  @Transform(({ value }) => ToArray(value))
+  relations!: string[];
 
   @IsOptional()
   @IsObject()
