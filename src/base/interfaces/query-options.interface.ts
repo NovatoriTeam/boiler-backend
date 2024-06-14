@@ -1,6 +1,5 @@
-import { FilterableTypeEnum } from '../enums/filterable-type.enum';
-import { QueryOptionsEnum } from '../enums/query-options.enum';
+import { QueryOptionsType } from '../types/query-options.type';
 
 export interface QueryOptionsInterface {
-  [key: string]: (QueryOptionsEnum | FilterableTypeEnum)[];
+  [key: string]: QueryOptionsType[];
 }
