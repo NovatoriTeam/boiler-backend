@@ -21,25 +21,12 @@ export class UsersService {
     return await this.usersRepository.findOne(id);
   }
 
-  async create(createUserDto: CreateUserDto): Promise<string> {
-    const data: {
-      password: string;
-      firstName: string;
-      lastName: string;
-      email: string;
-    } = {
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const data: Partial<User> = {
       ...createUserDto,
       password: await this.hashPassword(createUserDto.password),
     };
-
-    const user: User = await this.usersRepository.create(data);
-
-    const payload: { id: number } = { id: user.id };
-    const accessToken: string = this.jwtService.sign(payload, {
-      secret: '7B6SZB45M9MJ7IHIFUB31I97J3TF4TD6QRDKQLODSMFRSP6UKE',
-    });
-
-    return accessToken;
+    return await this.usersRepository.create(data);
   }
 
   async update(

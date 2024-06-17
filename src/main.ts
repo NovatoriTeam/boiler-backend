@@ -4,6 +4,7 @@ import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 import { AppModule } from './app.module';
+import { ResponseInterceptor } from './base/interceptors/response.interceptor';
 
 dotenv.config({ path: '.env' });
 
@@ -16,6 +17,7 @@ async function bootstrap(): Promise<void> {
     .setDescription('The Boiler Plate API Description')
     .setVersion('1.0')
     .build();
+  app.useGlobalInterceptors(new ResponseInterceptor());
   const document: OpenAPIObject = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 

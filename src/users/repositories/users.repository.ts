@@ -37,12 +37,10 @@ export class UsersRepository {
   }
 
   async findByEmail(email: string): Promise<User> {
-    const query: SelectQueryBuilder<User> = this.usersRepository
-      .createQueryBuilder()
-      .select(['*'])
-      .where('email = :email', { email });
-
-    return await query.getOneOrFail();
+    return await this.usersRepository.findOneOrFail({
+      where: { email },
+      select: ['email', 'password'],
+    });
   }
 
   async findUserByIdWithRoles(id: number): Promise<User> {
