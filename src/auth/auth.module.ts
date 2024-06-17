@@ -15,7 +15,7 @@ import { LocalStrategy } from './strategies/local.strategy';
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
       secret: jwtConfig.jwtSecret,
-      signOptions: { expiresIn: '30d' },
+      signOptions: { expiresIn: jwtConfig.jwtExpiration },
     }),
   ],
   providers: [

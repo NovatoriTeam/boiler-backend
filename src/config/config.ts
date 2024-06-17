@@ -16,7 +16,9 @@ export const databaseConfig: DatabaseConfigInterface = {
 
 export const jwtConfig: JwtConfigInterface = {
   jwtSecret: process.env.JWT_USER_SECRET,
+  jwtExpiration: process.env.JWT_EXPIRATION,
   refreshJwtSecret: process.env.REFRESH_USER_SECRET,
+  refreshJwtExpiration: process.env.REFRESH_JWT_EXPIRATION,
 };
 
 export const compilerConfig: CompilerConfigInterface = {

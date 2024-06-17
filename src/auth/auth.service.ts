@@ -35,7 +35,7 @@ export class AuthService {
       refreshToken: this.generateJwtToken(
         newUser.id,
         jwtConfig.refreshJwtSecret,
-        '60d',
+        jwtConfig.refreshJwtExpiration,
       ),
     };
 
