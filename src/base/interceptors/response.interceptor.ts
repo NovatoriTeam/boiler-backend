@@ -22,20 +22,20 @@ export class ResponseInterceptor implements NestInterceptor {
     data: unknown,
     accessToken?: string,
   ): { status: number } {
-    const obj: { status: number; accessToken?: string } = {
+    const response: { status: number; accessToken?: string } = {
       status: 200,
       accessToken,
     };
     if (Array.isArray(data)) {
-      Object.assign(obj, {
+      Object.assign(response, {
         data: instanceToPlain(data[0]) ?? data[0],
         count: data[1],
       });
     } else {
-      Object.assign(obj, {
+      Object.assign(response, {
         data: instanceToPlain(data) ?? data,
       });
     }
-    return obj;
+    return response;
   }
 }

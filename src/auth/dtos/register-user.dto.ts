@@ -1,4 +1,4 @@
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsString, Validate } from 'class-validator';
 
 export class RegisterUserDto {
   @IsString()
@@ -12,4 +12,13 @@ export class RegisterUserDto {
 
   @IsString()
   password: string;
+
+  @IsString()
+  @Validate(
+    (data: RegisterUserDto) => {
+      return data.password === data.confirmPassword;
+    },
+    { message: 'password do not match' },
+  )
+  confirmPassword: string;
 }

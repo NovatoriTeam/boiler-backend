@@ -8,6 +8,7 @@ import { User } from '../users/entities/user.entity';
 import { UsersRepository } from '../users/repositories/users.repository';
 import { AuthResponseDto } from './dtos/auth-response.dto';
 import { RegisterUserDto } from './dtos/register-user.dto';
+import { GenerateJwtTokenParamsInterface } from './interfaces/generate-jwt-token-params.interface';
 
 @Injectable()
 export class AuthService {
@@ -31,12 +32,16 @@ export class AuthService {
     const newUser: User = await this.usersRepository.create(data);
 
     const result: AuthResponseDto = {
-      accessToken: this.generateJwtToken(newUser.id),
-      refreshToken: this.generateJwtToken(
-        newUser.id,
-        jwtConfig.refreshJwtSecret,
-        jwtConfig.refreshJwtExpiration,
-      ),
+      accessToken: this.generateJwtToken({
+        userId: newUser.id,
+        secret: jwtConfig.jwtSecret,
+        expiresIn: jwtConfig.jwtExpiration,
+      }),
+      refreshToken: this.generateJwtToken({
+        userId: newUser.id,
+        secret: jwtConfig.refreshJwtSecret,
+        expiresIn: jwtConfig.refreshJwtExpiration,
+      }),
     };
 
     return plainToInstance(AuthResponseDto, result);
@@ -58,22 +63,13 @@ export class AuthService {
     return user;
   }
 
-  generateJwtToken(
-    userId: number,
-    secret?: string,
-    expiresIn?: string,
-  ): string {
-    const jwtSignData: { secret?: string; expiresIn?: string } = {};
+  generateJwtToken(data: GenerateJwtTokenParamsInterface): string {
+    const { userId, secret, expiresIn } = data;
 
-    if (secret) {
-      Object.assign(jwtSignData, { secret });
-    }
-
-    if (expiresIn) {
-      Object.assign(jwtSignData, { expiresIn });
-    }
-
-    const token: string = this.jwtService.sign({ id: userId }, jwtSignData);
+    const token: string = this.jwtService.sign(
+      { id: userId },
+      { secret, expiresIn },
+    );
     return token;
   }
 }
