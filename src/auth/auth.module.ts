@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { jwtConfig } from '../config/config';
 import { User } from '../users/entities/user.entity';
 import { UsersRepository } from '../users/repositories/users.repository';
 import { AuthController } from './auth.controller';
@@ -11,13 +10,7 @@ import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
   controllers: [AuthController],
-  imports: [
-    TypeOrmModule.forFeature([User]),
-    JwtModule.register({
-      secret: jwtConfig.jwtSecret,
-      signOptions: { expiresIn: jwtConfig.jwtExpiration },
-    }),
-  ],
+  imports: [TypeOrmModule.forFeature([User]), JwtModule.register({})],
   providers: [
     AuthService,
     UsersRepository,
