@@ -6,6 +6,7 @@ import { UsersRepository } from '../users/repositories/users.repository';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './guards/auth.guard';
+import { GoogleStrategy } from './strategies/google.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
@@ -15,6 +16,7 @@ import { LocalStrategy } from './strategies/local.strategy';
     AuthService,
     UsersRepository,
     LocalStrategy,
+    GoogleStrategy,
     { provide: 'APP_GUARD', useClass: AuthGuard },
   ],
 })
