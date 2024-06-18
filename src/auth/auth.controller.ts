@@ -66,8 +66,18 @@ export class AuthController {
     const { accessToken, refreshToken } =
       await this.authService.handleGoogleOAuthLogin(req.user);
 
-    res.cookie('accessToken', accessToken, { httpOnly: true });
-    res.cookie('refreshToken', refreshToken, { httpOnly: true });
+    const cookieExpirationDate: Date = new Date(
+      Date.now() + 365 * 24 * 60 * 60 * 1000,
+    ); // 1 year in milliseconds
+
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      expires: cookieExpirationDate,
+    });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      expires: cookieExpirationDate,
+    });
 
     res.redirect(googleOAuth2Config.redirectUrl);
   }
