@@ -2,6 +2,7 @@ import * as process from 'node:process';
 import * as dotenv from 'dotenv';
 import { CompilerConfigInterface } from './interfaces/compiler-config.interface';
 import { DatabaseConfigInterface } from './interfaces/database-config.interface';
+import { GoogleOAuthConfigInterface } from './interfaces/google-oauth-config.interface';
 import { JwtConfigInterface } from './interfaces/jwt-config.interface';
 
 dotenv.config();
@@ -25,4 +26,11 @@ export const compilerConfig: CompilerConfigInterface = {
   url: process.env.COMPILER_API_URL,
   apiKey: process.env.COMPILER_API_KEY,
   apiHost: process.env.COMPILER_API_HOST,
+};
+
+export const googleOAuth2Config: GoogleOAuthConfigInterface = {
+  clientId: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackUrl: process.env.GOOGLE_CALLBACK_URL,
+  redirectUrl: process.env.REDIRECT_URL,
 };

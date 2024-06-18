@@ -1,9 +1,20 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
-import { jwtConfig } from '../config/config';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
+import { Response } from 'express';
+import { DeepPartial } from 'typeorm';
+import { googleOAuth2Config, jwtConfig } from '../config/config';
 import { User } from '../users/entities/user.entity';
 import { AuthService } from './auth.service';
 import { AuthResponseDto } from './dtos/auth-response.dto';
 import { RegisterUserDto } from './dtos/register-user.dto';
+import { GoogleOAuthGuard } from './guards/google.guard';
 import { UsernamePasswordAuthGuard } from './guards/local.guard';
 import { Public } from './guards/public.key';
 import { RequestInterface } from './interfaces/request.interface';
@@ -38,5 +49,26 @@ export class AuthController {
         expiresIn: jwtConfig.refreshJwtExpiration,
       }),
     };
+  }
+
+  @UseGuards(GoogleOAuthGuard)
+  @Public()
+  @Get('google')
+  async googleAuth(): Promise<void> {}
+
+  @UseGuards(GoogleOAuthGuard)
+  @Public()
+  @Get('google/callback')
+  async googleAuthCallBack(
+    @Req() req: RequestInterface<DeepPartial<User>>,
+    @Res() res: Response,
+  ): Promise<void> {
+    const { accessToken, refreshToken } =
+      await this.authService.handleGoogleOAuthLogin(req.user);
+
+    res.cookie('accessToken', accessToken, { httpOnly: true });
+    res.cookie('refreshToken', refreshToken, { httpOnly: true });
+
+    res.redirect(googleOAuth2Config.redirectUrl);
   }
 }

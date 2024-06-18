@@ -72,4 +72,31 @@ export class AuthService {
     );
     return token;
   }
+
+  async handleGoogleOAuthLogin(
+    data: DeepPartial<User>,
+  ): Promise<AuthResponseDto> {
+    const user: User = await this.usersRepository.findByEmail(data.email);
+    let userId: number = user?.id ?? null;
+
+    if (!userId) {
+      const newUser: User = await this.usersRepository.create(data);
+      userId = newUser.id;
+    }
+
+    const response: AuthResponseDto = {
+      accessToken: this.generateJwtToken({
+        userId,
+        secret: jwtConfig.jwtSecret,
+        expiresIn: jwtConfig.jwtExpiration,
+      }),
+      refreshToken: this.generateJwtToken({
+        userId,
+        secret: jwtConfig.refreshJwtSecret,
+        expiresIn: jwtConfig.refreshJwtExpiration,
+      }),
+    };
+
+    return plainToInstance(AuthResponseDto, response);
+  }
 }
