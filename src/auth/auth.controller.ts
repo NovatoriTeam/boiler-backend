@@ -54,8 +54,7 @@ export class AuthController {
   @UseGuards(GoogleOAuthGuard)
   @Public()
   @Get('google')
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  async googleAuth() {}
+  async googleAuth(): Promise<void> {}
 
   @UseGuards(GoogleOAuthGuard)
   @Public()
