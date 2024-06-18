@@ -39,7 +39,7 @@ export class UsersRepository {
   async findByEmail(email: string): Promise<User> {
     return await this.usersRepository.findOne({
       where: { email },
-      select: ['email', 'password'],
+      select: ['id', 'email', 'password'],
     });
   }
 
