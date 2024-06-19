@@ -9,11 +9,16 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { DeepPartial } from 'typeorm';
-import { googleOAuth2Config, jwtConfig } from '../config/config';
+import {
+  discordOAuth2Config,
+  googleOAuth2Config,
+  jwtConfig,
+} from '../config/config';
 import { User } from '../users/entities/user.entity';
 import { AuthService } from './auth.service';
 import { AuthResponseDto } from './dtos/auth-response.dto';
 import { RegisterUserDto } from './dtos/register-user.dto';
+import { DiscordOAuthGuard } from './guards/discord.guard';
 import { GoogleOAuthGuard } from './guards/google.guard';
 import { UsernamePasswordAuthGuard } from './guards/local.guard';
 import { Public } from './guards/public.key';
@@ -63,8 +68,39 @@ export class AuthController {
     @Req() req: RequestInterface<DeepPartial<User>>,
     @Res() res: Response,
   ): Promise<void> {
+    return await this.handleOAuthCallback(
+      req,
+      res,
+      googleOAuth2Config.redirectUrl,
+    );
+  }
+
+  @UseGuards(DiscordOAuthGuard)
+  @Public()
+  @Get('discord')
+  async discordAuth(): Promise<void> {}
+
+  @UseGuards(DiscordOAuthGuard)
+  @Public()
+  @Get('discord/callback')
+  async discordAuthCallback(
+    @Req() req: RequestInterface<DeepPartial<User>>,
+    @Res() res: Response,
+  ): Promise<void> {
+    return await this.handleOAuthCallback(
+      req,
+      res,
+      discordOAuth2Config.redirectUrl,
+    );
+  }
+
+  async handleOAuthCallback(
+    req: RequestInterface<DeepPartial<User>>,
+    res: Response,
+    redirectUrl: string,
+  ): Promise<void> {
     const { accessToken, refreshToken } =
-      await this.authService.handleGoogleOAuthLogin(req.user);
+      await this.authService.handleOAuthLogin(req.user);
 
     const cookieExpirationDate: Date = new Date(
       Date.now() + 365 * 24 * 60 * 60 * 1000,
@@ -79,6 +115,6 @@ export class AuthController {
       expires: cookieExpirationDate,
     });
 
-    res.redirect(googleOAuth2Config.redirectUrl);
+    res.redirect(redirectUrl);
   }
 }

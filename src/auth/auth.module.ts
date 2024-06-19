@@ -6,6 +6,7 @@ import { UsersRepository } from '../users/repositories/users.repository';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './guards/auth.guard';
+import { DiscordStrategy } from './strategies/discord.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 
@@ -17,6 +18,7 @@ import { LocalStrategy } from './strategies/local.strategy';
     UsersRepository,
     LocalStrategy,
     GoogleStrategy,
+    DiscordStrategy,
     { provide: 'APP_GUARD', useClass: AuthGuard },
   ],
 })
