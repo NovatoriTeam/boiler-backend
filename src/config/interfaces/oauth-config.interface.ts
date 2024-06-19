@@ -1,4 +1,4 @@
-export interface GoogleOAuthConfigInterface {
+export interface OAuthConfigInterface {
   readonly clientId: string;
   readonly clientSecret: string;
   readonly callbackUrl: string;

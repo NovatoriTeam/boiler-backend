@@ -12,7 +12,7 @@ export class User extends BaseEntity {
   @Column()
   firstName: string;
 
-  @ApiProperty({ type: Number })
+  @ApiProperty({ type: Number, nullable: true })
   @Column()
   lastName: string;
 

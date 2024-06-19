@@ -73,9 +73,7 @@ export class AuthService {
     return token;
   }
 
-  async handleGoogleOAuthLogin(
-    data: DeepPartial<User>,
-  ): Promise<AuthResponseDto> {
+  async handleOAuthLogin(data: DeepPartial<User>): Promise<AuthResponseDto> {
     const user: User = await this.usersRepository.findByEmail(data.email);
     let userId: number = user?.id ?? null;
 

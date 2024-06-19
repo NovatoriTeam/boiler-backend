@@ -2,8 +2,8 @@ import * as process from 'node:process';
 import * as dotenv from 'dotenv';
 import { CompilerConfigInterface } from './interfaces/compiler-config.interface';
 import { DatabaseConfigInterface } from './interfaces/database-config.interface';
-import { GoogleOAuthConfigInterface } from './interfaces/google-oauth-config.interface';
 import { JwtConfigInterface } from './interfaces/jwt-config.interface';
+import { OAuthConfigInterface } from './interfaces/oauth-config.interface';
 
 dotenv.config();
 
@@ -28,9 +28,16 @@ export const compilerConfig: CompilerConfigInterface = {
   apiHost: process.env.COMPILER_API_HOST,
 };
 
-export const googleOAuth2Config: GoogleOAuthConfigInterface = {
+export const googleOAuth2Config: OAuthConfigInterface = {
   clientId: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackUrl: process.env.GOOGLE_CALLBACK_URL,
+  redirectUrl: process.env.REDIRECT_URL,
+};
+
+export const discordOAuth2Config: OAuthConfigInterface = {
+  clientId: process.env.DISCORD_CLIENT_ID,
+  clientSecret: process.env.DISCORD_CLIENT_SECRET,
+  callbackUrl: process.env.DISCORD_CALLBACK_URL,
   redirectUrl: process.env.REDIRECT_URL,
 };
