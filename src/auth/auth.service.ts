@@ -1,4 +1,3 @@
-import * as crypto from 'node:crypto';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -6,6 +5,8 @@ import { plainToInstance } from 'class-transformer';
 import * as dayjs from 'dayjs';
 import { DeepPartial } from 'typeorm';
 import { jwtConfig } from '../config/config';
+import { generateRandomString } from '../shared/helpers/generateRandomString/generate-random-string';
+import { hashString } from '../shared/helpers/hashString/hashString';
 import { User } from '../users/entities/user.entity';
 import { UsersRepository } from '../users/repositories/users.repository';
 import { AuthResponseDto } from './dtos/auth-response.dto';
@@ -24,7 +25,7 @@ export class AuthService {
   ) {}
 
   async findOne(userId: number, refreshToken: string): Promise<Refresh> {
-    const hashedRefreshToken: string = this.hashString(refreshToken);
+    const hashedRefreshToken: string = hashString(refreshToken);
     return await this.authRepository.findOne({
       userId,
       refreshToken: hashedRefreshToken,
@@ -132,22 +133,14 @@ export class AuthService {
     return plainToInstance(AuthResponseDto, response);
   }
 
-  private generateRandomString(size: number = 64): string {
-    return crypto.randomBytes(size).toString('hex');
-  }
-
-  private hashString(data: string): string {
-    return crypto.createHash('sha256').update(data).digest('hex');
-  }
-
   private generateRefreshToken(): {
     refreshToken: string;
     hashedRefreshToken: string;
   } {
-    const refreshToken: string = this.generateRandomString();
+    const refreshToken: string = generateRandomString();
     return {
       refreshToken: refreshToken,
-      hashedRefreshToken: this.hashString(refreshToken),
+      hashedRefreshToken: hashString(refreshToken),
     };
   }
 
@@ -159,7 +152,7 @@ export class AuthService {
       refreshToken: newToken,
       hashedRefreshToken: newHashedRefreshToken,
     } = this.generateRefreshToken();
-    const hashedOldToken: string = this.hashString(oldToken);
+    const hashedOldToken: string = hashString(oldToken);
 
     await this.authRepository.createAndRemove({
       userId,
@@ -183,7 +176,7 @@ export class AuthService {
   ): boolean {
     const { refreshToken: refreshTokenFromDatabase, expirationDate } =
       currentSession;
-    const hashedRefreshToken: string = this.hashString(userRefreshToken);
+    const hashedRefreshToken: string = hashString(userRefreshToken);
 
     const isRefreshTokenExpired: boolean = dayjs(new Date()).isAfter(
       expirationDate,
