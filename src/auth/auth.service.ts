@@ -161,10 +161,11 @@ export class AuthService {
     } = this.generateRefreshToken();
     const hashedOldToken: string = this.hashString(oldToken);
 
-    await this.authRepository.createAndRemove(
-      { userId, refreshToken: hashedOldToken },
-      newHashedRefreshToken,
-    );
+    await this.authRepository.createAndRemove({
+      userId,
+      refreshToken: hashedOldToken,
+      newRefreshToken: newHashedRefreshToken,
+    });
 
     return this.generateAuthResponse(
       {

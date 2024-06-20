@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeepPartial, Repository } from 'typeorm';
 import { Refresh } from '../entities/refresh.entity';
+import { AuthParamsInterface } from '../interfaces/auth-params.interface';
+import { CreateAndRemoveParamsInterface } from '../interfaces/create-and-remove-params.interface';
 
 @Injectable()
 export class AuthRepository {
@@ -9,7 +11,7 @@ export class AuthRepository {
     @InjectRepository(Refresh) private refreshRepository: Repository<Refresh>,
   ) {}
 
-  async findOne(data: DeepPartial<Refresh>): Promise<Refresh> {
+  async findOne(data: AuthParamsInterface): Promise<Refresh> {
     return await this.refreshRepository.findOneBy({
       refreshToken: data?.refreshToken,
       userId: data?.userId,
@@ -17,10 +19,14 @@ export class AuthRepository {
   }
 
   async createAndRemove(
-    data: DeepPartial<Refresh>,
-    newToken: string,
+    data: CreateAndRemoveParamsInterface,
   ): Promise<Refresh> {
-    const currentRefresh: Refresh = await this.findOne(data);
+    const { newRefreshToken, refreshToken, userId } = data;
+
+    const currentRefresh: Refresh = await this.findOne({
+      refreshToken,
+      userId,
+    });
 
     if (currentRefresh) {
       await this.refreshRepository.remove(currentRefresh);
@@ -28,7 +34,7 @@ export class AuthRepository {
 
     const newRefresh: Refresh = this.refreshRepository.create({
       userId: data.userId,
-      refreshToken: newToken,
+      refreshToken: newRefreshToken,
     });
 
     return await this.refreshRepository.save(newRefresh);

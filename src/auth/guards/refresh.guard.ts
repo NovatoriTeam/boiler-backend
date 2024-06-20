@@ -23,32 +23,29 @@ export class RefreshGuard implements CanActivate {
     const accessToken: string = request.cookies['accessToken'];
     const refreshToken: string = request.cookies['refreshToken'];
 
-    try {
-      const payload: JwtPayloadInterface =
-        await this.jwtService.verifyAsync<JwtPayloadInterface>(accessToken, {
-          ignoreExpiration: true,
-          secret: jwtConfig.jwtSecret,
-        });
+    const payload: JwtPayloadInterface =
+      await this.jwtService.verifyAsync<JwtPayloadInterface>(accessToken, {
+        ignoreExpiration: true,
+        secret: jwtConfig.jwtSecret,
+      });
 
-      const currentRefreshTokenSession: Refresh =
-        await this.authService.findOne(payload.id, refreshToken);
+    const currentRefreshTokenSession: Refresh = await this.authService.findOne(
+      payload.id,
+      refreshToken,
+    );
 
-      if (!currentRefreshTokenSession) {
-        throw new UnauthorizedException();
-      }
-
-      const isRefreshTokenValid: boolean =
-        this.authService.isRefreshTokenCorrect(
-          currentRefreshTokenSession,
-          refreshToken,
-        );
-
-      request['user'] = payload;
-      request['refreshToken'] = refreshToken;
-
-      return isRefreshTokenValid;
-    } catch (err) {
+    if (!currentRefreshTokenSession) {
       throw new UnauthorizedException();
     }
+
+    const isRefreshTokenValid: boolean = this.authService.isRefreshTokenCorrect(
+      currentRefreshTokenSession,
+      refreshToken,
+    );
+
+    request['user'] = payload;
+    request['refreshToken'] = refreshToken;
+
+    return isRefreshTokenValid;
   }
 }
