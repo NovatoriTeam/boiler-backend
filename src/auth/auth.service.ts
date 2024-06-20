@@ -12,12 +12,8 @@ import { AuthResponseDto } from './dtos/auth-response.dto';
 import { RegisterUserDto } from './dtos/register-user.dto';
 import { Refresh } from './entities/refresh.entity';
 import { GenerateJwtTokenParamsInterface } from './interfaces/generate-jwt-token-params.interface';
+import { RefreshTokenInterface } from './interfaces/refresh-token.interface';
 import { AuthRepository } from './repositories/auth.repository';
-
-interface RefreshTokenInterface {
-  refreshToken: string;
-  hashedRefreshToken: string;
-}
 
 @Injectable()
 export class AuthService {
