@@ -1,3 +1,3 @@
 export interface RefreshTokenConstsInterface {
-  readonly expiration: string;
+  readonly expiration: Date;
 }

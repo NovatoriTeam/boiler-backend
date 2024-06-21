@@ -179,7 +179,7 @@ export class AuthService {
     const hashedRefreshToken: string = hashString(userRefreshToken);
 
     const isRefreshTokenExpired: boolean = dayjs(new Date()).isAfter(
-      expirationDate,
+      dayjs(expirationDate),
     );
 
     if (isRefreshTokenExpired) {

@@ -23,7 +23,7 @@ export class Refresh {
   user: User;
 
   @Column({
-    type: 'datetime',
+    type: 'timestamp',
     default: refreshTokenConsts.expiration,
   })
   expirationDate: Date;
