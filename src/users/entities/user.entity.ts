@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import * as bcrypt from 'bcrypt';
-import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { BaseEntity } from '../../base/entities/base.entity';
 import { Product } from '../../products/entities/product.entity';
-import { Role } from '../../roles/entities/roles.entity';
+import { UserRole } from '../../roles/entities/user-role.entity';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -30,7 +30,7 @@ export class User extends BaseEntity {
   @OneToMany(() => Product, (product) => product.user)
   products: Product[];
 
-  @ApiProperty({ type: Role })
-  @ManyToMany(() => Role, (role) => role.users)
-  roles: Role[];
+  @ApiProperty({ type: UserRole, isArray: true })
+  @OneToMany(() => UserRole, (role) => role.user)
+  roles: UserRole[];
 }
