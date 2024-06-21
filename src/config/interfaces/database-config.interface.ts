@@ -5,4 +5,5 @@ export interface DatabaseConfigInterface {
   readonly port: number;
   readonly database: string;
   readonly schema: string;
+  readonly migrationsRun: boolean;
 }

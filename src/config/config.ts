@@ -14,6 +14,7 @@ export const databaseConfig: DatabaseConfigInterface = {
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
   schema: process.env.DATABASE_SCHEMA,
+  migrationsRun: process.env.MIGRATIONS_RUN === 'true',
 };
 
 export const jwtConfig: JwtConfigInterface = {
