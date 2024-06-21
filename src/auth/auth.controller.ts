@@ -9,11 +9,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { DeepPartial } from 'typeorm';
-import {
-  discordOAuth2Config,
-  googleOAuth2Config,
-  jwtConfig,
-} from '../config/config';
+import { discordOAuth2Config, googleOAuth2Config } from '../config/config';
 import { User } from '../users/entities/user.entity';
 import { AuthService } from './auth.service';
 import { AuthResponseDto } from './dtos/auth-response.dto';
@@ -40,20 +36,7 @@ export class AuthController {
   @Public()
   @Post('login')
   async login(@Req() req: RequestInterface<User>): Promise<AuthResponseDto> {
-    const { user } = req;
-
-    return {
-      accessToken: this.authService.generateJwtToken({
-        userId: user.id,
-        secret: jwtConfig.jwtSecret,
-        expiresIn: jwtConfig.jwtExpiration,
-      }),
-      refreshToken: this.authService.generateJwtToken({
-        userId: user.id,
-        secret: jwtConfig.refreshJwtSecret,
-        expiresIn: jwtConfig.refreshJwtExpiration,
-      }),
-    };
+    return await this.authService.login(req.user);
   }
 
   @UseGuards(GoogleOAuthGuard)

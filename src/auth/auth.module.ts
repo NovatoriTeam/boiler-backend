@@ -5,17 +5,20 @@ import { User } from '../users/entities/user.entity';
 import { UsersRepository } from '../users/repositories/users.repository';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { Refresh } from './entities/refresh.entity';
 import { AuthGuard } from './guards/auth.guard';
+import { AuthRepository } from './repositories/auth.repository';
 import { DiscordStrategy } from './strategies/discord.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
   controllers: [AuthController],
-  imports: [TypeOrmModule.forFeature([User]), JwtModule.register({})],
+  imports: [TypeOrmModule.forFeature([User, Refresh]), JwtModule.register({})],
   providers: [
     AuthService,
     UsersRepository,
+    AuthRepository,
     LocalStrategy,
     GoogleStrategy,
     DiscordStrategy,

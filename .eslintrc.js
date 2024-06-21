@@ -37,7 +37,7 @@ module.exports = {
       'error',
       {
         variableDeclaration: true,
-        variableDeclarationIgnoreFunction: false,
+        variableDeclarationIgnoreFunction: true,
       },
     ],
     // allow usage of Class.name as tests name
