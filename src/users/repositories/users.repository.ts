@@ -47,7 +47,7 @@ export class UsersRepository {
     const query: SelectQueryBuilder<User> = this.usersRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.roles', 'roles')
-      .where('id = :id', { id });
+      .where('user.id = :id', { id });
 
     return await query.getOneOrFail();
   }

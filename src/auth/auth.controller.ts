@@ -12,12 +12,12 @@ import { DeepPartial } from 'typeorm';
 import { discordOAuth2Config, googleOAuth2Config } from '../config/config';
 import { User } from '../users/entities/user.entity';
 import { AuthService } from './auth.service';
+import { Public } from './decorators/public.decorator';
 import { AuthResponseDto } from './dtos/auth-response.dto';
 import { RegisterUserDto } from './dtos/register-user.dto';
 import { DiscordOAuthGuard } from './guards/discord.guard';
 import { GoogleOAuthGuard } from './guards/google.guard';
 import { UsernamePasswordAuthGuard } from './guards/local.guard';
-import { Public } from './guards/public.key';
 import { RequestInterface } from './interfaces/request.interface';
 
 @Controller('auth')
