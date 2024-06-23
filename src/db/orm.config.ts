@@ -6,7 +6,6 @@ export const connectionOptions: DataSourceOptions = {
   ...databaseConfig,
   entities: ['dist/**/*.entity{.ts,.js}'],
   migrations: ['dist/db/migrations/*{.ts,.js}'],
-  migrationsRun: true,
 };
 
 const dataSource: DataSource = new DataSource(connectionOptions);
