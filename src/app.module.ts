@@ -5,7 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CompilerModule } from './compiler/compiler.module';
-import { databaseConfig } from './config/config';
+import { connectionOptions } from './db/orm.config';
 import { ProductsModule } from './products/products.module';
 import { RolesModule } from './roles/roles.module';
 import { TasksModule } from './tasks/tasks.module';
@@ -13,12 +13,7 @@ import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      ...databaseConfig,
-      autoLoadEntities: true,
-      synchronize: true,
-    }),
+    TypeOrmModule.forRoot(connectionOptions),
     UsersModule,
     AuthModule,
     ProductsModule,
