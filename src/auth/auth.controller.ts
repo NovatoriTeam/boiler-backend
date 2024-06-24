@@ -9,7 +9,11 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { DeepPartial } from 'typeorm';
-import { discordOAuth2Config, googleOAuth2Config } from '../config/config';
+import {
+  corsConfig,
+  discordOAuth2Config,
+  googleOAuth2Config,
+} from '../config/config';
 import { User } from '../users/entities/user.entity';
 import { AuthService } from './auth.service';
 import { AuthResponseDto } from './dtos/auth-response.dto';
@@ -92,10 +96,14 @@ export class AuthController {
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       expires: cookieExpirationDate,
+      domain: corsConfig.baseDomain,
+      secure: true,
     });
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       expires: cookieExpirationDate,
+      secure: true,
+      domain: corsConfig.baseDomain,
     });
 
     res.redirect(redirectUrl);

@@ -5,19 +5,27 @@ import * as cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 import { AppModule } from './app.module';
 import { ResponseInterceptor } from './base/interceptors/response.interceptor';
+import { corsConfig } from './config/config';
 
 dotenv.config({ path: '.env' });
 
 async function bootstrap(): Promise<void> {
   const app: INestApplication = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
-  app.use(cookieParser());
+  app
+    .useGlobalPipes(new ValidationPipe())
+    .use(cookieParser())
+    .useGlobalInterceptors(new ResponseInterceptor())
+    .enableCors({
+      credentials: true,
+      origin: corsConfig.allowedUrls,
+    });
+
   const config: Omit<OpenAPIObject, 'paths'> = new DocumentBuilder()
     .setTitle('Boiler Plate')
     .setDescription('The Boiler Plate API Description')
     .setVersion('1.0')
     .build();
-  app.useGlobalInterceptors(new ResponseInterceptor());
+
   const document: OpenAPIObject = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 

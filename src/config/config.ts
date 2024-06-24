@@ -1,6 +1,7 @@
 import * as process from 'node:process';
 import * as dotenv from 'dotenv';
 import { CompilerConfigInterface } from './interfaces/compiler-config.interface';
+import { CorsConfigInterface } from './interfaces/cors-config.interface';
 import { DatabaseConfigInterface } from './interfaces/database-config.interface';
 import { JwtConfigInterface } from './interfaces/jwt-config.interface';
 import { OAuthConfigInterface } from './interfaces/oauth-config.interface';
@@ -42,4 +43,9 @@ export const discordOAuth2Config: OAuthConfigInterface = {
   clientSecret: process.env.DISCORD_CLIENT_SECRET,
   callbackUrl: process.env.DISCORD_CALLBACK_URL,
   redirectUrl: process.env.REDIRECT_URL,
+};
+
+export const corsConfig: CorsConfigInterface = {
+  allowedUrls: process.env.ALLOWED_ORIGIN_URLS?.split?.(',') ?? [],
+  baseDomain: process.env.BASE_DOMAIN,
 };
