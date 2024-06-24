@@ -46,5 +46,5 @@ export const discordOAuth2Config: OAuthConfigInterface = {
 };
 
 export const allowedOriginsConfig: AllowedOriginsConfigInterface = {
-  allowedOrigins: process.env.ALLOWED_ORIGINS.split(','),
+  allowedOrigins: process.env.ALLOWED_ORIGINS?.split?.(',') ?? [],
 };

@@ -92,10 +92,12 @@ export class AuthController {
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       expires: cookieExpirationDate,
+      secure: true,
     });
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       expires: cookieExpirationDate,
+      secure: true,
     });
 
     res.redirect(redirectUrl);
