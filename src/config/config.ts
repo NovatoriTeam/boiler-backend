@@ -1,5 +1,6 @@
 import * as process from 'node:process';
 import * as dotenv from 'dotenv';
+import { AllowedOriginsConfigInterface } from './interfaces/allowed-origins-config.interface';
 import { CompilerConfigInterface } from './interfaces/compiler-config.interface';
 import { DatabaseConfigInterface } from './interfaces/database-config.interface';
 import { JwtConfigInterface } from './interfaces/jwt-config.interface';
@@ -42,4 +43,8 @@ export const discordOAuth2Config: OAuthConfigInterface = {
   clientSecret: process.env.DISCORD_CLIENT_SECRET,
   callbackUrl: process.env.DISCORD_CALLBACK_URL,
   redirectUrl: process.env.REDIRECT_URL,
+};
+
+export const allowedOriginsConfig: AllowedOriginsConfigInterface = {
+  allowedOrigins: process.env.ALLOWED_ORIGINS.split(','),
 };
