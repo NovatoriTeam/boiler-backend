@@ -6,7 +6,7 @@ import { RoleEnum } from '../enums/role.enum';
 @Entity('user_role')
 export class UserRole extends BaseEntity {
   @Column({ type: 'enum', enum: RoleEnum })
-  role!: RoleEnum;
+  name!: RoleEnum;
 
   @Column()
   userId!: number;

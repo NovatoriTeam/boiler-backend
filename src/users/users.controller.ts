@@ -10,8 +10,8 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { UpdateUserDto } from 'boiler-shareds';
 import { DeleteResult, UpdateResult } from 'typeorm';
+import { Public } from '../auth/decorators/public.decorator';
 import { AuthGuard } from '../auth/guards/auth.guard';
-import { Public } from '../auth/guards/public.key';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
