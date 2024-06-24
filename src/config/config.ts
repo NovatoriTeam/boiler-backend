@@ -1,7 +1,7 @@
 import * as process from 'node:process';
 import * as dotenv from 'dotenv';
-import { AllowedOriginsConfigInterface } from './interfaces/allowed-origins-config.interface';
 import { CompilerConfigInterface } from './interfaces/compiler-config.interface';
+import { CorsConfigInterface } from './interfaces/cors-config.interface';
 import { DatabaseConfigInterface } from './interfaces/database-config.interface';
 import { JwtConfigInterface } from './interfaces/jwt-config.interface';
 import { OAuthConfigInterface } from './interfaces/oauth-config.interface';
@@ -45,6 +45,7 @@ export const discordOAuth2Config: OAuthConfigInterface = {
   redirectUrl: process.env.REDIRECT_URL,
 };
 
-export const allowedOriginsConfig: AllowedOriginsConfigInterface = {
-  allowedOrigins: process.env.ALLOWED_ORIGINS?.split?.(',') ?? [],
+export const corsConfig: CorsConfigInterface = {
+  allowedUrls: process.env.ALLOWED_ORIGIN_URLS?.split?.(',') ?? [],
+  baseDomain: process.env.BASE_DOMAIN,
 };
