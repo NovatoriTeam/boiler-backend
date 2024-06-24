@@ -13,7 +13,7 @@ export class User extends BaseEntity {
   firstName: string;
 
   @ApiProperty({ type: Number, nullable: true })
-  @Column()
+  @Column({ nullable: true })
   lastName: string;
 
   @ApiProperty({ type: Number })
