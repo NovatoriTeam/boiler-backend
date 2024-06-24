@@ -12,6 +12,7 @@ import { DeepPartial } from 'typeorm';
 import {
   corsConfig,
   discordOAuth2Config,
+  facebookOAuth2Config,
   googleOAuth2Config,
 } from '../config/config';
 import { User } from '../users/entities/user.entity';
@@ -20,6 +21,7 @@ import { Public } from './decorators/public.decorator';
 import { AuthResponseDto } from './dtos/auth-response.dto';
 import { RegisterUserDto } from './dtos/register-user.dto';
 import { DiscordOAuthGuard } from './guards/discord.guard';
+import { FacebookGuard } from './guards/facebook.guard';
 import { GoogleOAuthGuard } from './guards/google.guard';
 import { UsernamePasswordAuthGuard } from './guards/local.guard';
 import { RequestInterface } from './interfaces/request.interface';
@@ -78,6 +80,25 @@ export class AuthController {
       req,
       res,
       discordOAuth2Config.redirectUrl,
+    );
+  }
+
+  @UseGuards(FacebookGuard)
+  @Public()
+  @Get('facebook')
+  async facebookAuth(): Promise<void> {}
+
+  @UseGuards(FacebookGuard)
+  @Public()
+  @Get('facebook/callback')
+  async facebookAuthCallback(
+    @Req() req: RequestInterface<DeepPartial<User>>,
+    @Res() res: Response,
+  ): Promise<void> {
+    return await this.handleOAuthCallback(
+      req,
+      res,
+      facebookOAuth2Config.redirectUrl,
     );
   }
 
