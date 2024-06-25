@@ -6,7 +6,10 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CompilerModule } from './compiler/compiler.module';
 import { connectionOptions } from './db/orm.config';
+import { DepartmentsModule } from './departments/departments.module';
+import { EmployeesModule } from './employees/employees.module';
 import { ProductsModule } from './products/products.module';
+import { ProjectsModule } from './projects/projects.module';
 import { RolesModule } from './roles/roles.module';
 import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
@@ -21,6 +24,9 @@ import { UsersModule } from './users/users.module';
     TasksModule,
     CompilerModule,
     ConfigModule.forRoot({ isGlobal: true }),
+    EmployeesModule,
+    DepartmentsModule,
+    ProjectsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
