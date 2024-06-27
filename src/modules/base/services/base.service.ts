@@ -5,8 +5,8 @@ import { BaseEntity } from '../entities/base.entity';
 import { BaseRepository } from '../repositories/base.repository';
 import { QueryHelperInterface } from '../types/interfaces/query-helper.interface';
 
-export class BaseService<EntityType extends BaseEntity, CreateDto, UpdateDto>
-  implements BaseServiceContract<EntityType, CreateDto, UpdateDto>
+export class BaseService<EntityType extends BaseEntity>
+  implements BaseServiceContract<EntityType>
 {
   constructor(private readonly baseRepo: BaseRepository<EntityType>) {}
 
@@ -20,11 +20,11 @@ export class BaseService<EntityType extends BaseEntity, CreateDto, UpdateDto>
     return await this.baseRepo.findOne(id);
   }
 
-  async create(dto: CreateDto): Promise<EntityType> {
+  async create(dto): Promise<EntityType> {
     return await this.baseRepo.create(dto as DeepPartial<EntityType>);
   }
 
-  async update(id: number, body: UpdateDto): Promise<UpdateResult> {
+  async update(id: number, body): Promise<UpdateResult> {
     return await this.baseRepo.update(
       id,
       body as QueryDeepPartialEntity<EntityType>,
