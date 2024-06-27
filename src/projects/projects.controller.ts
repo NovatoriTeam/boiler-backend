@@ -4,18 +4,22 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
+  Put,
   Req,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UpdateResult } from 'typeorm';
+import { Public } from '../auth/decorators/public.decorator';
 import { BaseController } from '../base/base.controller';
+import { FilterInterceptor } from '../base/interceptors/filter.interceptor';
 import { RequestInterface } from '../base/interfaces/request.interface';
 import { PaginationResponseType } from '../base/types/pagination.response.type';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { Project } from './entities/project.entity';
 import { ProjectsService } from './projects.service';
+import { projectsFilterInterceptorParameters } from './utils/projects-filter-interceptor.parameters';
 
 @Controller('projects')
 export class ProjectsController extends BaseController<
@@ -29,10 +33,13 @@ export class ProjectsController extends BaseController<
   }
 
   @Post()
+  @Public()
   create(@Body() createProjectDto: CreateProjectDto): Promise<Project> {
     return this.projectsService.create(createProjectDto);
   }
 
+  @UseInterceptors(new FilterInterceptor(projectsFilterInterceptorParameters))
+  @Public()
   @Get()
   findAll(
     @Req() req: RequestInterface,
@@ -41,11 +48,13 @@ export class ProjectsController extends BaseController<
   }
 
   @Get(':id')
+  @Public()
   findOne(@Param('id') id: string): Promise<Project> {
     return this.projectsService.findOne(Number(id));
   }
 
-  @Patch(':id')
+  @Put(':id')
+  @Public()
   update(
     @Param('id') id: string,
     @Body() updateProjectDto: UpdateProjectDto,
@@ -54,6 +63,7 @@ export class ProjectsController extends BaseController<
   }
 
   @Delete(':id')
+  @Public()
   remove(@Param('id') id: string): Promise<UpdateResult> {
     return this.projectsService.remove(Number(id));
   }

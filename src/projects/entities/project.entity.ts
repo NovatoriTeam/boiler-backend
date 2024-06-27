@@ -10,12 +10,6 @@ export class Project extends BaseEntity {
   @Column('text')
   description: string;
 
-  @Column({ type: 'timestamp' })
-  startDate: Date;
-
-  @Column({ type: 'timestamp' })
-  endDate: Date;
-
   @Column('decimal', { precision: 10, scale: 2 })
   budget: number;
 

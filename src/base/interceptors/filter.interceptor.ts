@@ -17,7 +17,7 @@ import { QueryProcessor } from '../processors/query.processor';
 export class FilterInterceptor implements NestInterceptor {
   constructor(
     private options: QueryOptionsInterface,
-    private alias: string,
+    private alias?: string,
   ) {}
 
   async intercept(

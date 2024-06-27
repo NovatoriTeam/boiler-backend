@@ -4,12 +4,15 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
+  Put,
   Req,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UpdateResult } from 'typeorm';
+import { Public } from '../auth/decorators/public.decorator';
 import { BaseController } from '../base/base.controller';
+import { FilterInterceptor } from '../base/interceptors/filter.interceptor';
 import { RequestInterface } from '../base/interfaces/request.interface';
 import { PaginationResponseType } from '../base/types/pagination.response.type';
 import { DepartmentsService } from './departments.service';
@@ -29,13 +32,20 @@ export class DepartmentsController extends BaseController<
   }
 
   @Post()
+  @Public()
   create(
     @Body() createDepartmentDto: CreateDepartmentDto,
   ): Promise<Department> {
     return this.departmentsService.create(createDepartmentDto);
   }
 
+  @UseInterceptors(
+    new FilterInterceptor({
+      name: ['searchable'],
+    }),
+  )
   @Get()
+  @Public()
   findAll(
     @Req() req: RequestInterface,
   ): Promise<PaginationResponseType<Department>> {
@@ -43,11 +53,13 @@ export class DepartmentsController extends BaseController<
   }
 
   @Get(':id')
+  @Public()
   findOne(@Param('id') id: string): Promise<Department> {
     return this.departmentsService.findOne(Number(id));
   }
 
-  @Patch(':id')
+  @Put(':id')
+  @Public()
   update(
     @Param('id') id: string,
     @Body() updateDepartmentDto: UpdateDepartmentDto,
@@ -56,6 +68,7 @@ export class DepartmentsController extends BaseController<
   }
 
   @Delete(':id')
+  @Public()
   remove(@Param('id') id: string): Promise<UpdateResult> {
     return this.departmentsService.remove(Number(id));
   }

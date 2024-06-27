@@ -1,6 +1,5 @@
 import {
   DeepPartial,
-  FindManyOptions,
   Repository,
   SelectQueryBuilder,
   UpdateResult,
@@ -18,9 +17,11 @@ export class BaseRepository<EntityType extends BaseEntity>
   async findAll(
     applyQueryParametersFilter: QueryHelperInterface,
   ): Promise<[EntityType[], number]> {
-    const query: FindManyOptions<EntityType> = {};
-    applyQueryParametersFilter.toQuery(query);
-    return await this.baseRepository.findAndCount(query);
+    const query: SelectQueryBuilder<EntityType> =
+      this.baseRepository.createQueryBuilder('project');
+
+    applyQueryParametersFilter?.toQuery(query);
+    return await query.getManyAndCount();
   }
 
   async findOne(id: number): Promise<EntityType> {

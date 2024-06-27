@@ -32,8 +32,8 @@ export class TypeormFindUtil {
     pagination: { limit: number; offset: number },
   ): void {
     Object.assign(query, {
-      limit: pagination.limit,
-      take: pagination.offset,
+      take: pagination.limit,
+      skip: pagination.offset,
     });
   }
 
@@ -51,8 +51,10 @@ export class TypeormFindUtil {
   ): void {
     for (const key in search) {
       Object.assign(query, {
-        ...query.where,
-        [key]: Like(`%${search[key]}%`),
+        where: {
+          ...query.where,
+          [key]: Like(`%${search[key]}%`),
+        },
       });
     }
   }

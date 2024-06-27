@@ -1,4 +1,4 @@
-import { IsDateString, IsDecimal, IsString } from 'class-validator';
+import { IsDecimal, IsString } from 'class-validator';
 
 export class CreateProjectDto {
   @IsString()
@@ -6,12 +6,6 @@ export class CreateProjectDto {
 
   @IsString()
   description: string;
-
-  @IsDateString()
-  startDate: Date;
-
-  @IsDateString()
-  endDate: Date;
 
   @IsDecimal()
   budget: number;
