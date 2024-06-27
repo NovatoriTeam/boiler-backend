@@ -4,8 +4,8 @@ import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 import { AppModule } from './app.module';
-import { ResponseInterceptor } from './base/interceptors/response.interceptor';
 import { corsConfig } from './config/config';
+import { ResponseInterceptor } from './modules/base/interceptors/response.interceptor';
 
 dotenv.config({ path: '.env' });
 
