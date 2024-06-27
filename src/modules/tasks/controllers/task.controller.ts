@@ -1,17 +1,10 @@
 import { Controller, Get, Req } from '@nestjs/common';
 import { BaseController } from '../../base/controllers/base.controller';
-import { CreateTaskDto } from '../dtos/create-task.dto';
-import { UpdateTaskDto } from '../dtos/update-task.dto';
 import { TaskEntity } from '../entities/task.entity';
 import { TaskService } from '../services/task.service';
 
 @Controller('tasks')
-export class TaskController extends BaseController<
-  TaskEntity,
-  TaskService,
-  CreateTaskDto,
-  UpdateTaskDto
-> {
+export class TaskController extends BaseController<TaskEntity> {
   constructor(private taskService: TaskService) {
     super(taskService);
   }
