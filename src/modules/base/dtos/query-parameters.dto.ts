@@ -1,4 +1,4 @@
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { IsArray, IsNumber, IsObject, IsOptional } from 'class-validator';
 import { FilterType } from '../types/filter.type';
 import { SearchType } from '../types/search.type';
@@ -8,10 +8,12 @@ import { ToArray } from '../utils/to-array';
 export class QueryParametersDto {
   @IsOptional()
   @IsNumber()
+  @Type(() => Number)
   limit!: number;
 
   @IsOptional()
   @IsNumber()
+  @Type(() => Number)
   offset!: number;
 
   @IsOptional()
