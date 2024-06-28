@@ -1,5 +1,4 @@
 import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common';
-import { instanceToPlain } from 'class-transformer';
 import { Observable, map } from 'rxjs';
 import { CookieEnum } from '../../auth/types/enums/cookie.enum';
 
@@ -28,12 +27,12 @@ export class ResponseInterceptor implements NestInterceptor {
     };
     if (Array.isArray(data)) {
       Object.assign(response, {
-        data: instanceToPlain(data[0]) ?? data[0],
+        data: data[0],
         count: data[1],
       });
     } else {
       Object.assign(response, {
-        data: instanceToPlain(data) ?? data,
+        data: data,
       });
     }
     return response;

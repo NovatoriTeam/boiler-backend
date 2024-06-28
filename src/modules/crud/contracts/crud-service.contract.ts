@@ -1,11 +1,11 @@
 import { QueryHelperInterface } from '../types/interfaces/query-helper.interface';
 
-export interface CrudServiceContract<EntityType> {
+export interface CrudServiceContract<_EntityType, ModelType> {
   findAll: (
     applyQueryFilters: QueryHelperInterface,
-  ) => Promise<[EntityType[], number]>;
-  findOne: (id: number) => Promise<EntityType>;
-  create: (data) => Promise<EntityType>;
+  ) => Promise<[ModelType[], number]>;
+  findOne: (id: number) => Promise<ModelType>;
+  create: (data) => Promise<ModelType>;
   update: (id: number, data) => void;
   remove: (id: number) => void;
 }
