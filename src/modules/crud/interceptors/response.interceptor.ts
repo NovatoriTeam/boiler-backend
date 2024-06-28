@@ -1,40 +1,30 @@
 import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common';
 import { Observable, map } from 'rxjs';
-import { CookieEnum } from '../../auth/types/enums/cookie.enum';
+import { baseEntityChecker } from '../../../shared/helpers/baseEntityChecker/base-entity.checker';
+import { ResponseInterface } from '../types/interfaces/response.interface';
 
 export class ResponseInterceptor implements NestInterceptor {
   intercept(
     context: ExecutionContext,
     next: CallHandler,
-  ): Observable<{ status: number }> {
-    const request: Request = context.switchToHttp().getRequest();
-    const accessToken: string | undefined = request[CookieEnum.AccessToken];
-
+  ): Observable<ResponseInterface> {
     return next.handle().pipe(
       map((data) => {
-        return this.transformData(data, accessToken);
+        return this.transformData(data);
       }),
     );
   }
 
-  private transformData(
-    data: unknown,
-    accessToken?: string,
-  ): { status: number } {
-    const response: { status: number; accessToken?: string } = {
+  private transformData(result: unknown): ResponseInterface {
+    baseEntityChecker(result?.[0] ?? result);
+
+    const data: unknown = result[0] ?? result;
+    const count: number = result?.[1];
+
+    return {
       status: 200,
-      accessToken,
+      data,
+      count: count,
     };
-    if (Array.isArray(data)) {
-      Object.assign(response, {
-        data: data[0],
-        count: data[1],
-      });
-    } else {
-      Object.assign(response, {
-        data: data,
-      });
-    }
-    return response;
   }
 }
