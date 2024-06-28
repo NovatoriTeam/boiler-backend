@@ -4,7 +4,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Product } from '../entities/product.entity';
+import { ProductsModel } from '../models/products.model';
 import { ProductsRepository } from '../repositories/products.repository';
 
 @Injectable()
@@ -14,7 +14,8 @@ export class ProductGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: { body: { id } } = context.switchToHttp().getRequest();
     const productId: number = request.body.id;
-    const product: Product = await this.productsRepository.findOne(productId);
+    const product: ProductsModel =
+      await this.productsRepository.findOne(productId);
 
     if (product.userId !== 1) {
       throw new UnauthorizedException();
