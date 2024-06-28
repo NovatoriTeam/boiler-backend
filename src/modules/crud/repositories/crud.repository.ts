@@ -17,7 +17,7 @@ export class CrudRepository<
 {
   constructor(private baseRepository: Repository<EntityType>) {}
 
-  async findAll(
+  async _$findAll(
     applyQueryParametersFilter: QueryHelperInterface,
   ): Promise<[ModelType[], number]> {
     const query: FindManyOptions<EntityType> = {};
@@ -28,7 +28,7 @@ export class CrudRepository<
     return [returnable, res[1]];
   }
 
-  async findOne(id: number): Promise<ModelType> {
+  async _$findOne(id: number): Promise<ModelType> {
     const query: SelectQueryBuilder<EntityType> = this.baseRepository
       .createQueryBuilder()
       .where('id = :id', { id });
@@ -37,7 +37,7 @@ export class CrudRepository<
     return res.toModel();
   }
 
-  async create(data: ModelType): Promise<ModelType> {
+  async _$create(data: ModelType): Promise<ModelType> {
     const item: EntityType = this.baseRepository.create(
       data as unknown as DeepPartial<EntityType>,
     );
@@ -45,7 +45,7 @@ export class CrudRepository<
     return res.toModel();
   }
 
-  async update(
+  async _$update(
     id: number,
     data: QueryDeepPartialEntity<ModelType>,
   ): Promise<ModelType> {
@@ -53,11 +53,11 @@ export class CrudRepository<
       id,
       data as unknown as QueryDeepPartialEntity<EntityType>,
     );
-    return await this.findOne(id);
+    return await this._$findOne(id);
   }
 
-  async remove(id: number): Promise<ModelType> {
+  async _$remove(id: number): Promise<ModelType> {
     await this.baseRepository.softDelete(id);
-    return await this.findOne(id);
+    return await this._$findOne(id);
   }
 }

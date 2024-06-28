@@ -13,25 +13,25 @@ export class CrudService<
     private readonly baseRepo: CrudRepository<EntityType, ModelType>,
   ) {}
 
-  async findAll(
+  async _$findAll(
     applyQueryFilers: QueryHelperInterface,
   ): Promise<[ModelType[], number]> {
-    return await this.baseRepo.findAll(applyQueryFilers);
+    return await this.baseRepo._$findAll(applyQueryFilers);
   }
 
-  async findOne(id: number): Promise<ModelType> {
-    return await this.baseRepo.findOne(id);
+  async _$findOne(id: number): Promise<ModelType> {
+    return await this.baseRepo._$findOne(id);
   }
 
-  async create(dto): Promise<ModelType> {
-    return await this.baseRepo.create(dto);
+  async _$create(dto): Promise<ModelType> {
+    return await this.baseRepo._$create(dto);
   }
 
-  async update(id: number, body): Promise<ModelType> {
-    return await this.baseRepo.update(id, body);
+  async _$update(id: number, body): Promise<ModelType> {
+    return await this.baseRepo._$update(id, body);
   }
 
-  async remove(id: number): Promise<ModelType> {
-    return await this.baseRepo.remove(id);
+  async _$remove(id: number): Promise<ModelType> {
+    return await this.baseRepo._$remove(id);
   }
 }
