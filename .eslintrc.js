@@ -4,7 +4,7 @@ module.exports = {
     project: 'tsconfig.json',
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin', 'jest', 'import'],
+  plugins: ['@typescript-eslint/eslint-plugin', 'jest', 'import', 'filenames'],
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
@@ -80,6 +80,7 @@ module.exports = {
     ],
     'sort-imports': ['error', { ignoreDeclarationSort: true }],
     'import/order': ['error', { alphabetize: { order: 'asc' } }],
+    "filenames/match-regex": [2, "^[a-z0-9-]+(\\.test)?\\.js$", true],
     'no-restricted-imports': [
       'error',
       {
