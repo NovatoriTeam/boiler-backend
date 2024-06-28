@@ -2,7 +2,7 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 import { BaseEntity } from '../entities/base.entity';
 import { QueryHelperInterface } from '../types/interfaces/query-helper.interface';
 
-export interface BaseRepositoryContract<EntityType extends BaseEntity> {
+export interface CrudRepositoryContract<EntityType extends BaseEntity> {
   findAll: (
     applyQueryFilters: QueryHelperInterface,
   ) => Promise<[EntityType[], number]>;

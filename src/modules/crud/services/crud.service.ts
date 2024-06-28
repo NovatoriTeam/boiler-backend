@@ -1,14 +1,14 @@
 import { DeepPartial, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { BaseServiceContract } from '../contracts/base-service.contract';
+import { CrudServiceContract } from '../contracts/crud-service.contract';
 import { BaseEntity } from '../entities/base.entity';
-import { BaseRepository } from '../repositories/base.repository';
+import { CrudRepository } from '../repositories/crud.repository';
 import { QueryHelperInterface } from '../types/interfaces/query-helper.interface';
 
-export class BaseService<EntityType extends BaseEntity>
-  implements BaseServiceContract<EntityType>
+export class CrudService<EntityType extends BaseEntity>
+  implements CrudServiceContract<EntityType>
 {
-  constructor(private readonly baseRepo: BaseRepository<EntityType>) {}
+  constructor(private readonly baseRepo: CrudRepository<EntityType>) {}
 
   async findAll(
     applyQueryFilers: QueryHelperInterface,

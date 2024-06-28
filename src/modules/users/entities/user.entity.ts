@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import * as bcrypt from 'bcrypt';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-import { BaseEntity } from '../../base/entities/base.entity';
+import { BaseEntity } from '../../crud/entities/base.entity';
 import { Product } from '../../products/entities/product.entity';
 import { UserRole } from '../../roles/entities/user-role.entity';
 

@@ -6,12 +6,12 @@ import {
   UpdateResult,
 } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { BaseRepositoryContract } from '../contracts/base-repository.contract';
+import { CrudRepositoryContract } from '../contracts/crud-repository.contract';
 import { BaseEntity } from '../entities/base.entity';
 import { QueryHelperInterface } from '../types/interfaces/query-helper.interface';
 
-export class BaseRepository<EntityType extends BaseEntity>
-  implements BaseRepositoryContract<EntityType>
+export class CrudRepository<EntityType extends BaseEntity>
+  implements CrudRepositoryContract<EntityType>
 {
   constructor(private baseRepository: Repository<EntityType>) {}
 

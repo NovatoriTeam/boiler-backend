@@ -1,15 +1,15 @@
 import { Body, Controller, Get, Post, Req } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { Public } from '../../auth/decorators/public.decorator';
-import { BaseController } from '../../base/controllers/base.controller';
-import { CrudFilter } from '../../base/decorators/crud-filter.decorator';
-import { RequestInterface } from '../../base/types/interfaces/request.interface';
+import { CrudController } from '../../crud/controllers/crud.controller';
+import { CrudFilter } from '../../crud/decorators/crud-filter.decorator';
+import { RequestInterface } from '../../crud/types/interfaces/request.interface';
 import { CreateProductDto } from '../dtos/create-product.dto';
 import { Product } from '../entities/product.entity';
 import { ProductsService } from '../services/products.service';
 
 @Controller('products')
-export class ProductsController extends BaseController<Product> {
+export class ProductsController extends CrudController<Product> {
   constructor(private productService: ProductsService) {
     super(productService);
   }

@@ -1,6 +1,6 @@
 import { QueryHelperInterface } from '../types/interfaces/query-helper.interface';
 
-export interface BaseServiceContract<EntityType> {
+export interface CrudServiceContract<EntityType> {
   findAll: (
     applyQueryFilters: QueryHelperInterface,
   ) => Promise<[EntityType[], number]>;
