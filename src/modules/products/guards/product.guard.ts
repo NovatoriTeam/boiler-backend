@@ -15,7 +15,7 @@ export class ProductGuard implements CanActivate {
     const request: { body: { id } } = context.switchToHttp().getRequest();
     const productId: number = request.body.id;
     const product: ProductsModel =
-      await this.productsRepository.findOne(productId);
+      await this.productsRepository.$_findOne(productId);
 
     if (product.userId !== 1) {
       throw new UnauthorizedException();
