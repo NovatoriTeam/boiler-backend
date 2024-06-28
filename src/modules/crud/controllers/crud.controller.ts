@@ -23,22 +23,22 @@ export abstract class CrudController<
   abstract removeController(id: string);
 
   async findAll(@Req() req: RequestInterface): Promise<[ModelType[], number]> {
-    return await this.baseService._$findAll(req.queryHelper);
+    return await this.baseService.$_findAll(req.queryHelper);
   }
 
   async findOne(@Param('id') id: string): Promise<ModelType> {
-    return await this.baseService._$findOne(Number(id));
+    return await this.baseService.$_findOne(Number(id));
   }
 
   async create(dto): Promise<ModelType> {
-    return await this.baseService._$create(dto);
+    return await this.baseService.$_create(dto);
   }
 
   async update(id: string, dto): Promise<ModelType> {
-    return await this.baseService._$update(Number(id), dto);
+    return await this.baseService.$_update(Number(id), dto);
   }
 
   async remove(id: string): Promise<ModelType> {
-    return await this.baseService._$remove(Number(id));
+    return await this.baseService.$_remove(Number(id));
   }
 }

@@ -7,11 +7,11 @@ export interface CrudRepositoryContract<
   EntityType extends BaseEntity<ModelType>,
   ModelType extends BaseModel<EntityType>,
 > {
-  _$findAll: (
+  $_findAll: (
     applyQueryFilters: QueryHelperInterface,
   ) => Promise<[ModelType[], number]>;
-  _$findOne: (id: number) => Promise<ModelType>;
-  _$create: (data: ModelType) => Promise<ModelType>;
-  _$update: (id: number, data: QueryDeepPartialEntity<ModelType>) => void;
-  _$remove: (id: number) => void;
+  $_findOne: (id: number) => Promise<ModelType>;
+  $_create: (data: ModelType) => Promise<ModelType>;
+  $_update: (id: number, data: QueryDeepPartialEntity<ModelType>) => void;
+  $_remove: (id: number) => void;
 }
