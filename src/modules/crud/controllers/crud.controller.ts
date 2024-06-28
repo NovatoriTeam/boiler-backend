@@ -1,12 +1,12 @@
 import { Param, Req } from '@nestjs/common';
 import { UpdateResult } from 'typeorm';
 import { BaseEntity } from '../entities/base.entity';
-import { BaseService } from '../services/base.service';
+import { CrudService } from '../services/crud.service';
 import { RequestInterface } from '../types/interfaces/request.interface';
 
-export abstract class BaseController<EntityType extends BaseEntity> {
+export abstract class CrudController<EntityType extends BaseEntity> {
   protected constructor(
-    private readonly baseService: BaseService<EntityType>,
+    private readonly baseService: CrudService<EntityType>,
   ) {}
 
   async findAll(@Req() req: RequestInterface): Promise<[EntityType[], number]> {

@@ -5,7 +5,7 @@ import * as cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 import { AppModule } from './app.module';
 import { corsConfig } from './config/config';
-import { ResponseInterceptor } from './modules/base/interceptors/response.interceptor';
+import { ResponseInterceptor } from './modules/crud/interceptors/response.interceptor';
 
 dotenv.config({ path: '.env' });
 
