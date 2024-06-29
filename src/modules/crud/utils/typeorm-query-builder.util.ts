@@ -67,7 +67,7 @@ export class TypeormQueryBuilderUtil {
       new Brackets((query) => {
         for (const key in search) {
           query.orWhere(
-            `${this.conditionalyGenerateAlias(alias, key)} like :value`,
+            `Lower(${this.conditionalyGenerateAlias(alias, key)}) like :value`,
             {
               value: `%${search[key]}%`,
             },

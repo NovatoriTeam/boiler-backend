@@ -32,7 +32,7 @@ export class ProductsController extends CrudController<Product, ProductsModel> {
       price: ['sortable', 'searchable'],
       user: ['relatable'],
     },
-    'product',
+    'products',
   )
   @ApiResponse({ isArray: true, type: Product })
   @Public()

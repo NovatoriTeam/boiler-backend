@@ -22,6 +22,7 @@ async function bootstrap(): Promise<void> {
       new ClassSerializerInterceptor(app.get(Reflector), {
         strategy: 'excludeAll',
         excludeExtraneousValues: true,
+        enableImplicitConversion: true,
       }),
     )
     .use(cookieParser())
