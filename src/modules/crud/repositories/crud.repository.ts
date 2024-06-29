@@ -1,4 +1,9 @@
-import { DeepPartial, Repository, SelectQueryBuilder } from 'typeorm';
+import {
+  DeepPartial,
+  FindManyOptions,
+  Repository,
+  SelectQueryBuilder,
+} from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { CrudRepositoryContract } from '../contracts/crud-repository.contract';
 import { BaseEntity } from '../entities/base.entity';
@@ -15,11 +20,11 @@ export class CrudRepository<
   async $_findAll(
     applyQueryParametersFilter: QueryHelperInterface,
   ): Promise<[ModelType[], number]> {
-    const query: SelectQueryBuilder<EntityType> =
-      this.baseRepository.createQueryBuilder('');
+    const query: FindManyOptions<EntityType> = {};
     applyQueryParametersFilter?.toQuery?.(query);
 
-    const res: [EntityType[], number] = await query.getManyAndCount();
+    const res: [EntityType[], number] =
+      await this.baseRepository.findAndCount(query);
     const returnable: ModelType[] = res[0].map((r) => r.toModel());
     return [returnable, res[1]];
   }
