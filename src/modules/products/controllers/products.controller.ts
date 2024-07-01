@@ -25,15 +25,12 @@ export class ProductsController extends CrudController<Product, ProductsModel> {
     super(productService);
   }
 
-  @CrudFilter(
-    {
-      name: ['sortable'],
-      shop: ['sortable', 'searchable', 'exact'],
-      price: ['sortable', 'searchable'],
-      user: ['relatable'],
-    },
-    'product',
-  )
+  @CrudFilter({
+    name: ['sortable'],
+    shop: ['sortable', 'searchable', 'exact'],
+    price: ['sortable', 'searchable'],
+    user: ['relatable'],
+  })
   @ApiResponse({ isArray: true, type: Product })
   @Public()
   @Get()

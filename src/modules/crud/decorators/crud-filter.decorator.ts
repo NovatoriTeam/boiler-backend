@@ -8,6 +8,6 @@ export function CrudFilter(
   alias?: string,
 ): ApplyDecoratorType {
   return applyDecorators(
-    UseInterceptors(new FilterInterceptor(options, alias)),
+    UseInterceptors(new FilterInterceptor(options, alias ?? 'items')),
   );
 }

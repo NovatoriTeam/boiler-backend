@@ -1,5 +1,6 @@
-import { Expose, plainToInstance } from 'class-transformer';
+import { Expose, Type, plainToInstance } from 'class-transformer';
 import { BaseModel } from '../../crud/models/base.model';
+import { UserModel } from '../../users/models/user.model';
 import { Product } from '../entities/product.entity';
 
 export class ProductsModel extends BaseModel<Product> {
@@ -7,7 +8,17 @@ export class ProductsModel extends BaseModel<Product> {
   id!: number;
 
   @Expose()
-  userId!: number;
+  name!: string;
+
+  @Expose()
+  price!: number;
+
+  @Expose()
+  shop!: string;
+
+  @Type(() => UserModel)
+  @Expose()
+  user!: UserModel;
 
   toEntity(): Product {
     return plainToInstance(Product, this);
