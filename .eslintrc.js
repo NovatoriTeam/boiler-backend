@@ -82,17 +82,6 @@ module.exports = {
     'import/order': ['error', { alphabetize: { order: 'asc' } }],
     'no-restricted-imports': [
       'error',
-      {
-        paths: [
-          {
-            name: '@nestjs/common',
-            importNames: ['Logger'],
-            message: 'Please use @devsbb/logger instead.',
-          },
-        ],
-        // Allow every other nestjs package
-        patterns: ['@nestjs/(?!config)'],
-      },
     ],
   },
   overrides: [
