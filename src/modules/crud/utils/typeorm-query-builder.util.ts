@@ -66,10 +66,11 @@ export class TypeormQueryBuilderUtil {
     query.andWhere(
       new Brackets((query) => {
         for (const key in search) {
+          const lowerCaseValue: string = search[key].toLowerCase();
           query.orWhere(
             `Lower(${this.conditionalyGenerateAlias(alias, key)}) like :value`,
             {
-              value: `%${search[key]}%`,
+              value: `%${lowerCaseValue}%`,
             },
           );
         }
