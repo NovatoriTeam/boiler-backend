@@ -21,6 +21,7 @@ import { RegisterUserDto } from '../dtos/register-user.dto';
 import { DiscordOAuthGuard } from '../guards/discord.guard';
 import { GoogleOAuthGuard } from '../guards/google.guard';
 import { UsernamePasswordAuthGuard } from '../guards/local.guard';
+import { RefreshGuard } from '../guards/refresh.guard';
 import { AuthService } from '../services/auth.service';
 import { RequestInterface } from '../types/interfaces/request.interface';
 
@@ -78,6 +79,18 @@ export class AuthController {
       req,
       res,
       discordOAuth2Config.redirectUrl,
+    );
+  }
+
+  @Public()
+  @UseGuards(RefreshGuard)
+  @Get('refresh')
+  async refreshTokens(
+    @Req() req: RequestInterface<User>,
+  ): Promise<AuthResponseDto> {
+    return await this.authService.refreshToken(
+      req.user.id,
+      req['refreshToken'],
     );
   }
 

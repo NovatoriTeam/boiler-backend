@@ -21,7 +21,7 @@ export class CompilerService {
       },
     );
 
-    const returnable: CompilerCodeInterface = {
+    const returnable = {
       output: JSON.parse(JSON.stringify(response.data.stdout)),
       error: response.data.exception,
     };
