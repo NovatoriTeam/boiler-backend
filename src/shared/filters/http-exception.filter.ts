@@ -24,7 +24,7 @@ const buildBoilerException = ({
 interface ExceptionResponseInterface {
   message: string | string[];
   error: string;
-  statusCode: number;
+  status: number;
 }
 
 @Catch(HttpException)
@@ -49,14 +49,14 @@ export class HttpExceptionFilter implements ExceptionFilter {
     if (Array.isArray(exceptionResponse.message)) {
       errors = exceptionResponse.message.map((errorMessage: string) =>
         buildBoilerException({
-          code: exceptionResponse.statusCode,
+          code: exceptionResponse.status,
           message: errorMessage,
         }),
       );
     }
 
     response.status(exception.getStatus()).json({
-      statusCode: exception.getStatus(),
+      status: exception.getStatus(),
       errors,
     });
   }

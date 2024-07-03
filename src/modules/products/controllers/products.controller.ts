@@ -32,7 +32,6 @@ export class ProductsController extends CrudController<Product, ProductsModel> {
     user: ['relatable'],
   })
   @ApiResponse({ isArray: true, type: Product })
-  @Public()
   @Get()
   async findAllController(
     @Req() req: RequestInterface,
