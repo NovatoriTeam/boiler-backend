@@ -40,6 +40,7 @@ export class ProductsController extends CrudController<Product, ProductsModel> {
     return await super.findAll(req);
   }
 
+  @Public()
   @Post()
   async createController(
     @Body() createProductDto: CreateProductDto,
