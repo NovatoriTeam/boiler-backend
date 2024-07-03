@@ -9,6 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { CrudController } from '../../crud/controllers/crud.controller';
+import { RequestInterface } from '../../crud/types/interfaces/request.interface';
 import { CreateTaskDto } from '../dtos/create-task.dto';
 import { UpdateTaskDto } from '../dtos/update-task.dto';
 import { TaskEntity } from '../entities/task.entity';
@@ -22,7 +23,9 @@ export class TaskController extends CrudController<TaskEntity, TaskModel> {
   }
 
   @Get()
-  async findAllController(@Req() req): Promise<[TaskModel[], number]> {
+  async findAllController(
+    @Req() req: RequestInterface,
+  ): Promise<[TaskModel[], number]> {
     return await super.findAll(req);
   }
 
