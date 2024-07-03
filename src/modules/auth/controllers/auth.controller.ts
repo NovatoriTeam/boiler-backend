@@ -82,16 +82,13 @@ export class AuthController {
     );
   }
 
-  @Public()
   @UseGuards(RefreshGuard)
+  @Public()
   @Get('refresh')
   async refreshTokens(
-    @Req() req: RequestInterface<User>,
+    @Req() req: { user: { id: number }; refreshToken: string },
   ): Promise<AuthResponseDto> {
-    return await this.authService.refreshToken(
-      req.user.id,
-      req['refreshToken'],
-    );
+    return await this.authService.refreshToken(req.user.id, req.refreshToken);
   }
 
   async handleOAuthCallback(
