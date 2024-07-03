@@ -66,7 +66,7 @@ export class AuthGuard implements CanActivate {
 
   private validateUserRoles(requiredRoles: RoleEnum[], user: User): boolean {
     const userRoles: RoleEnum[] = user.roles.map((role) => role.name);
-    const isRouteGuardedWithRole: boolean = !!requiredRoles?.length;
+    const isRouteGuardedWithRole = !!requiredRoles?.length;
     const isAdmin: boolean = userRoles.includes(RoleEnum.Admin);
     const hasRequiredRoles: boolean = requiredRoles?.some?.((role) =>
       userRoles.includes(role),

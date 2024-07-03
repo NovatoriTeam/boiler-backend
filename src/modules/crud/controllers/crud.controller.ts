@@ -30,11 +30,11 @@ export abstract class CrudController<
     return await this.baseService.$_findOne(Number(id));
   }
 
-  async create(dto): Promise<ModelType> {
+  async create(dto: unknown): Promise<ModelType> {
     return await this.baseService.$_create(dto);
   }
 
-  async update(id: string, dto): Promise<ModelType> {
+  async update(id: string, dto: unknown): Promise<ModelType> {
     return await this.baseService.$_update(Number(id), dto);
   }
 

@@ -1,3 +1,4 @@
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { CrudServiceContract } from '../contracts/crud-service.contract';
 import { BaseEntity } from '../entities/base.entity';
 import { BaseModel } from '../models/base.model';
@@ -23,12 +24,15 @@ export class CrudService<
     return await this.baseRepo.$_findOne(id);
   }
 
-  async $_create(dto): Promise<ModelType> {
-    return await this.baseRepo.$_create(dto);
+  async $_create(dto: unknown): Promise<ModelType> {
+    return await this.baseRepo.$_create(dto as ModelType);
   }
 
-  async $_update(id: number, body): Promise<ModelType> {
-    return await this.baseRepo.$_update(id, body);
+  async $_update(id: number, body: unknown): Promise<ModelType> {
+    return await this.baseRepo.$_update(
+      id,
+      body as QueryDeepPartialEntity<ModelType>,
+    );
   }
 
   async $_remove(id: number): Promise<ModelType> {

@@ -92,7 +92,7 @@ export class QueryProcessor {
   }
 
   private validateRelationOptions(relations: string[]): string[] {
-    for (let i: number = 0; i < relations.length; i++) {
+    for (let i = 0; i < relations.length; i++) {
       const isFieldRelatable: boolean = this.options[relations[i]]?.includes(
         QueryOptionsEnum.Relatable,
       );
