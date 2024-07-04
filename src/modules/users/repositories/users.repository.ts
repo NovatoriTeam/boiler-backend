@@ -7,6 +7,7 @@ import {
   SelectQueryBuilder,
   UpdateResult,
 } from 'typeorm';
+import { OAuthTypeEnum } from '../../auth/types/enums/o-auth-type.enum';
 import { User } from '../entities/user.entity';
 
 @Injectable()
@@ -41,6 +42,14 @@ export class UsersRepository {
       where: { email },
       select: ['id', 'email', 'password'],
     });
+  }
+
+  async findByOAuthId(type: OAuthTypeEnum, oAuthId: string): Promise<User> {
+    const query = await this.usersRepository
+      .createQueryBuilder('user')
+      .where(`"user"."oAuths"->>'${type}' = :id`, { id: oAuthId });
+
+    return await query.getOne();
   }
 
   async findUserByIdWithRoles(id: number): Promise<User> {

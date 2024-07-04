@@ -8,7 +8,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { DeepPartial } from 'typeorm';
 import {
   corsConfig,
   discordOAuth2Config,
@@ -23,6 +22,7 @@ import { GoogleOAuthGuard } from '../guards/google.guard';
 import { UsernamePasswordAuthGuard } from '../guards/local.guard';
 import { RefreshGuard } from '../guards/refresh.guard';
 import { AuthService } from '../services/auth.service';
+import { OAuthRequestInterface } from '../types/interfaces/o-auth-request.interface';
 import { RequestInterface } from '../types/interfaces/request.interface';
 
 @Controller('auth')
@@ -53,7 +53,7 @@ export class AuthController {
   @Public()
   @Get('google/callback')
   async googleAuthCallBack(
-    @Req() req: RequestInterface<DeepPartial<User>>,
+    @Req() req: OAuthRequestInterface,
     @Res() res: Response,
   ): Promise<void> {
     return await this.handleOAuthCallback(
@@ -72,7 +72,7 @@ export class AuthController {
   @Public()
   @Get('discord/callback')
   async discordAuthCallback(
-    @Req() req: RequestInterface<DeepPartial<User>>,
+    @Req() req: OAuthRequestInterface,
     @Res() res: Response,
   ): Promise<void> {
     return await this.handleOAuthCallback(
@@ -92,13 +92,26 @@ export class AuthController {
   }
 
   async handleOAuthCallback(
-    req: RequestInterface<DeepPartial<User>>,
+    req: OAuthRequestInterface,
     res: Response,
     redirectUrl: string,
   ): Promise<void> {
-    const { accessToken, refreshToken } =
-      await this.authService.handleOAuthLogin(req.user);
+    const user = await this.authService.handleOAuthLogin(req);
 
+    if (!req.user.isLinkingAccount) {
+      const { refreshToken, accessToken } = user as AuthResponseDto;
+      this.setTokenCookiesToResponse({ res, refreshToken, accessToken });
+    }
+
+    res.redirect(redirectUrl);
+  }
+
+  private setTokenCookiesToResponse(data: {
+    res: Response;
+    accessToken: string;
+    refreshToken: string;
+  }): void {
+    const { res, accessToken, refreshToken } = data;
     const cookieExpirationDate: Date = new Date(
       Date.now() + 365 * 24 * 60 * 60 * 1000,
     ); // 1 year in milliseconds
@@ -115,7 +128,5 @@ export class AuthController {
       secure: true,
       domain: corsConfig.baseDomain,
     });
-
-    res.redirect(redirectUrl);
   }
 }

@@ -14,6 +14,7 @@ import { RegisterUserDto } from '../dtos/register-user.dto';
 import { Refresh } from '../entities/refresh.entity';
 import { AuthRepository } from '../repositories/auth.repository';
 import { GenerateJwtTokenParamsInterface } from '../types/interfaces/generate-jwt-token-params.interface';
+import { OAuthRequestInterface } from '../types/interfaces/o-auth-request.interface';
 import { RefreshTokenInterface } from '../types/interfaces/refresh-token.interface';
 
 @Injectable()
@@ -95,12 +96,22 @@ export class AuthService {
     return this.jwtService.sign({ id: userId }, { secret, expiresIn });
   }
 
-  async handleOAuthLogin(data: DeepPartial<User>): Promise<AuthResponseDto> {
-    const user: User = await this.usersRepository.findByEmail(data.email);
-    let userId: number = user?.id ?? null;
+  async handleOAuthLogin(
+    req: OAuthRequestInterface,
+  ): Promise<AuthResponseDto | void> {
+    const { user: oAuthReq } = req;
+    const { isLinkingAccount, oAuthId, data, type } = oAuthReq;
+
+    if (isLinkingAccount) {
+      await this.usersRepository.update(data.id, { oAuths: data.oAuths });
+      return;
+    }
+
+    const user = await this.usersRepository.findByOAuthId(type, oAuthId);
+    let userId = user?.id ?? null;
 
     if (!userId) {
-      const newUser: User = await this.usersRepository.create(data);
+      const newUser = await this.usersRepository.create(data);
       userId = newUser.id;
     }
 

@@ -22,6 +22,9 @@ export class User extends BaseEntity<UserModel> {
   @Column({ unique: true })
   email!: string;
 
+  @Column({ type: 'jsonb', default: {} })
+  oAuths: { googleId?: string };
+
   @Column({
     select: false,
     default: bcrypt.hashSync(uuidv4() as string, bcrypt.genSaltSync(10)),
