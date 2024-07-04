@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -24,8 +24,12 @@
     "typeorm:create": "npm run typeorm migration:create",
     "typeorm:generate": "npm run typeorm migration:generate",
     "typeorm:revert": "npm run typeorm migration:revert",
+    "pub:validators:patch": "npm version patch --force --workspace=libs/validators  && npm run build --workspace=libs/validators && npm publish --workspace=libs/validators",
+    "pub:validators:minor": "npm version minor --force --workspace=libs/validators  && npm run build --workspace=libs/validators && npm publish --workspace=libs/validators",
+    "pub:validators:major": "npm version major --force --workspace=libs/validators  && npm run build --workspace=libs/validators && npm publish --workspace=libs/validators",
     "typeorm:run": "npm run typeorm migration:run"
   },
+  "workspaces": ["libs/validators"],
   "dependencies": {
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.2",
@@ -100,7 +104,7 @@
       "json",
       "ts"
     ],
-    "rootDir": "src",
+    "rootDir": ".",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
@@ -108,8 +112,15 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "coverageDirectory": "./coverage",
+    "testEnvironment": "node",
+    "roots": [
+      "<rootDir>/src/",
+      "<rootDir>/libs/"
+    ],
+    "moduleNameMapper": {
+      "^novatori/validators(|/.*)$": "<rootDir>/libs/validators/src/$1"
+    }
   },
   "engines": {
     "node": ">=20.8.0"
