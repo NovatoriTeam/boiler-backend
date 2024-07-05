@@ -4,6 +4,7 @@ import { Strategy, VerifyCallback } from 'passport-google-oauth2';
 import { DeepPartial } from 'typeorm';
 import { googleOAuth2Config } from '../../../config/config';
 import { User } from '../../users/entities/user.entity';
+import { OAuthsEnum } from '../types/enums/o-auths.enum';
 import { GoogleOauthUserInterface } from '../types/interfaces/google-oauth-user.interface';
 
 @Injectable()
@@ -29,8 +30,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       email: emails[0].value,
       firstName: name.givenName,
       lastName: name.familyName,
+      oAuths: { [OAuthsEnum.Google]: profile.id },
     };
-
-    done(null, user);
+    done(null, { data: user, type: OAuthsEnum.Google, oauthId: profile.id });
   }
 }
