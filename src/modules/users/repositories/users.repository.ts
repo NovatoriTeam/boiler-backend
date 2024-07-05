@@ -43,6 +43,7 @@ export class UsersRepository {
       .createQueryBuilder('user')
       .update()
       .set(data)
+      .where('user.id = :id', { id })
       .execute();
   }
 
