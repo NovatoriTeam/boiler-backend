@@ -38,6 +38,13 @@ export const googleOAuth2Config: OAuthConfigInterface = {
   redirectUrl: process.env.REDIRECT_URL,
 };
 
+export const facebookOAuth2Config: OAuthConfigInterface = {
+  clientId: process.env.FACEBOOK_APP_ID,
+  clientSecret: process.env.FACEBOOK_APP_SECRET,
+  callbackUrl: process.env.FACEBOOK_CALLBACK_URL,
+  redirectUrl: process.env.REDIRECT_URL,
+};
+
 export const discordOAuth2Config: OAuthConfigInterface = {
   clientId: process.env.DISCORD_CLIENT_ID,
   clientSecret: process.env.DISCORD_CLIENT_SECRET,

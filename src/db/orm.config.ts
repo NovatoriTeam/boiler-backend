@@ -5,7 +5,7 @@ export const connectionOptions: DataSourceOptions = {
   type: 'postgres',
   ...databaseConfig,
   entities: ['dist/**/*.entity{.ts,.js}'],
-  migrations: ['dist/db/migrations/*{.ts,.js}'],
+  migrations: ['dist/src/db/migrations/*{.ts,.js}'],
 };
 
 const dataSource: DataSource = new DataSource(connectionOptions);

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { EmployeeModel } from 'novatori/validators/employees/models/employee.model';
 import { Repository } from 'typeorm';
 import { CrudRepository } from '../../crud/repositories/crud.repository';
 import { Employee } from '../entities/employee.entity';
-import { EmployeeModel } from '../models/employee.model';
 
 @Injectable()
 export class EmployeesRepository extends CrudRepository<
@@ -14,6 +14,6 @@ export class EmployeesRepository extends CrudRepository<
     @InjectRepository(Employee)
     private employeesRepository: Repository<Employee>,
   ) {
-    super(employeesRepository);
+    super(employeesRepository, EmployeeModel);
   }
 }

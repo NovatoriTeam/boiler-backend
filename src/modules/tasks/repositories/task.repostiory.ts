@@ -11,6 +11,6 @@ export class TaskRepository extends CrudRepository<TaskEntity, TaskModel> {
     @InjectRepository(TaskEntity)
     private taskRepository: Repository<TaskEntity>,
   ) {
-    super(taskRepository);
+    super(taskRepository, TaskModel);
   }
 }

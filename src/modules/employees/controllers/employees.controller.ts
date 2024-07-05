@@ -9,11 +9,11 @@ import {
   Req,
 } from '@nestjs/common';
 import { CreateEmployeeDto, UpdateEmployeeDto } from 'novatori/validators';
+import { EmployeeModel } from 'novatori/validators/employees/models/employee.model';
 import { Public } from '../../auth/decorators/public.decorator';
 import { CrudController } from '../../crud/controllers/crud.controller';
 import { RequestInterface } from '../../crud/types/interfaces/request.interface';
 import { Employee } from '../entities/employee.entity';
-import { EmployeeModel } from '../models/employee.model';
 import { EmployeesService } from '../services/employees.service';
 
 @Controller('employees')

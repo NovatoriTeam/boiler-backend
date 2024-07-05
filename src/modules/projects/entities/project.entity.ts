@@ -1,11 +1,9 @@
-import { plainToInstance } from 'class-transformer';
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 import { BaseEntity } from '../../crud/entities/base.entity';
 import { Employee } from '../../employees/entities/employee.entity';
-import { ProjectModel } from '../models/project.model';
 
 @Entity()
-export class Project extends BaseEntity<ProjectModel> {
+export class Project extends BaseEntity {
   @Column()
   name!: string;
 
@@ -21,8 +19,4 @@ export class Project extends BaseEntity<ProjectModel> {
   @ManyToMany(() => Employee)
   @JoinTable()
   employees: Employee[];
-
-  toModel(): ProjectModel {
-    return plainToInstance(ProjectModel, this);
-  }
 }

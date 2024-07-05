@@ -9,12 +9,12 @@ import {
   Req,
 } from '@nestjs/common';
 import { CreateDepartmentDto, UpdateDepartmentDto } from 'novatori/validators';
+import { DepartmentModel } from 'novatori/validators/departments/models/department.model';
 import { Public } from '../../auth/decorators/public.decorator';
 import { CrudController } from '../../crud/controllers/crud.controller';
 import { CrudFilter } from '../../crud/decorators/crud-filter.decorator';
 import { RequestInterface } from '../../crud/types/interfaces/request.interface';
 import { Department } from '../entities/department.entity';
-import { DepartmentModel } from '../models/department.model';
 import { DepartmentsService } from '../services/departments.service';
 
 @Controller('departments')

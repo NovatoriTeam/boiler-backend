@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { EmployeeModel } from 'novatori/validators/employees/models/employee.model';
 import { CrudService } from '../../crud/services/crud.service';
 import { Employee } from '../entities/employee.entity';
-import { EmployeeModel } from '../models/employee.model';
 import { EmployeesRepository } from '../repositories/employees.repository';
 
 @Injectable()

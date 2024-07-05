@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ProductsModel } from 'novatori/validators/products/models/products.model';
 import { Repository } from 'typeorm';
 import { CrudRepository } from '../../crud/repositories/crud.repository';
 import { Product } from '../entities/product.entity';
-import { ProductsModel } from '../models/products.model';
 
 @Injectable()
 export class ProductsRepository extends CrudRepository<Product, ProductsModel> {
@@ -11,6 +11,6 @@ export class ProductsRepository extends CrudRepository<Product, ProductsModel> {
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
   ) {
-    super(productRepository);
+    super(productRepository, ProductsModel);
   }
 }
