@@ -4,7 +4,7 @@ module.exports = {
     project: 'tsconfig.json',
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin', 'jest', 'import'],
+  plugins: ['@typescript-eslint/eslint-plugin', 'jest', 'import', 'filenames'],
   extends: [
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
@@ -20,8 +20,12 @@ module.exports = {
     'no-console': 'error',
     'prettier/prettier': 'error',
     '@typescript-eslint/interface-name-prefix': 'off',
+    "@typescript-eslint/array-type": "error",
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': ['error'],
+    "@typescript-eslint/ban-ts-comment": "error",
+    '@typescript-eslint/no-explicit-any': 'error',
+    "@typescript-eslint/no-mixed-enums": "error",
+    "@typescript-eslint/no-inferrable-types": "error",
     'no-return-await': 'off',
     '@typescript-eslint/return-await': ['error', 'always'],
     '@typescript-eslint/no-unused-vars': [
@@ -33,11 +37,17 @@ module.exports = {
     'jest/no-identical-title': 'error',
     'jest/prefer-to-have-length': 'warn',
     'jest/valid-expect': 'error',
-    '@typescript-eslint/explicit-function-return-type': ['error'],
+    "@typescript-eslint/explicit-function-return-type": "error",
     '@typescript-eslint/typedef': [
       'error',
       {
-        variableDeclaration: true,
+        arrayDestructuring: false,
+        arrowParameter: false,
+        memberVariableDeclaration: false,
+        objectDestructuring: false,
+        parameter: true,
+        propertyDeclaration: true,
+        variableDeclaration: false,
         variableDeclarationIgnoreFunction: true,
       },
     ],
@@ -82,17 +92,6 @@ module.exports = {
     'import/order': ['error', { alphabetize: { order: 'asc' } }],
     'no-restricted-imports': [
       'error',
-      {
-        paths: [
-          {
-            name: '@nestjs/common',
-            importNames: ['Logger'],
-            message: 'Please use @devsbb/logger instead.',
-          },
-        ],
-        // Allow every other nestjs package
-        patterns: ['@nestjs/(?!config)'],
-      },
     ],
   },
   overrides: [
