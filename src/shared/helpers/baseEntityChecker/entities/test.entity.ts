@@ -1,3 +1,3 @@
-import { BaseModel } from '../../../../modules/crud/models/base.model';
+import { BaseModel } from 'novatori/validators/base/base.model';
 
 export class TestModel extends BaseModel {}

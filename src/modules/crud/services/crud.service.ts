@@ -1,7 +1,7 @@
+import { BaseModel } from 'novatori/validators/base/base.model';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { CrudServiceContract } from '../contracts/crud-service.contract';
 import { BaseEntity } from '../entities/base.entity';
-import { BaseModel } from '../models/base.model';
 import { CrudRepository } from '../repositories/crud.repository';
 import { QueryHelperInterface } from '../types/interfaces/query-helper.interface';
 

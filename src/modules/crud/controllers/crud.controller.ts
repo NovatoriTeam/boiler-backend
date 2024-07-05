@@ -1,6 +1,6 @@
 import { Param, Req } from '@nestjs/common';
+import { BaseModel } from 'novatori/validators/base/base.model';
 import { BaseEntity } from '../entities/base.entity';
-import { BaseModel } from '../models/base.model';
 import { CrudService } from '../services/crud.service';
 import { RequestInterface } from '../types/interfaces/request.interface';
 

@@ -1,9 +1,9 @@
 import { ClassConstructor, plainToInstance } from 'class-transformer';
+import { BaseModel } from 'novatori/validators/base/base.model';
 import { DeepPartial, Repository, SelectQueryBuilder } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { CrudRepositoryContract } from '../contracts/crud-repository.contract';
 import { BaseEntity } from '../entities/base.entity';
-import { BaseModel } from '../models/base.model';
 import { QueryHelperInterface } from '../types/interfaces/query-helper.interface';
 
 export class CrudRepository<

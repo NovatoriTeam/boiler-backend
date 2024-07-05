@@ -1,6 +1,6 @@
 import { Expose, plainToInstance } from 'class-transformer';
-import { BaseModel } from '../../../../../src/modules/crud/models/base.model';
 import { Employee } from '../../../../../src/modules/employees/entities/employee.entity';
+import { BaseModel } from '../../base/base.model';
 
 export class EmployeeModel extends BaseModel {
   @Expose()
