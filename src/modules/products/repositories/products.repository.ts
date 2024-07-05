@@ -11,6 +11,6 @@ export class ProductsRepository extends CrudRepository<Product, ProductsModel> {
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
   ) {
-    super(productRepository);
+    super(productRepository, ProductsModel);
   }
 }

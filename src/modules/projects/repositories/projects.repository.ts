@@ -10,6 +10,6 @@ export class ProjectsRepository extends CrudRepository<Project, ProjectModel> {
   constructor(
     @InjectRepository(Project) private projectsRepository: Repository<Project>,
   ) {
-    super(projectsRepository);
+    super(projectsRepository, ProjectModel);
   }
 }

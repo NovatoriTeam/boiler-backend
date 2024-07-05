@@ -2,7 +2,7 @@ import { Expose, plainToInstance } from 'class-transformer';
 import { BaseModel } from '../../crud/models/base.model';
 import { Employee } from '../entities/employee.entity';
 
-export class EmployeeModel extends BaseModel<Employee> {
+export class EmployeeModel extends BaseModel {
   @Expose()
   firstName: string;
 

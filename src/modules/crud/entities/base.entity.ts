@@ -5,7 +5,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export abstract class BaseEntity<T> {
+export abstract class BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -17,6 +17,4 @@ export abstract class BaseEntity<T> {
 
   @DeleteDateColumn()
   deletedAt!: Date;
-
-  abstract toModel(): T;
 }

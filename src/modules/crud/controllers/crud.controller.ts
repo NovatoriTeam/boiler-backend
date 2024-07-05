@@ -5,8 +5,8 @@ import { CrudService } from '../services/crud.service';
 import { RequestInterface } from '../types/interfaces/request.interface';
 
 export abstract class CrudController<
-  EntityType extends BaseEntity<ModelType>,
-  ModelType extends BaseModel<EntityType>,
+  EntityType extends BaseEntity,
+  ModelType extends BaseModel,
 > {
   protected constructor(
     private readonly baseService: CrudService<EntityType, ModelType>,

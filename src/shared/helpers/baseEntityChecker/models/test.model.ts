@@ -1,11 +1,6 @@
 import { BaseEntity } from '../../../../modules/crud/entities/base.entity';
-import { TestModel } from '../entities/test.entity';
 
-export class TestEntity extends BaseEntity<TestModel> {
+export class TestEntity extends BaseEntity {
   id: number;
   name: string;
-
-  toModel(): TestModel {
-    return undefined;
-  }
 }
