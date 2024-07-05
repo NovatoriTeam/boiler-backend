@@ -9,7 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { CreateEmployeeDto, UpdateEmployeeDto } from 'novatori/validators';
-import { EmployeeModel } from 'novatori/validators/employees/models/employee.model';
+import { EmployeeModel } from 'novatori/validators';
 import { Public } from '../../auth/decorators/public.decorator';
 import { CrudController } from '../../crud/controllers/crud.controller';
 import { RequestInterface } from '../../crud/types/interfaces/request.interface';

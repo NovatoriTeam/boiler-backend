@@ -1,6 +1,6 @@
 import { Controller, Delete, Get, Param, Post, Put, Req } from '@nestjs/common';
 import { CreateProjectDto, UpdateProjectDto } from 'novatori/validators';
-import { ProjectModel } from 'novatori/validators/projects/models/project.model';
+import { ProjectModel } from 'novatori/validators';
 import { Public } from '../../auth/decorators/public.decorator';
 import { CrudController } from '../../crud/controllers/crud.controller';
 import { CrudFilter } from '../../crud/decorators/crud-filter.decorator';

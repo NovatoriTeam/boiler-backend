@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EmployeeModel } from 'novatori/validators/employees/models/employee.model';
+import { EmployeeModel } from 'novatori/validators';
 import { Repository } from 'typeorm';
 import { CrudRepository } from '../../crud/repositories/crud.repository';
 import { Employee } from '../entities/employee.entity';

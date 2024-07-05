@@ -9,7 +9,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { CreateDepartmentDto, UpdateDepartmentDto } from 'novatori/validators';
-import { DepartmentModel } from 'novatori/validators/departments/models/department.model';
+import { DepartmentModel } from 'novatori/validators';
 import { Public } from '../../auth/decorators/public.decorator';
 import { CrudController } from '../../crud/controllers/crud.controller';
 import { CrudFilter } from '../../crud/decorators/crud-filter.decorator';
