@@ -7,6 +7,7 @@ import {
   SelectQueryBuilder,
   UpdateResult,
 } from 'typeorm';
+import { OAuthsEnum } from '../../auth/types/enums/o-auths.enum';
 import { User } from '../entities/user.entity';
 
 @Injectable()
@@ -29,11 +30,31 @@ export class UsersRepository {
   }
 
   async update(id: number, user: DeepPartial<User>): Promise<UpdateResult> {
-    return await this.usersRepository.update(id, user);
+    const data = { ...user };
+
+    if (user.oAuths) {
+      Object.assign(data, {
+        oAuths: () =>
+          `jsonb_set(preferences, '{${Object.keys(user.oAuths).join(',')}}', '${JSON.stringify(user.oAuths)}', true)`,
+      });
+    }
+
+    return await this.usersRepository
+      .createQueryBuilder('user')
+      .update()
+      .set(data)
+      .execute();
   }
 
   async remove(id: number): Promise<DeleteResult> {
     return await this.usersRepository.delete(id);
+  }
+
+  async findOneByOAuthId(oAuth: OAuthsEnum, id: string): Promise<User> {
+    return await this.usersRepository
+      .createQueryBuilder('user')
+      .where(`user.oAuths ->>'${oAuth}' = :id`, { id })
+      .getOne();
   }
 
   async findByEmail(email: string): Promise<User> {

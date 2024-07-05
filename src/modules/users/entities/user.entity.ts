@@ -8,14 +8,6 @@ import { Product } from '../../products/entities/product.entity';
 import { UserRole } from '../../roles/entities/user-role.entity';
 import { UserModel } from '../models/user.model';
 
-enum OAuthsEnum {
-  Facebook = 'facebook',
-}
-
-type OAuths = {
-  [key in keyof typeof OAuthsEnum];
-};
-
 @Entity('users')
 export class User extends BaseEntity<UserModel> {
   @ApiProperty({ type: String })
@@ -37,7 +29,7 @@ export class User extends BaseEntity<UserModel> {
   password!: string;
 
   @Column({ type: 'jsonb', default: {} })
-  oAuths!: OAuths;
+  oAuths!: { facebook: string };
 
   @ApiProperty({ type: Product })
   @OneToMany(() => Product, (product) => product.user)
