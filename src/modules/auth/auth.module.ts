@@ -9,6 +9,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { AuthRepository } from './repositories/auth.repository';
 import { AuthService } from './services/auth.service';
 import { DiscordStrategy } from './strategies/discord.strategy';
+import { FacebookStrategy } from './strategies/facebook.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 
@@ -22,6 +23,7 @@ import { LocalStrategy } from './strategies/local.strategy';
     LocalStrategy,
     GoogleStrategy,
     DiscordStrategy,
+    FacebookStrategy,
     { provide: 'APP_GUARD', useClass: AuthGuard },
   ],
 })

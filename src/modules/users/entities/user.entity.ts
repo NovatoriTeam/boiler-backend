@@ -28,6 +28,9 @@ export class User extends BaseEntity<UserModel> {
   })
   password!: string;
 
+  @Column({ type: 'jsonb', default: {} })
+  oAuths!: { facebook: string };
+
   @ApiProperty({ type: Product })
   @OneToMany(() => Product, (product) => product.user)
   products: Product[];

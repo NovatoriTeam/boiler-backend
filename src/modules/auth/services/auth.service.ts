@@ -13,6 +13,7 @@ import { AuthResponseDto } from '../dtos/auth-response.dto';
 import { RegisterUserDto } from '../dtos/register-user.dto';
 import { Refresh } from '../entities/refresh.entity';
 import { AuthRepository } from '../repositories/auth.repository';
+import { OAuthsEnum } from '../types/enums/o-auths.enum';
 import { GenerateJwtTokenParamsInterface } from '../types/interfaces/generate-jwt-token-params.interface';
 import { RefreshTokenInterface } from '../types/interfaces/refresh-token.interface';
 
@@ -42,7 +43,7 @@ export class AuthService {
     const data: DeepPartial<User> = {
       ...registerUserDto,
       password: hashedPassword,
-    };
+    } as DeepPartial<User>;
 
     const newUser: User = await this.usersRepository.create(data);
 
@@ -95,8 +96,15 @@ export class AuthService {
     return this.jwtService.sign({ id: userId }, { secret, expiresIn });
   }
 
-  async handleOAuthLogin(data: DeepPartial<User>): Promise<AuthResponseDto> {
-    const user: User = await this.usersRepository.findByEmail(data.email);
+  async handleOAuthLogin(
+    data: DeepPartial<User>,
+    oAuth: OAuthsEnum,
+    oAuthId: string,
+  ): Promise<AuthResponseDto> {
+    const user: User = await this.usersRepository.findOneByOAuthId(
+      oAuth,
+      oAuthId,
+    );
     let userId: number = user?.id ?? null;
 
     if (!userId) {
