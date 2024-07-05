@@ -1,8 +1,15 @@
 import { Expose, plainToInstance } from 'class-transformer';
+import { EmployeeInterface } from 'novatori/validators/employees/interfaces/employee.interface';
 import { BaseModel } from '../../crud/models/base.model';
 import { Employee } from '../entities/employee.entity';
 
-export class EmployeeModel extends BaseModel<Employee> {
+export class EmployeeModel
+  extends BaseModel<Employee>
+  implements EmployeeInterface
+{
+  @Expose()
+  id!: number;
+
   @Expose()
   firstName: string;
 
