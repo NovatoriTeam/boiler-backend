@@ -1,12 +1,11 @@
 import { Controller, Delete, Get, Param, Post, Put, Req } from '@nestjs/common';
+import { CreateProjectDto, UpdateProjectDto } from 'novatori/validators';
+import { ProjectModel } from 'novatori/validators';
 import { Public } from '../../auth/decorators/public.decorator';
 import { CrudController } from '../../crud/controllers/crud.controller';
 import { CrudFilter } from '../../crud/decorators/crud-filter.decorator';
 import { RequestInterface } from '../../crud/types/interfaces/request.interface';
-import { CreateProjectDto } from '../dto/create-project.dto';
-import { UpdateProjectDto } from '../dto/update-project.dto';
 import { Project } from '../entities/project.entity';
-import { ProjectModel } from '../models/project.model';
 import { ProjectsService } from '../services/projects.service';
 
 @Controller('projects')

@@ -9,14 +9,13 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
+import { CreateProductDto, UpdateProductDto } from 'novatori/validators';
+import { ProductsModel } from 'novatori/validators';
 import { Public } from '../../auth/decorators/public.decorator';
 import { CrudController } from '../../crud/controllers/crud.controller';
 import { CrudFilter } from '../../crud/decorators/crud-filter.decorator';
 import { RequestInterface } from '../../crud/types/interfaces/request.interface';
-import { CreateProductDto } from '../dtos/create-product.dto';
-import { UpdateProductDto } from '../dtos/update-product.dto';
 import { Product } from '../entities/product.entity';
-import { ProductsModel } from '../models/products.model';
 import { ProductsService } from '../services/products.service';
 
 @Controller('products')

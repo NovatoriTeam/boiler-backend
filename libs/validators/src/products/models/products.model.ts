@@ -1,7 +1,7 @@
 import { Expose, Type, plainToInstance } from 'class-transformer';
-import { BaseModel } from '../../crud/models/base.model';
-import { UserModel } from '../../users/models/user.model';
-import { Product } from '../entities/product.entity';
+import { BaseModel } from '../../../../../src/modules/crud/models/base.model';
+import { Product } from '../../../../../src/modules/products/entities/product.entity';
+import { UserModel } from '../../../../../src/modules/users/models/user.model';
 
 export class ProductsModel extends BaseModel {
   @Expose()

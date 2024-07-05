@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { BaseModel } from '../../crud/models/base.model';
+import { BaseModel } from '../../../../../src/modules/crud/models/base.model';
 
 export class DepartmentModel extends BaseModel {
   @Expose()
