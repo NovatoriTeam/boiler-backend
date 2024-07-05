@@ -1,5 +1,4 @@
-import { Expose, plainToInstance } from 'class-transformer';
-import { Project } from '../../../../../src/modules/projects/entities/project.entity';
+import { Expose } from 'class-transformer';
 import { BaseModel } from '../../base/base.model';
 
 export class ProjectModel extends BaseModel {
@@ -14,8 +13,4 @@ export class ProjectModel extends BaseModel {
 
   @Expose()
   status!: string;
-
-  toEntity(): Project {
-    return plainToInstance(Project, this);
-  }
 }

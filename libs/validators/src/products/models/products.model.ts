@@ -1,6 +1,5 @@
-import { Expose, Type, plainToInstance } from 'class-transformer';
-import { Product } from '../../../../../src/modules/products/entities/product.entity';
-import { UserModel } from '../../../../../src/modules/users/models/user.model';
+import { Expose, Type } from 'class-transformer';
+import { UserModel } from 'novatori/validators/users/models/user.model';
 import { BaseModel } from '../../base/base.model';
 
 export class ProductsModel extends BaseModel {
@@ -19,8 +18,4 @@ export class ProductsModel extends BaseModel {
   @Type(() => UserModel)
   @Expose()
   user!: UserModel;
-
-  toEntity(): Product {
-    return plainToInstance(Product, this);
-  }
 }

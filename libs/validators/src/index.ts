@@ -10,3 +10,4 @@ export * from './projects/models/project.model';
 export * from './products/create-product.dto';
 export * from './products/update-product.dto';
 export * from './products/models/products.model';
+export * from './users/models/user.model';
