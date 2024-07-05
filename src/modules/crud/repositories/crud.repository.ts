@@ -7,7 +7,7 @@ import { BaseModel } from '../models/base.model';
 import { QueryHelperInterface } from '../types/interfaces/query-helper.interface';
 
 export class CrudRepository<
-  EntityType extends BaseEntity<ModelType>,
+  EntityType extends BaseEntity,
   ModelType extends BaseModel,
 > implements CrudRepositoryContract<ModelType>
 {
