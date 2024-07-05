@@ -3,7 +3,7 @@ import { BaseModel } from '../../crud/models/base.model';
 import { UserModel } from '../../users/models/user.model';
 import { Product } from '../entities/product.entity';
 
-export class ProductsModel extends BaseModel<Product> {
+export class ProductsModel extends BaseModel {
   @Expose()
   id!: number;
 

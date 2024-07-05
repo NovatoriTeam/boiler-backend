@@ -7,7 +7,7 @@ import { QueryHelperInterface } from '../types/interfaces/query-helper.interface
 
 export class CrudService<
   EntityType extends BaseEntity<ModelType>,
-  ModelType extends BaseModel<EntityType>,
+  ModelType extends BaseModel,
 > implements CrudServiceContract<EntityType, ModelType>
 {
   constructor(

@@ -1,3 +1,4 @@
+import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { DeepPartial, Repository, SelectQueryBuilder } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { CrudRepositoryContract } from '../contracts/crud-repository.contract';
@@ -7,10 +8,13 @@ import { QueryHelperInterface } from '../types/interfaces/query-helper.interface
 
 export class CrudRepository<
   EntityType extends BaseEntity<ModelType>,
-  ModelType extends BaseModel<EntityType>,
-> implements CrudRepositoryContract<EntityType, ModelType>
+  ModelType extends BaseModel,
+> implements CrudRepositoryContract<ModelType>
 {
-  constructor(private baseRepository: Repository<EntityType>) {}
+  constructor(
+    private baseRepository: Repository<EntityType>,
+    private clx: ClassConstructor<ModelType>,
+  ) {}
 
   async $_findAll(
     applyQueryParametersFilter: QueryHelperInterface,
@@ -20,7 +24,9 @@ export class CrudRepository<
     applyQueryParametersFilter?.toQuery?.(query);
 
     const res: [EntityType[], number] = await query.getManyAndCount();
-    const returnable: ModelType[] = res[0].map((r) => r.toModel());
+    const returnable: ModelType[] = res[0].map((r) =>
+      plainToInstance(this.clx, r),
+    );
     return [returnable, res[1]];
   }
 
@@ -30,7 +36,7 @@ export class CrudRepository<
       .where('id = :id', { id });
 
     const res: EntityType = await query.getOneOrFail();
-    return res.toModel();
+    return plainToInstance(this.clx, res);
   }
 
   async $_create(data: ModelType): Promise<ModelType> {
@@ -38,7 +44,7 @@ export class CrudRepository<
       data as unknown as DeepPartial<EntityType>,
     );
     const res: EntityType = await this.baseRepository.save(item);
-    return res.toModel();
+    return plainToInstance(this.clx, res);
   }
 
   async $_update(

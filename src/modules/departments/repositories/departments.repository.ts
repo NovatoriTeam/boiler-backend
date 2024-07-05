@@ -14,6 +14,6 @@ export class DepartmentsRepository extends CrudRepository<
     @InjectRepository(Department)
     private departmentsRepository: Repository<Department>,
   ) {
-    super(departmentsRepository);
+    super(departmentsRepository, DepartmentModel);
   }
 }

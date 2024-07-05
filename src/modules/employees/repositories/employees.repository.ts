@@ -14,6 +14,6 @@ export class EmployeesRepository extends CrudRepository<
     @InjectRepository(Employee)
     private employeesRepository: Repository<Employee>,
   ) {
-    super(employeesRepository);
+    super(employeesRepository, EmployeeModel);
   }
 }

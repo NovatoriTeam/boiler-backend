@@ -1,8 +1,6 @@
 import { Expose } from 'class-transformer';
 
-export abstract class BaseModel<T> {
+export abstract class BaseModel {
   @Expose()
   id!: number;
-
-  abstract toEntity(): T;
 }

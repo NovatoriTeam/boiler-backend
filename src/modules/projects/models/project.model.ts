@@ -2,7 +2,7 @@ import { Expose, plainToInstance } from 'class-transformer';
 import { BaseModel } from '../../crud/models/base.model';
 import { Project } from '../entities/project.entity';
 
-export class ProjectModel extends BaseModel<Project> {
+export class ProjectModel extends BaseModel {
   @Expose()
   name!: string;
 
