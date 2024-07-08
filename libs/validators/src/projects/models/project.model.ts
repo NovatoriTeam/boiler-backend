@@ -9,7 +9,7 @@ export class ProjectModel extends BaseModel {
   description!: string;
 
   @Expose()
-  budget!: string;
+  budget!: number;
 
   @Expose()
   status!: string;
