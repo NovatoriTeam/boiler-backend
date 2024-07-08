@@ -18,5 +18,5 @@ export class EmployeeModel extends BaseModel {
   jobTitle: string;
 
   @Expose()
-  salary: string;
+  salary: number;
 }
