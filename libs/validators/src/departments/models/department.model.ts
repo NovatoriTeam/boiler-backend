@@ -10,4 +10,7 @@ export class DepartmentModel extends BaseModel {
 
   @Expose()
   location!: string;
+
+  @Expose()
+  hireDate!: Date;
 }
