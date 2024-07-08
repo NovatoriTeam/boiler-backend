@@ -1,4 +1,4 @@
-import { BaseModel } from 'novatori/validators/base/base.model';
+import { BaseModel } from 'novatori/validators';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { CrudServiceContract } from '../contracts/crud-service.contract';
 import { BaseEntity } from '../entities/base.entity';

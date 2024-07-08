@@ -1,3 +1,3 @@
-import { BaseModel } from 'novatori/validators/base/base.model';
+import { BaseModel } from 'novatori/validators';
 
 export class UserRoleModel extends BaseModel {}

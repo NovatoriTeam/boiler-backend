@@ -1,5 +1,5 @@
 import { plainToInstance } from 'class-transformer';
-import { BaseModel } from 'novatori/validators/base/base.model';
+import { BaseModel } from 'novatori/validators';
 import { TaskEntity } from '../entities/task.entity';
 
 export class TaskModel extends BaseModel {

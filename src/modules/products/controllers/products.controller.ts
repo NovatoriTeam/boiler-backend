@@ -9,8 +9,11 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { CreateProductDto, UpdateProductDto } from 'novatori/validators';
-import { ProductsModel } from 'novatori/validators';
+import {
+  CreateProductDto,
+  ProductsModel,
+  UpdateProductDto,
+} from 'novatori/validators';
 import { Public } from '../../auth/decorators/public.decorator';
 import { CrudController } from '../../crud/controllers/crud.controller';
 import { CrudFilter } from '../../crud/decorators/crud-filter.decorator';

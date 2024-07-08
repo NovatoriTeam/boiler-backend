@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { BaseModel } from 'novatori/validators';
+import { BaseModel } from '../base/base.model';
 
 export class UserModel extends BaseModel {
   @Expose()
