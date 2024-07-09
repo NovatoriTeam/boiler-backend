@@ -5,6 +5,7 @@ import { CorsConfigInterface } from './interfaces/cors-config.interface';
 import { DatabaseConfigInterface } from './interfaces/database-config.interface';
 import { JwtConfigInterface } from './interfaces/jwt-config.interface';
 import { OAuthConfigInterface } from './interfaces/oauth-config.interface';
+import { RedirectConfigInterface } from './interfaces/redirect-config.interface';
 
 dotenv.config();
 
@@ -55,4 +56,9 @@ export const discordOAuth2Config: OAuthConfigInterface = {
 export const corsConfig: CorsConfigInterface = {
   allowedUrls: process.env.ALLOWED_ORIGIN_URLS?.split?.(',') ?? [],
   baseDomain: process.env.BASE_DOMAIN,
+};
+
+export const redirectConfig: RedirectConfigInterface = {
+  homePageUrl: process.env.HOME_PAGE_URL ?? '',
+  accountLinkingPageUrl: process.env.ACCOUNT_LINKING_PAGE_URL ?? '',
 };

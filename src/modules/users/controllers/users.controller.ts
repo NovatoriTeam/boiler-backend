@@ -9,7 +9,8 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UpdateUserDto } from 'boiler-shareds';
-import { DeleteResult, UpdateResult } from 'typeorm';
+import { UserModel } from 'novatori/validators';
+import { DeleteResult } from 'typeorm';
 import { Public } from '../../auth/decorators/public.decorator';
 import { AuthGuard } from '../../auth/guards/auth.guard';
 import { User } from '../entities/user.entity';
@@ -36,7 +37,7 @@ export class UsersController {
   async update(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
-  ): Promise<UpdateResult> {
+  ): Promise<UserModel> {
     return await this.usersService.update(Number(id), updateUserDto);
   }
 

@@ -9,10 +9,8 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import {
-  corsConfig,
   discordOAuth2Config,
   facebookOAuth2Config,
-  googleOAuth2Config,
 } from '../../../config/config';
 import { User } from '../../users/entities/user.entity';
 import { Public } from '../decorators/public.decorator';
@@ -20,7 +18,6 @@ import { AuthResponseDto } from '../dtos/auth-response.dto';
 import { RegisterUserDto } from '../dtos/register-user.dto';
 import { DiscordOAuthGuard } from '../guards/discord.guard';
 import { FacebookGuard } from '../guards/facebook.guard';
-import { GoogleOAuthGuard } from '../guards/google.guard';
 import { UsernamePasswordAuthGuard } from '../guards/local.guard';
 import { RefreshGuard } from '../guards/refresh.guard';
 import { AuthService } from '../services/auth.service';
@@ -46,25 +43,6 @@ export class AuthController {
     return await this.authService.login(req.user);
   }
 
-  @UseGuards(GoogleOAuthGuard)
-  @Public()
-  @Get('google')
-  async googleAuth(): Promise<void> {}
-
-  @UseGuards(GoogleOAuthGuard)
-  @Public()
-  @Get('google/callback')
-  async googleAuthCallBack(
-    @Req() req: OAuthRequestInterface,
-    @Res() res: Response,
-  ): Promise<void> {
-    return await this.handleOAuthCallback(
-      req,
-      res,
-      googleOAuth2Config.redirectUrl,
-    );
-  }
-
   @UseGuards(DiscordOAuthGuard)
   @Public()
   @Get('discord')
@@ -77,7 +55,7 @@ export class AuthController {
     @Req() req: OAuthRequestInterface,
     @Res() res: Response,
   ): Promise<void> {
-    return await this.handleOAuthCallback(
+    return await this.authService.handleOAuthCallback(
       req,
       res,
       discordOAuth2Config.redirectUrl,
@@ -105,38 +83,10 @@ export class AuthController {
     @Req() req: OAuthRequestInterface,
     @Res() res: Response,
   ): Promise<void> {
-    return await this.handleOAuthCallback(
+    return await this.authService.handleOAuthCallback(
       req,
       res,
       facebookOAuth2Config.redirectUrl,
     );
-  }
-
-  async handleOAuthCallback(
-    req: OAuthRequestInterface,
-    res: Response,
-    redirectUrl: string,
-  ): Promise<void> {
-    const { accessToken, refreshToken } =
-      await this.authService.handleOAuthLogin(req.user.data);
-
-    const cookieExpirationDate: Date = new Date(
-      Date.now() + 365 * 24 * 60 * 60 * 1000,
-    ); // 1 year in milliseconds
-
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      expires: cookieExpirationDate,
-      domain: corsConfig.baseDomain,
-      secure: true,
-    });
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      expires: cookieExpirationDate,
-      secure: true,
-      domain: corsConfig.baseDomain,
-    });
-
-    res.redirect(redirectUrl);
   }
 }

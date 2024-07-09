@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { plainToInstance } from 'class-transformer';
+import { AuthTypeEnum, UserModel } from 'novatori/validators';
 import {
   DeepPartial,
   DeleteResult,
   Repository,
   SelectQueryBuilder,
-  UpdateResult,
 } from 'typeorm';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { AuthTypeEnum } from '../../auth/types/enums/auth-type.enum';
 import { User } from '../entities/user.entity';
 
 @Injectable()
@@ -22,23 +21,29 @@ export class UsersRepository {
   }
 
   async findOne(id: number): Promise<User> {
-    return await this.usersRepository.findOneBy({ id });
+    return await this.usersRepository.findOne({
+      where: { id },
+      relations: { auths: true },
+    });
   }
 
-  async create(user: DeepPartial<User>): Promise<User> {
+  async create(user: DeepPartial<User>): Promise<UserModel> {
     const newUser: User = this.usersRepository.create(user);
-    return await this.usersRepository.save(newUser);
+    return plainToInstance(UserModel, await this.usersRepository.save(newUser));
   }
 
-  async update(id: number, user: DeepPartial<User>): Promise<UpdateResult> {
-    const data = { ...user };
+  async update(id: number, data: DeepPartial<User>): Promise<UserModel> {
+    const user = await this.findOne(id);
+    if (data?.auths) {
+      data.auths = [...user.auths, ...data.auths];
+    }
 
-    return await this.usersRepository
-      .createQueryBuilder('user')
-      .update()
-      .set(data as QueryDeepPartialEntity<User>)
-      .where('user.id = :id', { id })
-      .execute();
+    const updateUserData = { ...user, ...data };
+
+    return plainToInstance(
+      UserModel,
+      await this.usersRepository.save(updateUserData),
+    );
   }
 
   async remove(id: number): Promise<DeleteResult> {
@@ -48,21 +53,24 @@ export class UsersRepository {
   async findByAuthIdentifier(
     type: AuthTypeEnum,
     identifier: string,
-  ): Promise<User> {
-    return await this.usersRepository
+  ): Promise<UserModel> {
+    const user = await this.usersRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.auths', 'auth')
       .where('auth.identifier = :identifier', { identifier })
       .andWhere('auth.type = :type', { type })
-      .getOneOrFail();
+      .getOne();
+
+    return plainToInstance(UserModel, user);
   }
 
-  async findUserByIdWithRoles(id: number): Promise<User> {
+  async findUserByIdWithRoles(id: number): Promise<UserModel> {
     const query: SelectQueryBuilder<User> = this.usersRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.roles', 'roles')
       .where('user.id = :id', { id });
 
-    return await query.getOneOrFail();
+    const user = await query.getOneOrFail();
+    return plainToInstance(UserModel, user);
   }
 }

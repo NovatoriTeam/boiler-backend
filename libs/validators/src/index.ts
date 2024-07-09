@@ -12,3 +12,7 @@ export * from './products/update-product.dto';
 export * from './products/models/products.model';
 export * from './base/base.model';
 export * from './user/user.model';
+export * from './auth/models/auth.model';
+export * from './auth/enums/auth-type.enum';
+export * from './roles/enums/role.enum';
+export * from './roles/models/role.model';

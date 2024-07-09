@@ -7,9 +7,9 @@ import {
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { UserModel } from 'novatori/validators';
+import { RoleEnum } from 'novatori/validators/roles/enums/role.enum';
 import { jwtConfig } from '../../../config/config';
-import { RoleEnum } from '../../roles/types/enums/role.enum';
-import { User } from '../../users/entities/user.entity';
 import { UsersRepository } from '../../users/repositories/users.repository';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { ROLES_KEY } from '../decorators/roles.decorator';
@@ -50,9 +50,7 @@ export class AuthGuard implements CanActivate {
         RoleEnum[]
       >(ROLES_KEY, [context.getHandler, context.getClass]);
 
-      const user: User = await this.userRepository.findUserByIdWithRoles(
-        payload.id,
-      );
+      const user = await this.userRepository.findUserByIdWithRoles(payload.id);
 
       return this.validateUserRoles(requiredRoles, user);
     } catch (err) {
@@ -64,7 +62,10 @@ export class AuthGuard implements CanActivate {
     return request['cookies']['accessToken'];
   }
 
-  private validateUserRoles(requiredRoles: RoleEnum[], user: User): boolean {
+  private validateUserRoles(
+    requiredRoles: RoleEnum[],
+    user: UserModel,
+  ): boolean {
     const userRoles: RoleEnum[] = user.roles.map((role) => role.name);
     const isRouteGuardedWithRole = !!requiredRoles?.length;
     const isAdmin: boolean = userRoles.includes(RoleEnum.Admin);

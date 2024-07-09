@@ -1,4 +1,5 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
+import { AuthModel, RoleModel } from 'novatori/validators';
 import { BaseModel } from '../base/base.model';
 
 export class UserModel extends BaseModel {
@@ -10,4 +11,15 @@ export class UserModel extends BaseModel {
 
   @Expose()
   email!: string;
+
+  @Expose()
+  @Type(() => AuthModel)
+  auths!: AuthModel[];
+
+  @Expose()
+  roles!: RoleModel[];
+
+  public getAuths(): AuthModel[] {
+    return this.auths;
+  }
 }
