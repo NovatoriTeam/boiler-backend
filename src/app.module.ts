@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
@@ -28,7 +27,6 @@ import { HttpExceptionFilter } from './shared/filters/http-exception.filter';
     ProjectsModule,
     DepartmentsModule,
     EmployeesModule,
-    ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],
   providers: [
