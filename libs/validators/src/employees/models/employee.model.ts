@@ -1,6 +1,5 @@
-import { Expose, plainToInstance } from 'class-transformer';
-import { BaseModel } from '../../../../../src/modules/crud/models/base.model';
-import { Employee } from '../../../../../src/modules/employees/entities/employee.entity';
+import { Expose } from 'class-transformer';
+import { BaseModel } from '../../base/base.model';
 
 export class EmployeeModel extends BaseModel {
   @Expose()
@@ -19,9 +18,5 @@ export class EmployeeModel extends BaseModel {
   jobTitle: string;
 
   @Expose()
-  salary: string;
-
-  toEntity(): Employee {
-    return plainToInstance(Employee, this);
-  }
+  salary: number;
 }

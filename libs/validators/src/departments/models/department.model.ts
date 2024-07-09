@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import { BaseModel } from '../../../../../src/modules/crud/models/base.model';
+import { BaseModel } from '../../base/base.model';
 
 export class DepartmentModel extends BaseModel {
   @Expose()
@@ -10,4 +10,7 @@ export class DepartmentModel extends BaseModel {
 
   @Expose()
   location!: string;
+
+  @Expose()
+  hireDate!: Date;
 }

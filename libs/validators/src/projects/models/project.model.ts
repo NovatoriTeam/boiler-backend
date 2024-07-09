@@ -1,6 +1,5 @@
-import { Expose, plainToInstance } from 'class-transformer';
-import { BaseModel } from '../../../../../src/modules/crud/models/base.model';
-import { Project } from '../../../../../src/modules/projects/entities/project.entity';
+import { Expose } from 'class-transformer';
+import { BaseModel } from '../../base/base.model';
 
 export class ProjectModel extends BaseModel {
   @Expose()
@@ -10,12 +9,8 @@ export class ProjectModel extends BaseModel {
   description!: string;
 
   @Expose()
-  budget!: string;
+  budget!: number;
 
   @Expose()
   status!: string;
-
-  toEntity(): Project {
-    return plainToInstance(Project, this);
-  }
 }

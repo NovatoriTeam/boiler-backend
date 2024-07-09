@@ -1,10 +1,10 @@
-import { IsDecimal, IsString } from 'class-validator';
+import { IsDecimal, IsEmail, IsString } from 'class-validator';
 
 export class CreateProjectDto {
   @IsString()
   name: string;
 
-  @IsString()
+  @IsEmail()
   description: string;
 
   @IsDecimal()

@@ -21,7 +21,4 @@ export class CreateEmployeeDto {
 
   @IsNumber()
   salary: number;
-
-  @IsNumber()
-  departmentId: number;
 }
