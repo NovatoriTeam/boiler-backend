@@ -8,19 +8,20 @@ import { AuthTypeEnum } from '../types/enums/auth-type.enum';
 import { GoogleOauthUserInterface } from '../types/interfaces/google-oauth-user.interface';
 
 @Injectable()
-export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
+export class GoogleLinkStrategy extends PassportStrategy(
+  Strategy,
+  'google-link',
+) {
   constructor() {
     super({
       clientID: googleOAuth2Config.clientId,
       clientSecret: googleOAuth2Config.clientSecret,
-      callbackURL: googleOAuth2Config.callbackUrl,
+      callbackURL: `${googleOAuth2Config.callbackUrl}/link`,
       scope: ['profile', 'email'],
-      passReqToCallback: true,
     });
   }
 
   async validate(
-    req: Request,
     _accessToken: string,
     _refreshToken: string,
     profile: GoogleOauthUserInterface,
@@ -39,6 +40,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       ],
     };
 
-    done(null, user);
+    done(null, { data: user, link: true });
   }
 }

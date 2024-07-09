@@ -5,9 +5,7 @@ import {
   DeleteResult,
   Repository,
   SelectQueryBuilder,
-  UpdateResult,
 } from 'typeorm';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { AuthTypeEnum } from '../../auth/types/enums/auth-type.enum';
 import { User } from '../entities/user.entity';
 
@@ -22,7 +20,10 @@ export class UsersRepository {
   }
 
   async findOne(id: number): Promise<User> {
-    return await this.usersRepository.findOneBy({ id });
+    return await this.usersRepository.findOne({
+      where: { id },
+      relations: ['auths'],
+    });
   }
 
   async create(user: DeepPartial<User>): Promise<User> {
@@ -30,15 +31,15 @@ export class UsersRepository {
     return await this.usersRepository.save(newUser);
   }
 
-  async update(id: number, user: DeepPartial<User>): Promise<UpdateResult> {
-    const data = { ...user };
+  async update(id: number, data: DeepPartial<User>): Promise<User> {
+    const user = await this.findOne(id);
+    if (data?.auths) {
+      data.auths = [...user.auths, ...data.auths];
+    }
 
-    return await this.usersRepository
-      .createQueryBuilder('user')
-      .update()
-      .set(data as QueryDeepPartialEntity<User>)
-      .where('user.id = :id', { id })
-      .execute();
+    const updateUserData = { ...user, ...data };
+
+    return await this.usersRepository.save(updateUserData);
   }
 
   async remove(id: number): Promise<DeleteResult> {
@@ -54,7 +55,7 @@ export class UsersRepository {
       .leftJoinAndSelect('user.auths', 'auth')
       .where('auth.identifier = :identifier', { identifier })
       .andWhere('auth.type = :type', { type })
-      .getOneOrFail();
+      .getOne();
   }
 
   async findUserByIdWithRoles(id: number): Promise<User> {

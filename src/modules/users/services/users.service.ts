@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto, UpdateUserDto } from 'boiler-shareds';
-import { DeleteResult, UpdateResult } from 'typeorm';
+import { DeleteResult } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { UsersRepository } from '../repositories/users.repository';
 
@@ -28,10 +28,7 @@ export class UsersService {
     return await this.usersRepository.create(data);
   }
 
-  async update(
-    id: number,
-    updateUserDto: UpdateUserDto,
-  ): Promise<UpdateResult> {
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     return await this.usersRepository.update(id, updateUserDto);
   }
 

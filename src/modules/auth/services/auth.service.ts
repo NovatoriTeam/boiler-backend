@@ -3,8 +3,8 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 import * as dayjs from 'dayjs';
-import { DeepPartial } from 'typeorm';
-import { jwtConfig } from '../../../config/config';
+import { Response } from 'express';
+import { corsConfig, jwtConfig, redirectConfig } from '../../../config/config';
 import { generateRandomString } from '../../../shared/helpers/generateRandomString/generate-random-string';
 import { hashString } from '../../../shared/helpers/hashString/hashString';
 import { User } from '../../users/entities/user.entity';
@@ -17,6 +17,9 @@ import { AuthRepository } from '../repositories/auth.repository';
 import { RefreshRepository } from '../repositories/refresh.repository';
 import { AuthTypeEnum } from '../types/enums/auth-type.enum';
 import { GenerateJwtTokenParamsInterface } from '../types/interfaces/generate-jwt-token-params.interface';
+import { JwtPayloadInterface } from '../types/interfaces/jwt-payload.interface';
+import { ILocalAuthData } from '../types/interfaces/local-auth-data.interface';
+import { OAuthRequestInterface } from '../types/interfaces/o-auth-request-interface';
 import { RefreshTokenInterface } from '../types/interfaces/refresh-token.interface';
 
 @Injectable()
@@ -83,14 +86,14 @@ export class AuthService {
 
     const isValidPassword: boolean = await bcrypt.compare(
       password,
-      user.auths[0].metadata.password,
+      (user.auths[0].metadata as ILocalAuthData).password,
     );
 
     if (!isValidPassword) {
       throw new UnauthorizedException();
     }
 
-    delete user.auths[0].metadata.password;
+    delete (user.auths[0].metadata as ILocalAuthData).password;
     return user;
   }
 
@@ -100,12 +103,17 @@ export class AuthService {
     return this.jwtService.sign({ id: userId }, { secret, expiresIn });
   }
 
-  async handleOAuthLogin(data: DeepPartial<User>): Promise<AuthResponseDto> {
-    const user: User = await this.usersRepository.findOne(1);
+  async handleOAuthLogin(
+    req: OAuthRequestInterface,
+  ): Promise<AuthResponseDto | void> {
+    const user: User = await this.usersRepository.findByAuthIdentifier(
+      req.user.data.auths[0].type,
+      req.user.data.auths[0].identifier,
+    );
     let userId: number = user?.id ?? null;
 
     if (!userId) {
-      const newUser: User = await this.usersRepository.create(data);
+      const newUser: User = await this.usersRepository.create(req.user.data);
       userId = newUser.id;
     }
 
@@ -203,5 +211,71 @@ export class AuthService {
       refreshToken: tokens.hashedRefreshToken,
     });
     return tokens;
+  }
+
+  async handleOAuthCallback(
+    req: OAuthRequestInterface,
+    res: Response,
+    redirectUrl: string,
+  ): Promise<void> {
+    const isLinkingAccount = req.user.link;
+
+    if (isLinkingAccount) {
+      return await this.handleOAuthAccountLinking(req, res);
+    }
+
+    const { accessToken, refreshToken } = (await this.handleOAuthLogin(
+      req,
+    )) as AuthResponseDto;
+
+    const cookieExpirationDate: Date = new Date(
+      Date.now() + 365 * 24 * 60 * 60 * 1000,
+    ); // 1 year in milliseconds
+
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      expires: cookieExpirationDate,
+      domain: corsConfig.baseDomain,
+      secure: true,
+    });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      expires: cookieExpirationDate,
+      secure: true,
+      domain: corsConfig.baseDomain,
+    });
+
+    res.redirect(redirectUrl);
+  }
+
+  private async handleOAuthAccountLinking(
+    req: OAuthRequestInterface,
+    res: Response,
+  ): Promise<void> {
+    const accessToken = req['cookies']['accessToken'];
+    const payload = await this.jwtService.verifyAsync<JwtPayloadInterface>(
+      accessToken,
+      { secret: jwtConfig.jwtSecret },
+    );
+
+    const { type, identifier } = req.user.data.auths[0];
+
+    const user = await this.usersRepository.findByAuthIdentifier(
+      type,
+      identifier,
+    );
+
+    const isAccountAlreadyInUse = user && user.id !== payload.id;
+
+    if (isAccountAlreadyInUse) {
+      res.redirect(`${redirectConfig.homePageUrl}/login`);
+      return;
+    }
+
+    await this.usersRepository.update(payload.id, {
+      auths: req.user.data.auths,
+    });
+
+    res.redirect(redirectConfig.homePageUrl);
   }
 }
