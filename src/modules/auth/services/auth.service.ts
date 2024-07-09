@@ -268,7 +268,7 @@ export class AuthService {
     const isAccountAlreadyInUse = user && user.id !== payload.id;
 
     if (isAccountAlreadyInUse) {
-      res.redirect(`${redirectConfig.homePageUrl}/login`);
+      res.redirect(`${redirectConfig.homePageUrl}`);
       return;
     }
 
