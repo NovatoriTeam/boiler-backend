@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
+import { AuthModel, AuthTypeEnum, UserModel } from 'novatori/validators';
 import { Strategy, VerifyCallback } from 'passport-google-oauth2';
-import { DeepPartial } from 'typeorm';
 import { googleOAuth2Config } from '../../../config/config';
-import { User } from '../../users/entities/user.entity';
-import { AuthTypeEnum } from '../types/enums/auth-type.enum';
 import { GoogleOauthUserInterface } from '../types/interfaces/google-oauth-user.interface';
 
 @Injectable()
@@ -27,18 +25,18 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     done: VerifyCallback,
   ): Promise<void> {
     const { emails, name } = profile;
-    const user: DeepPartial<User> = {
-      firstName: name.givenName,
-      lastName: name.familyName,
-      auths: [
-        {
-          type: AuthTypeEnum.Google,
-          identifier: profile.id,
-          metadata: { email: emails[0].value },
-        },
-      ],
-    };
 
-    done(null, user);
+    const user = new UserModel();
+    user.firstName = name.givenName;
+    user.lastName = name.familyName;
+
+    const auth = new AuthModel();
+    auth.type = AuthTypeEnum.Google;
+    auth.identifier = profile.id;
+    auth.metadata = { email: emails[0].value };
+
+    user.auths = [auth];
+
+    done(null, { data: user, link: false });
   }
 }

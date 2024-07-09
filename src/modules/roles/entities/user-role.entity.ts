@@ -1,7 +1,7 @@
+import { RoleEnum } from 'novatori/validators/roles/enums/role.enum';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../crud/entities/base.entity';
 import { User } from '../../users/entities/user.entity';
-import { RoleEnum } from '../types/enums/role.enum';
 
 @Entity('user_role')
 export class UserRole extends BaseEntity {

@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UpdateUserDto } from 'boiler-shareds';
+import { UserModel } from 'novatori/validators';
 import { DeleteResult } from 'typeorm';
 import { Public } from '../../auth/decorators/public.decorator';
 import { AuthGuard } from '../../auth/guards/auth.guard';
@@ -36,7 +37,7 @@ export class UsersController {
   async update(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
-  ): Promise<User> {
+  ): Promise<UserModel> {
     return await this.usersService.update(Number(id), updateUserDto);
   }
 

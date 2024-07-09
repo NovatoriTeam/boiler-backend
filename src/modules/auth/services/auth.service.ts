@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 import * as dayjs from 'dayjs';
 import { Response } from 'express';
+import { AuthTypeEnum, UserModel } from 'novatori/validators';
 import { corsConfig, jwtConfig, redirectConfig } from '../../../config/config';
 import { generateRandomString } from '../../../shared/helpers/generateRandomString/generate-random-string';
 import { hashString } from '../../../shared/helpers/hashString/hashString';
@@ -15,7 +16,6 @@ import { Auth } from '../entities/auth.entity';
 import { Refresh } from '../entities/refresh.entity';
 import { AuthRepository } from '../repositories/auth.repository';
 import { RefreshRepository } from '../repositories/refresh.repository';
-import { AuthTypeEnum } from '../types/enums/auth-type.enum';
 import { GenerateJwtTokenParamsInterface } from '../types/interfaces/generate-jwt-token-params.interface';
 import { JwtPayloadInterface } from '../types/interfaces/jwt-payload.interface';
 import { ILocalAuthData } from '../types/interfaces/local-auth-data.interface';
@@ -78,22 +78,22 @@ export class AuthService {
     );
   }
 
-  async validateLocalUser(email: string, password: string): Promise<User> {
-    const user: User = await this.usersRepository.findByAuthIdentifier(
+  async validateLocalUser(email: string, password: string): Promise<UserModel> {
+    const user: UserModel = await this.usersRepository.findByAuthIdentifier(
       AuthTypeEnum.Local,
       email,
     );
 
     const isValidPassword: boolean = await bcrypt.compare(
       password,
-      (user.auths[0].metadata as ILocalAuthData).password,
+      (user.getAuths()[0].metadata as ILocalAuthData).password,
     );
 
     if (!isValidPassword) {
       throw new UnauthorizedException();
     }
 
-    delete (user.auths[0].metadata as ILocalAuthData).password;
+    delete (user.getAuths()[0].metadata as ILocalAuthData).password;
     return user;
   }
 
@@ -106,14 +106,16 @@ export class AuthService {
   async handleOAuthLogin(
     req: OAuthRequestInterface,
   ): Promise<AuthResponseDto | void> {
-    const user: User = await this.usersRepository.findByAuthIdentifier(
-      req.user.data.auths[0].type,
-      req.user.data.auths[0].identifier,
+    const user = await this.usersRepository.findByAuthIdentifier(
+      req.user.data.getAuths()[0].type,
+      req.user.data.getAuths()[0].identifier,
     );
     let userId: number = user?.id ?? null;
 
     if (!userId) {
-      const newUser: User = await this.usersRepository.create(req.user.data);
+      const newUser: UserModel = await this.usersRepository.create(
+        req.user.data,
+      );
       userId = newUser.id;
     }
 
@@ -252,13 +254,13 @@ export class AuthService {
     req: OAuthRequestInterface,
     res: Response,
   ): Promise<void> {
-    const accessToken = req['cookies']['accessToken'];
+    const accessToken = req['cookies']?.['accessToken'];
     const payload = await this.jwtService.verifyAsync<JwtPayloadInterface>(
       accessToken,
       { secret: jwtConfig.jwtSecret },
     );
 
-    const { type, identifier } = req.user.data.auths[0];
+    const { type, identifier } = req.user.data.getAuths()[0];
 
     const user = await this.usersRepository.findByAuthIdentifier(
       type,
@@ -267,14 +269,11 @@ export class AuthService {
 
     const isAccountAlreadyInUse = user && user.id !== payload.id;
 
-    if (isAccountAlreadyInUse) {
-      res.redirect(`${redirectConfig.homePageUrl}`);
-      return;
+    if (!isAccountAlreadyInUse) {
+      await this.usersRepository.update(payload.id, {
+        auths: req.user.data.getAuths(),
+      });
     }
-
-    await this.usersRepository.update(payload.id, {
-      auths: req.user.data.auths,
-    });
 
     res.redirect(redirectConfig.homePageUrl);
   }

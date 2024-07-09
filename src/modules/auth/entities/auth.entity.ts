@@ -1,7 +1,7 @@
+import { AuthTypeEnum } from 'novatori/validators';
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../crud/entities/base.entity';
 import { User } from '../../users/entities/user.entity';
-import { AuthTypeEnum } from '../types/enums/auth-type.enum';
 
 @Entity('auth')
 @Index(['type', 'identifier'], { unique: true })

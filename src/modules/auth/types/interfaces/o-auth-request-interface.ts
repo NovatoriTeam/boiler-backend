@@ -1,9 +1,8 @@
-import { DeepPartial } from 'typeorm';
-import { User } from '../../../users/entities/user.entity';
+import { UserModel } from 'novatori/validators';
 
 export interface OAuthRequestInterface {
   user: {
-    data: DeepPartial<User>;
+    data: UserModel;
     link: boolean;
   };
 }
