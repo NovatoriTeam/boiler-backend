@@ -8,7 +8,6 @@ import { GoogleAuthController } from './controllers/google-auth.controller';
 import { Auth } from './entities/auth.entity';
 import { Refresh } from './entities/refresh.entity';
 import { AuthGuard } from './guards/auth.guard';
-import { LinkGuard } from './guards/link.guard';
 import { AuthRepository } from './repositories/auth.repository';
 import { RefreshRepository } from './repositories/refresh.repository';
 import { AuthService } from './services/auth.service';
@@ -28,7 +27,6 @@ import { LocalStrategy } from './strategies/local.strategy';
     AuthService,
     UsersRepository,
     RefreshRepository,
-    LinkGuard,
     GoogleLinkStrategy,
     AuthRepository,
     LocalStrategy,
