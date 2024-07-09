@@ -8,6 +8,7 @@ import { AuthTypeEnum, UserModel } from 'novatori/validators';
 import { corsConfig, jwtConfig, redirectConfig } from '../../../config/config';
 import { generateRandomString } from '../../../shared/helpers/generateRandomString/generate-random-string';
 import { hashString } from '../../../shared/helpers/hashString/hashString';
+import { cookieConstants } from '../../../shared/operational-constants/cookie-constants';
 import { User } from '../../users/entities/user.entity';
 import { UsersRepository } from '../../users/repositories/users.repository';
 import { AuthResponseDto } from '../dtos/auth-response.dto';
@@ -230,19 +231,15 @@ export class AuthService {
       req,
     )) as AuthResponseDto;
 
-    const cookieExpirationDate: Date = new Date(
-      Date.now() + 365 * 24 * 60 * 60 * 1000,
-    ); // 1 year in milliseconds
-
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      expires: cookieExpirationDate,
+      expires: cookieConstants.oneYearExpirationDate,
       domain: corsConfig.baseDomain,
       secure: true,
     });
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      expires: cookieExpirationDate,
+      expires: cookieConstants.oneYearExpirationDate,
       secure: true,
       domain: corsConfig.baseDomain,
     });
