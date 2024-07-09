@@ -13,7 +13,8 @@ import { AuthResponseDto } from '../dtos/auth-response.dto';
 import { RegisterUserDto } from '../dtos/register-user.dto';
 import { Refresh } from '../entities/refresh.entity';
 import { AuthRepository } from '../repositories/auth.repository';
-import { OAuthsEnum } from '../types/enums/o-auths.enum';
+import { RefreshRepository } from '../repositories/refresh.repository';
+import { AuthTypeEnum } from '../types/enums/auth-type.enum';
 import { GenerateJwtTokenParamsInterface } from '../types/interfaces/generate-jwt-token-params.interface';
 import { RefreshTokenInterface } from '../types/interfaces/refresh-token.interface';
 
@@ -21,31 +22,32 @@ import { RefreshTokenInterface } from '../types/interfaces/refresh-token.interfa
 export class AuthService {
   constructor(
     private usersRepository: UsersRepository,
+    private refreshRepository: RefreshRepository,
     private authRepository: AuthRepository,
     private jwtService: JwtService,
   ) {}
 
   async findOne(userId: number, refreshToken: string): Promise<Refresh> {
     const hashedRefreshToken: string = hashString(refreshToken);
-    return await this.authRepository.findOne({
+    return await this.refreshRepository.findOne({
       userId,
       refreshToken: hashedRefreshToken,
     });
   }
 
   async register(registerUserDto: RegisterUserDto): Promise<AuthResponseDto> {
-    const salt: string = await bcrypt.genSalt(10);
-    const hashedPassword: string = await bcrypt.hash(
-      registerUserDto.password,
-      salt,
-    );
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(registerUserDto.password, salt);
 
-    const data: DeepPartial<User> = {
-      ...registerUserDto,
-      password: hashedPassword,
-    } as DeepPartial<User>;
-
-    const newUser: User = await this.usersRepository.create(data);
+    const newUser = await this.usersRepository.create(registerUserDto);
+    await this.authRepository.create({
+      userId: newUser.id,
+      type: AuthTypeEnum.Local,
+      identifier: registerUserDto.email,
+      metadata: {
+        password: hashedPassword,
+      },
+    });
 
     const { refreshToken } = await this.generateAndInsertRefreshToken(
       newUser.id,
@@ -74,19 +76,22 @@ export class AuthService {
     );
   }
 
-  async validateUser(email: string, password: string): Promise<User> {
-    const user: User = await this.usersRepository.findByEmail(email);
+  async validateLocalUser(email: string, password: string): Promise<User> {
+    const user: User = await this.usersRepository.findByAuthIdentifier(
+      AuthTypeEnum.Local,
+      email,
+    );
 
     const isValidPassword: boolean = await bcrypt.compare(
       password,
-      user.password,
+      user.auths[0].metadata.password,
     );
 
     if (!isValidPassword) {
       throw new UnauthorizedException();
     }
 
-    delete user.password;
+    delete user.auths[0].metadata.password;
     return user;
   }
 
@@ -96,15 +101,8 @@ export class AuthService {
     return this.jwtService.sign({ id: userId }, { secret, expiresIn });
   }
 
-  async handleOAuthLogin(
-    data: DeepPartial<User>,
-    oAuth: OAuthsEnum,
-    oAuthId: string,
-  ): Promise<AuthResponseDto> {
-    const user: User = await this.usersRepository.findOneByOAuthId(
-      oAuth,
-      oAuthId,
-    );
+  async handleOAuthLogin(data: DeepPartial<User>): Promise<AuthResponseDto> {
+    const user: User = await this.usersRepository.findOne(1);
     let userId: number = user?.id ?? null;
 
     if (!userId) {
@@ -114,7 +112,7 @@ export class AuthService {
 
     const { refreshToken, hashedRefreshToken } = this.generateRefreshToken();
 
-    await this.authRepository.create({
+    await this.refreshRepository.create({
       userId,
       refreshToken: hashedRefreshToken,
     } as Refresh);
@@ -162,7 +160,7 @@ export class AuthService {
     } = this.generateRefreshToken();
     const hashedOldToken: string = hashString(oldToken);
 
-    await this.authRepository.createAndRemove({
+    await this.refreshRepository.createAndRemove({
       userId,
       refreshToken: hashedOldToken,
       newRefreshToken: newHashedRefreshToken,
@@ -201,7 +199,7 @@ export class AuthService {
     userId: number,
   ): Promise<RefreshTokenInterface> {
     const tokens: RefreshTokenInterface = this.generateRefreshToken();
-    await this.authRepository.create({
+    await this.refreshRepository.create({
       userId: userId,
       refreshToken: tokens.hashedRefreshToken,
     });

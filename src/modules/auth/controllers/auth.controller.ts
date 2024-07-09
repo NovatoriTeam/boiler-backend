@@ -118,11 +118,7 @@ export class AuthController {
     redirectUrl: string,
   ): Promise<void> {
     const { accessToken, refreshToken } =
-      await this.authService.handleOAuthLogin(
-        req.user.data,
-        req.user.type,
-        req.user.oauthId,
-      );
+      await this.authService.handleOAuthLogin(req.user.data);
 
     const cookieExpirationDate: Date = new Date(
       Date.now() + 365 * 24 * 60 * 60 * 1000,

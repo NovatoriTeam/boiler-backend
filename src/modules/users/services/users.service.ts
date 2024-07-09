@@ -24,8 +24,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     const data: Partial<User> = {
       ...createUserDto,
-      password: await this.hashPassword(createUserDto.password),
-    };
+    } as Partial<User>;
     return await this.usersRepository.create(data);
   }
 

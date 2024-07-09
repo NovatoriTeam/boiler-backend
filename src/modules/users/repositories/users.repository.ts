@@ -7,7 +7,8 @@ import {
   SelectQueryBuilder,
   UpdateResult,
 } from 'typeorm';
-import { OAuthsEnum } from '../../auth/types/enums/o-auths.enum';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { AuthTypeEnum } from '../../auth/types/enums/auth-type.enum';
 import { User } from '../entities/user.entity';
 
 @Injectable()
@@ -32,17 +33,10 @@ export class UsersRepository {
   async update(id: number, user: DeepPartial<User>): Promise<UpdateResult> {
     const data = { ...user };
 
-    if (user.oAuths) {
-      Object.assign(data, {
-        oAuths: () =>
-          `jsonb_set(preferences, '{${Object.keys(user.oAuths).join(',')}}', '${JSON.stringify(user.oAuths)}', true)`,
-      });
-    }
-
     return await this.usersRepository
       .createQueryBuilder('user')
       .update()
-      .set(data)
+      .set(data as QueryDeepPartialEntity<User>)
       .where('user.id = :id', { id })
       .execute();
   }
@@ -51,18 +45,16 @@ export class UsersRepository {
     return await this.usersRepository.delete(id);
   }
 
-  async findOneByOAuthId(oAuth: OAuthsEnum, id: string): Promise<User> {
+  async findByAuthIdentifier(
+    type: AuthTypeEnum,
+    identifier: string,
+  ): Promise<User> {
     return await this.usersRepository
       .createQueryBuilder('user')
-      .where(`user.oAuths ->>'${oAuth}' = :id`, { id })
-      .getOne();
-  }
-
-  async findByEmail(email: string): Promise<User> {
-    return await this.usersRepository.findOne({
-      where: { email },
-      select: ['id', 'email', 'password'],
-    });
+      .leftJoinAndSelect('user.auths', 'auth')
+      .where('auth.identifier = :identifier', { identifier })
+      .andWhere('auth.type = :type', { type })
+      .getOneOrFail();
   }
 
   async findUserByIdWithRoles(id: number): Promise<User> {
