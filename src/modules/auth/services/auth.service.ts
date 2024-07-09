@@ -11,6 +11,7 @@ import { User } from '../../users/entities/user.entity';
 import { UsersRepository } from '../../users/repositories/users.repository';
 import { AuthResponseDto } from '../dtos/auth-response.dto';
 import { RegisterUserDto } from '../dtos/register-user.dto';
+import { Auth } from '../entities/auth.entity';
 import { Refresh } from '../entities/refresh.entity';
 import { AuthRepository } from '../repositories/auth.repository';
 import { RefreshRepository } from '../repositories/refresh.repository';
@@ -39,15 +40,13 @@ export class AuthService {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(registerUserDto.password, salt);
 
-    const newUser = await this.usersRepository.create(registerUserDto);
-    await this.authRepository.create({
-      userId: newUser.id,
-      type: AuthTypeEnum.Local,
-      identifier: registerUserDto.email,
-      metadata: {
-        password: hashedPassword,
-      },
-    });
+    const auth = new Auth();
+    auth.type = AuthTypeEnum.Local;
+    auth.identifier = registerUserDto.email;
+    auth.metadata = { password: hashedPassword };
+
+    const data = { ...registerUserDto, auths: [auth] };
+    const newUser = await this.usersRepository.create(data);
 
     const { refreshToken } = await this.generateAndInsertRefreshToken(
       newUser.id,
@@ -160,7 +159,7 @@ export class AuthService {
     } = this.generateRefreshToken();
     const hashedOldToken: string = hashString(oldToken);
 
-    await this.refreshRepository.createAndRemove({
+    await this.refreshRepository.createAndUpdate({
       userId,
       refreshToken: hashedOldToken,
       newRefreshToken: newHashedRefreshToken,

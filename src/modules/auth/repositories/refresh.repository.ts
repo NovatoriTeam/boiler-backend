@@ -18,7 +18,7 @@ export class RefreshRepository {
     });
   }
 
-  async createAndRemove(
+  async createAndUpdate(
     data: CreateAndRemoveParamsInterface,
   ): Promise<Refresh> {
     const { newRefreshToken, refreshToken, userId } = data;

@@ -20,7 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prepare": "husky",
     "lint-staged": "lint-staged",
-    "typeorm": "nest build && ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource src/db/orm.config.ts",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js --dataSource src/db/orm.config.ts",
     "typeorm:create": "npm run typeorm migration:create",
     "typeorm:generate": "npm run typeorm migration:generate",
     "typeorm:revert": "npm run typeorm migration:revert",
