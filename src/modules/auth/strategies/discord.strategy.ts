@@ -21,11 +21,10 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
     _refreshToken: string,
     profile: Profile,
   ): Promise<DeepPartial<User>> {
-    const { email, username } = profile;
+    const { username } = profile;
     const user: DeepPartial<User> = {
       firstName: username,
-      email,
-    };
+    } as DeepPartial<User>;
 
     return user;
   }

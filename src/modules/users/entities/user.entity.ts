@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import * as bcrypt from 'bcrypt';
 import { Column, Entity, OneToMany } from 'typeorm';
-import { v4 as uuidv4 } from 'uuid';
+import { Auth } from '../../auth/entities/auth.entity';
 import { BaseEntity } from '../../crud/entities/base.entity';
 import { Product } from '../../products/entities/product.entity';
 import { UserRole } from '../../roles/entities/user-role.entity';
@@ -16,19 +15,6 @@ export class User extends BaseEntity {
   @Column()
   lastName: string;
 
-  @ApiProperty({ type: Number })
-  @Column({ unique: true })
-  email!: string;
-
-  @Column({
-    select: false,
-    default: bcrypt.hashSync(uuidv4() as string, bcrypt.genSaltSync(10)),
-  })
-  password!: string;
-
-  @Column({ type: 'jsonb', default: {} })
-  oAuths!: { facebook: string };
-
   @ApiProperty({ type: Product })
   @OneToMany(() => Product, (product) => product.user)
   products: Product[];
@@ -36,4 +22,7 @@ export class User extends BaseEntity {
   @ApiProperty({ type: UserRole, isArray: true })
   @OneToMany(() => UserRole, (role) => role.user)
   roles: UserRole[];
+
+  @OneToMany(() => Auth, (auth) => auth.user, { cascade: true })
+  auths!: Auth[];
 }
