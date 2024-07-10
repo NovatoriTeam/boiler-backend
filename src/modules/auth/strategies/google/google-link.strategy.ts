@@ -31,10 +31,9 @@ export class GoogleLinkStrategy extends PassportStrategy(
     const user = serializeOAuthUser({
       firstName: name.givenName,
       lastName: name.familyName,
-      email: emails[0].value,
       identifier: id,
       type: AuthTypeEnum.Google,
-      accessToken,
+      metadata: { emails: emails[0].value, accessToken },
     });
 
     done(null, { data: user, link: true });

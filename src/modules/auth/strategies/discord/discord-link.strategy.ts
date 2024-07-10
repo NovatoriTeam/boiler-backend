@@ -28,9 +28,8 @@ export class DiscordLinkStrategy extends PassportStrategy(
     const user = serializeOAuthUser({
       firstName: username,
       type: AuthTypeEnum.Discord,
-      email: email,
-      accessToken: accessToken,
       identifier: id,
+      metadata: { email, accessToken },
     });
 
     return { data: user, link: true };
