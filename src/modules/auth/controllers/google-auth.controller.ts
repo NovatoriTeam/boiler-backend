@@ -1,6 +1,5 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
-import { googleOAuth2Config } from '../../../config/config';
 import { Public } from '../decorators/public.decorator';
 import { GoogleOauthLinkGuard } from '../guards/google/google-link.guard';
 import { GoogleOAuthGuard } from '../guards/google/google.guard';
@@ -23,11 +22,7 @@ export class GoogleAuthController {
     @Req() req: OAuthRequestInterface,
     @Res() res: Response,
   ): Promise<void> {
-    return await this.authService.handleOAuthCallback(
-      req,
-      res,
-      googleOAuth2Config.redirectUrl,
-    );
+    return await this.authService.handleOAuthCallback(req, res);
   }
 
   @UseGuards(GoogleOauthLinkGuard)
@@ -42,10 +37,6 @@ export class GoogleAuthController {
     @Req() req: OAuthRequestInterface,
     @Res() res: Response,
   ): Promise<void> {
-    return await this.authService.handleOAuthCallback(
-      req,
-      res,
-      googleOAuth2Config.redirectUrl,
-    );
+    return await this.authService.handleOAuthCallback(req, res);
   }
 }

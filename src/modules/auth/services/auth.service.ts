@@ -219,7 +219,6 @@ export class AuthService {
   async handleOAuthCallback(
     req: OAuthRequestInterface,
     res: Response,
-    redirectUrl: string,
   ): Promise<void> {
     const isLinkingAccount = req.user.link;
 
@@ -244,7 +243,7 @@ export class AuthService {
       domain: corsConfig.baseDomain,
     });
 
-    res.redirect(redirectUrl);
+    res.redirect(redirectConfig.homePageUrl);
   }
 
   private async handleOAuthAccountLinking(
