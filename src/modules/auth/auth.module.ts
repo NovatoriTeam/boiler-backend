@@ -5,6 +5,7 @@ import { User } from '../users/entities/user.entity';
 import { UsersRepository } from '../users/repositories/users.repository';
 import { AuthController } from './controllers/auth.controller';
 import { DiscordAuthController } from './controllers/discord-auth.controller';
+import { FacebookAuthController } from './controllers/facebook-auth.controller';
 import { GoogleAuthController } from './controllers/google-auth.controller';
 import { Auth } from './entities/auth.entity';
 import { Refresh } from './entities/refresh.entity';
@@ -14,13 +15,19 @@ import { RefreshRepository } from './repositories/refresh.repository';
 import { AuthService } from './services/auth.service';
 import { DiscordLinkStrategy } from './strategies/discord/discord-link.strategy';
 import { DiscordStrategy } from './strategies/discord/discord.strategy';
-import { FacebookStrategy } from './strategies/facebook.strategy';
+import { FacebookLinkStrategy } from './strategies/facebook/facebook-link.strategy';
+import { FacebookStrategy } from './strategies/facebook/facebook.strategy';
 import { GoogleLinkStrategy } from './strategies/google/google-link.strategy';
 import { GoogleStrategy } from './strategies/google/google.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
-  controllers: [AuthController, GoogleAuthController, DiscordAuthController],
+  controllers: [
+    AuthController,
+    GoogleAuthController,
+    DiscordAuthController,
+    FacebookAuthController,
+  ],
   imports: [
     TypeOrmModule.forFeature([User, Refresh, Auth]),
     JwtModule.register({}),
@@ -29,6 +36,7 @@ import { LocalStrategy } from './strategies/local.strategy';
     AuthService,
     UsersRepository,
     RefreshRepository,
+    FacebookLinkStrategy,
     GoogleLinkStrategy,
     AuthRepository,
     LocalStrategy,

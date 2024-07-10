@@ -33,7 +33,7 @@ export class GoogleLinkStrategy extends PassportStrategy(
       lastName: name.familyName,
       identifier: id,
       type: AuthTypeEnum.Google,
-      metadata: { emails: emails[0].value, accessToken },
+      metadata: { email: emails[0].value, accessToken },
     });
 
     done(null, { data: user, link: true });
