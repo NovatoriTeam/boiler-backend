@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
+import { AuthTypeEnum } from 'novatori/validators';
 import { Profile, Strategy } from 'passport-facebook';
-import { DeepPartial } from 'typeorm';
-import { facebookOAuth2Config } from '../../../config/config';
-import { User } from '../../users/entities/user.entity';
+import { facebookOAuth2Config } from '../../../../config/config';
+import { OAuthUserInterface } from '../../types/interfaces/o-auth-user.interface';
+import { serializeOAuthUser } from '../../utils/serialize-o-auth-user';
 
 @Injectable()
 export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
@@ -18,18 +19,20 @@ export class FacebookStrategy extends PassportStrategy(Strategy, 'facebook') {
   }
 
   async validate(
-    _accessToken: string,
+    accessToken: string,
     _refreshToken: string,
     profile: Profile,
-  ): Promise<{ data: DeepPartial<User>; type: string; oauthId: string }> {
-    const { name, emails } = profile;
+  ): Promise<OAuthUserInterface> {
+    const { name, emails, id } = profile;
 
-    const user: DeepPartial<User> = {
-      email: emails[0].value,
+    const user = serializeOAuthUser({
       firstName: name.givenName,
       lastName: name.familyName,
-    } as DeepPartial<User>;
+      identifier: id,
+      type: AuthTypeEnum.Facebook,
+      metadata: { email: emails[0].value, accessToken },
+    });
 
-    return { data: user, type: 'facebook', oauthId: profile.id };
+    return { data: user, link: false };
   }
 }
