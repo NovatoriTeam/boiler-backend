@@ -11,8 +11,8 @@ export class User extends BaseEntity {
   @Column()
   firstName: string;
 
-  @ApiProperty({ type: Number, nullable: true })
-  @Column()
+  @ApiProperty({ type: Number })
+  @Column({ nullable: true })
   lastName: string;
 
   @ApiProperty({ type: Product })

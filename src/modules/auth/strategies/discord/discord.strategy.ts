@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
+import { AuthTypeEnum } from 'novatori/validators';
 import { Profile, Strategy } from 'passport-discord';
-import { DeepPartial } from 'typeorm';
-import { discordOAuth2Config } from '../../../config/config';
-import { User } from '../../users/entities/user.entity';
+import { discordOAuth2Config } from '../../../../config/config';
+import { OAuthUserInterface } from '../../types/interfaces/o-auth-user.interface';
+import { serializeOAuthUser } from '../../utils/serialize-o-auth-user';
 
 @Injectable()
 export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
@@ -17,15 +18,20 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
   }
 
   async validate(
-    _accessToken: string,
+    accessToken: string,
     _refreshToken: string,
     profile: Profile,
-  ): Promise<DeepPartial<User>> {
-    const { username } = profile;
-    const user: DeepPartial<User> = {
-      firstName: username,
-    } as DeepPartial<User>;
+  ): Promise<OAuthUserInterface> {
+    const { username, email, id } = profile;
 
-    return user;
+    const user = serializeOAuthUser({
+      firstName: username,
+      type: AuthTypeEnum.Discord,
+      accessToken: accessToken,
+      identifier: id,
+      email,
+    });
+
+    return { data: user, link: false };
   }
 }

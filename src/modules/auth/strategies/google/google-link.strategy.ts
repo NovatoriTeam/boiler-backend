@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { AuthModel, AuthTypeEnum, UserModel } from 'novatori/validators';
+import { AuthTypeEnum } from 'novatori/validators';
 import { Strategy, VerifyCallback } from 'passport-google-oauth2';
-import { googleOAuth2Config } from '../../../config/config';
-import { GoogleOauthUserInterface } from '../types/interfaces/google-oauth-user.interface';
+import { googleOAuth2Config } from '../../../../config/config';
+import { GoogleOauthUserInterface } from '../../types/interfaces/google-oauth-user.interface';
+import { serializeOAuthUser } from '../../utils/serialize-o-auth-user';
 
 @Injectable()
 export class GoogleLinkStrategy extends PassportStrategy(
@@ -25,18 +26,16 @@ export class GoogleLinkStrategy extends PassportStrategy(
     profile: GoogleOauthUserInterface,
     done: VerifyCallback,
   ): Promise<void> {
-    const { emails, name } = profile;
+    const { emails, name, id } = profile;
 
-    const user = new UserModel();
-    user.firstName = name.givenName;
-    user.lastName = name.familyName;
-
-    const auth = new AuthModel();
-    auth.type = AuthTypeEnum.Google;
-    auth.identifier = profile.id;
-    auth.metadata = { email: emails[0].value, accessToken };
-
-    user.auths = [auth];
+    const user = serializeOAuthUser({
+      firstName: name.givenName,
+      lastName: name.familyName,
+      email: emails[0].value,
+      identifier: id,
+      type: AuthTypeEnum.Google,
+      accessToken,
+    });
 
     done(null, { data: user, link: true });
   }

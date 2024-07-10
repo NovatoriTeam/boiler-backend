@@ -1,8 +1,5 @@
-import { UserModel } from 'novatori/validators';
+import { OAuthUserInterface } from './o-auth-user.interface';
 
 export interface OAuthRequestInterface {
-  user: {
-    data: UserModel;
-    link: boolean;
-  };
+  user: OAuthUserInterface;
 }
