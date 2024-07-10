@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UpdateUserDto } from 'boiler-shareds';
-import { UserModel } from 'novatori/validators';
 import { DeleteResult } from 'typeorm';
+import { UserModel } from '../../../boiler-shared/src/validators/user/user.model';
 import { Public } from '../../auth/decorators/public.decorator';
 import { AuthGuard } from '../../auth/guards/auth.guard';
 import { User } from '../entities/user.entity';

@@ -1,4 +1,4 @@
-import { UserModel } from 'novatori/validators';
+import { UserModel } from '../../../../boiler-shared/src/validators/user/user.model';
 
 export interface OAuthRequestInterface {
   user: {

@@ -1,5 +1,5 @@
 import { Param, Req } from '@nestjs/common';
-import { BaseModel } from 'novatori/validators';
+import { BaseModel } from '../../../boiler-shared/src/validators/base/base.model';
 import { BaseEntity } from '../entities/base.entity';
 import { CrudService } from '../services/crud.service';
 import { RequestInterface } from '../types/interfaces/request.interface';

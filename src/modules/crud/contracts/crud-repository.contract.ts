@@ -1,5 +1,5 @@
-import { BaseModel } from 'novatori/validators';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { BaseModel } from '../../../boiler-shared/src/validators/base/base.model';
 import { QueryHelperInterface } from '../types/interfaces/query-helper.interface';
 
 export interface CrudRepositoryContract<ModelType extends BaseModel> {

@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { UserModel } from 'novatori/validators';
 import { Strategy } from 'passport-local';
+import { UserModel } from '../../../boiler-shared/src/validators/user/user.model';
 import { AuthService } from '../services/auth.service';
 
 @Injectable()

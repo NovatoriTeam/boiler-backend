@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto, UpdateUserDto } from 'boiler-shareds';
-import { UserModel } from 'novatori/validators';
 import { DeleteResult } from 'typeorm';
+import { UserModel } from '../../../boiler-shared/src/validators/user/user.model';
 import { User } from '../entities/user.entity';
 import { UsersRepository } from '../repositories/users.repository';
 

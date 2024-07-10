@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ProjectModel } from 'novatori/validators';
+import { ProjectModel } from '../../../boiler-shared/src/validators/projects/models/project.model';
 import { CrudService } from '../../crud/services/crud.service';
 import { Project } from '../entities/project.entity';
 import { ProjectsRepository } from '../repositories/projects.repository';

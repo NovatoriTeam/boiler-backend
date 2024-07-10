@@ -8,8 +8,9 @@ import {
   Put,
   Req,
 } from '@nestjs/common';
-import { CreateDepartmentDto, UpdateDepartmentDto } from 'novatori/validators';
-import { DepartmentModel } from 'novatori/validators';
+import { CreateDepartmentDto } from '../../../boiler-shared/src/validators/departments/create-department.dto';
+import { DepartmentModel } from '../../../boiler-shared/src/validators/departments/models/department.model';
+import { UpdateDepartmentDto } from '../../../boiler-shared/src/validators/departments/update-department.dto';
 import { Public } from '../../auth/decorators/public.decorator';
 import { CrudController } from '../../crud/controllers/crud.controller';
 import { CrudFilter } from '../../crud/decorators/crud-filter.decorator';

@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
-import { AuthTypeEnum, UserModel } from 'novatori/validators';
 import {
   DeepPartial,
   DeleteResult,
   Repository,
   SelectQueryBuilder,
 } from 'typeorm';
+import { AuthTypeEnum } from '../../../boiler-shared/src/validators/auth/enums/auth-type.enum';
+import { UserModel } from '../../../boiler-shared/src/validators/user/user.model';
 import { User } from '../entities/user.entity';
 
 @Injectable()

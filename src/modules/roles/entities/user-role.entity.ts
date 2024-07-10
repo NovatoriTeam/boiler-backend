@@ -1,5 +1,5 @@
-import { RoleEnum } from 'novatori/validators';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { RoleEnum } from '../../../boiler-shared/src/validators/roles/enums/role.enum';
 import { BaseEntity } from '../../crud/entities/base.entity';
 import { User } from '../../users/entities/user.entity';
 

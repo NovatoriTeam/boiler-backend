@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DepartmentModel } from 'novatori/validators';
+import { DepartmentModel } from '../../../boiler-shared/src/validators/departments/models/department.model';
 import { CrudService } from '../../crud/services/crud.service';
 import { Department } from '../entities/department.entity';
 import { DepartmentsRepository } from '../repositories/departments.repository';

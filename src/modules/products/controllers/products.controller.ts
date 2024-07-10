@@ -9,11 +9,9 @@ import {
   Req,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import {
-  CreateProductDto,
-  ProductsModel,
-  UpdateProductDto,
-} from 'novatori/validators';
+import { CreateProductDto } from '../../../boiler-shared/src/validators/products/create-product.dto';
+import { ProductsModel } from '../../../boiler-shared/src/validators/products/models/products.model';
+import { UpdateProductDto } from '../../../boiler-shared/src/validators/products/update-product.dto';
 import { Public } from '../../auth/decorators/public.decorator';
 import { CrudController } from '../../crud/controllers/crud.controller';
 import { CrudFilter } from '../../crud/decorators/crud-filter.decorator';
@@ -34,6 +32,7 @@ export class ProductsController extends CrudController<Product, ProductsModel> {
     user: ['relatable'],
   })
   @ApiResponse({ isArray: true, type: Product })
+  @Public()
   @Get()
   async findAllController(
     @Req() req: RequestInterface,

@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { AuthModel, AuthTypeEnum, UserModel } from 'novatori/validators';
 import { Strategy, VerifyCallback } from 'passport-google-oauth2';
+import { AuthTypeEnum } from '../../../boiler-shared/src/validators/auth/enums/auth-type.enum';
+import { AuthModel } from '../../../boiler-shared/src/validators/auth/models/auth.model';
+import { UserModel } from '../../../boiler-shared/src/validators/user/user.model';
 import { googleOAuth2Config } from '../../../config/config';
 import { GoogleOauthUserInterface } from '../types/interfaces/google-oauth-user.interface';
 

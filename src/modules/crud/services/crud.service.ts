@@ -1,5 +1,5 @@
-import { BaseModel } from 'novatori/validators';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { BaseModel } from '../../../boiler-shared/src/validators/base/base.model';
 import { CrudServiceContract } from '../contracts/crud-service.contract';
 import { BaseEntity } from '../entities/base.entity';
 import { CrudRepository } from '../repositories/crud.repository';

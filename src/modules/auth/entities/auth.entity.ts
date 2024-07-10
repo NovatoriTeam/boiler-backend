@@ -1,5 +1,5 @@
-import { AuthTypeEnum } from 'novatori/validators';
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
+import { AuthTypeEnum } from '../../../boiler-shared/src/validators/auth/enums/auth-type.enum';
 import { BaseEntity } from '../../crud/entities/base.entity';
 import { User } from '../../users/entities/user.entity';
 

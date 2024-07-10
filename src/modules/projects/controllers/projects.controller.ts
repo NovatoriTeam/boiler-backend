@@ -1,6 +1,7 @@
 import { Controller, Delete, Get, Param, Post, Put, Req } from '@nestjs/common';
-import { CreateProjectDto, UpdateProjectDto } from 'novatori/validators';
-import { ProjectModel } from 'novatori/validators';
+import { CreateProjectDto } from '../../../boiler-shared/src/validators/projects/create-project.dto';
+import { ProjectModel } from '../../../boiler-shared/src/validators/projects/models/project.model';
+import { UpdateProjectDto } from '../../../boiler-shared/src/validators/projects/update-project.dto';
 import { Public } from '../../auth/decorators/public.decorator';
 import { CrudController } from '../../crud/controllers/crud.controller';
 import { CrudFilter } from '../../crud/decorators/crud-filter.decorator';
