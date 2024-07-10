@@ -13,13 +13,11 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       clientSecret: googleOAuth2Config.clientSecret,
       callbackURL: googleOAuth2Config.callbackUrl,
       scope: ['profile', 'email'],
-      passReqToCallback: true,
     });
   }
 
   async validate(
-    req: Request,
-    _accessToken: string,
+    accessToken: string,
     _refreshToken: string,
     profile: GoogleOauthUserInterface,
     done: VerifyCallback,
@@ -33,10 +31,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     const auth = new AuthModel();
     auth.type = AuthTypeEnum.Google;
     auth.identifier = profile.id;
-    auth.metadata = { email: emails[0].value };
+    auth.metadata = { email: emails[0].value, accessToken };
 
     user.auths = [auth];
-
     done(null, { data: user, link: false });
   }
 }

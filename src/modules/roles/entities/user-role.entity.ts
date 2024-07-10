@@ -1,4 +1,4 @@
-import { RoleEnum } from 'novatori/validators/roles/enums/role.enum';
+import { RoleEnum } from 'novatori/validators';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../crud/entities/base.entity';
 import { User } from '../../users/entities/user.entity';

@@ -20,12 +20,13 @@ export class GoogleLinkStrategy extends PassportStrategy(
   }
 
   async validate(
-    _accessToken: string,
+    accessToken: string,
     _refreshToken: string,
     profile: GoogleOauthUserInterface,
     done: VerifyCallback,
   ): Promise<void> {
     const { emails, name } = profile;
+
     const user = new UserModel();
     user.firstName = name.givenName;
     user.lastName = name.familyName;
@@ -33,7 +34,7 @@ export class GoogleLinkStrategy extends PassportStrategy(
     const auth = new AuthModel();
     auth.type = AuthTypeEnum.Google;
     auth.identifier = profile.id;
-    auth.metadata = { email: emails[0].value };
+    auth.metadata = { email: emails[0].value, accessToken };
 
     user.auths = [auth];
 
