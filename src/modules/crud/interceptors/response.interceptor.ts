@@ -18,7 +18,7 @@ export class ResponseInterceptor implements NestInterceptor {
   private transformData(result: unknown): ResponseInterface {
     baseEntityChecker(result?.[0] ?? result);
 
-    const data: unknown = result[0] ?? result;
+    const data: unknown = result?.[0] ?? result;
     const count: number = result?.[1];
 
     return {
