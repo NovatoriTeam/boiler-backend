@@ -1,0 +1,3 @@
+[submodule "boiler-shared"]
+	path = boiler-shared
+	url = git@github.com:NovatoriTeam/boiler-shared.git
