@@ -16,10 +16,12 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     });
   }
 
-  protected performUserValidation(
-    profile: GoogleOauthUserInterface,
+  async validate(
     accessToken: string,
-  ): UserModel {
+    _refreshToken: string,
+    profile: GoogleOauthUserInterface,
+    done: VerifyCallback,
+  ): Promise<void> {
     const { emails, name } = profile;
 
     const user = new UserModel();
@@ -32,17 +34,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     auth.metadata = { email: emails[0].value, accessToken };
 
     user.auths = [auth];
-
-    return user;
-  }
-
-  async validate(
-    accessToken: string,
-    _refreshToken: string,
-    profile: GoogleOauthUserInterface,
-    done: VerifyCallback,
-  ): Promise<void> {
-    const user = this.performUserValidation(profile, accessToken);
     done(null, { data: user, link: false });
   }
 }
