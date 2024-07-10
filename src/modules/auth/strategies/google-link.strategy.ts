@@ -1,41 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { PassportStrategy } from '@nestjs/passport';
-import { AuthModel, AuthTypeEnum, UserModel } from 'novatori/validators';
-import { Strategy, VerifyCallback } from 'passport-google-oauth2';
-import { googleOAuth2Config } from '../../../config/config';
+import { VerifyCallback } from 'passport-google-oauth2';
 import { GoogleOauthUserInterface } from '../types/interfaces/google-oauth-user.interface';
+import { GoogleStrategy } from './google.strategy';
 
 @Injectable()
-export class GoogleLinkStrategy extends PassportStrategy(
-  Strategy,
-  'google-link',
-) {
-  constructor() {
-    super({
-      clientID: googleOAuth2Config.clientId,
-      clientSecret: googleOAuth2Config.clientSecret,
-      callbackURL: `${googleOAuth2Config.callbackUrl}/link`,
-      scope: ['profile', 'email'],
-    });
-  }
-
+export class GoogleLinkStrategy extends GoogleStrategy {
   async validate(
-    _accessToken: string,
+    accessToken: string,
     _refreshToken: string,
     profile: GoogleOauthUserInterface,
     done: VerifyCallback,
   ): Promise<void> {
-    const { emails, name } = profile;
-    const user = new UserModel();
-    user.firstName = name.givenName;
-    user.lastName = name.familyName;
-
-    const auth = new AuthModel();
-    auth.type = AuthTypeEnum.Google;
-    auth.identifier = profile.id;
-    auth.metadata = { email: emails[0].value };
-
-    user.auths = [auth];
+    const user = this.performUserValidation(profile, accessToken);
 
     done(null, { data: user, link: true });
   }

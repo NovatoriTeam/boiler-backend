@@ -272,6 +272,10 @@ export class AuthService {
       });
     }
 
-    res.redirect(redirectConfig.homePageUrl);
+    const urlSubResource = isAccountAlreadyInUse
+      ? '?error=Account is already in use'
+      : '';
+
+    res.redirect(redirectConfig.homePageUrl + urlSubResource);
   }
 }

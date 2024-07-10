@@ -8,7 +8,7 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { UserModel } from 'novatori/validators';
-import { RoleEnum } from 'novatori/validators/roles/enums/role.enum';
+import { RoleEnum } from 'novatori/validators';
 import { jwtConfig } from '../../../config/config';
 import { UsersRepository } from '../../users/repositories/users.repository';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
