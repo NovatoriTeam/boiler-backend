@@ -6,6 +6,7 @@ import { DatabaseConfigInterface } from './interfaces/database-config.interface'
 import { JwtConfigInterface } from './interfaces/jwt-config.interface';
 import { OAuthConfigInterface } from './interfaces/oauth-config.interface';
 import { RedirectConfigInterface } from './interfaces/redirect-config.interface';
+import { SteamOAuthConfig } from './interfaces/steam-oauth-config.interface';
 
 dotenv.config();
 
@@ -75,4 +76,10 @@ export const bnetOAuth2Config: OAuthConfigInterface = {
   clientSecret: process.env.BNET_CLIENT_SECRET,
   callbackUrl: process.env.BNET_CALLBACK_URL,
   redirectUrl: process.env.REDIRECT_URL,
+};
+
+export const steamOAuth2Config: SteamOAuthConfig = {
+  returnUrl: process.env.STEAM_CALLBACK_URL,
+  realm: process.env.STEAM_REALM,
+  apiKey: process.env.STEAM_API_KEY,
 };
