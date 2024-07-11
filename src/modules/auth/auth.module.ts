@@ -9,6 +9,7 @@ import { DiscordAuthController } from './controllers/discord-auth.controller';
 import { FacebookAuthController } from './controllers/facebook-auth.controller';
 import { GithubAuthController } from './controllers/github-auth.controller';
 import { GoogleAuthController } from './controllers/google-auth.controller';
+import { SteamAuthController } from './controllers/steam-auth.controller';
 import { Auth } from './entities/auth.entity';
 import { Refresh } from './entities/refresh.entity';
 import { AuthGuard } from './guards/auth.guard';
@@ -26,6 +27,8 @@ import { GithubLinkStrategy } from './strategies/github/github.strategy';
 import { GoogleLinkStrategy } from './strategies/google/google-link.strategy';
 import { GoogleStrategy } from './strategies/google/google.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
+import { SteamLinkStrategy } from './strategies/steam/steam-link.strategy';
+import { SteamStrategy } from './strategies/steam/steam.strategy';
 
 @Module({
   controllers: [
@@ -35,6 +38,7 @@ import { LocalStrategy } from './strategies/local.strategy';
     FacebookAuthController,
     GithubAuthController,
     BnetAuthController,
+    SteamAuthController,
   ],
   imports: [
     TypeOrmModule.forFeature([User, Refresh, Auth]),
@@ -56,6 +60,8 @@ import { LocalStrategy } from './strategies/local.strategy';
     BnetStrategy,
     BnetLinkStrategy,
     GithubLinkStrategy,
+    SteamStrategy,
+    SteamLinkStrategy,
     { provide: 'APP_GUARD', useClass: AuthGuard },
   ],
 })
