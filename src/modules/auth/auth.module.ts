@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SenderModule } from '../sender/sender.module';
 import { User } from '../users/entities/user.entity';
 import { UsersRepository } from '../users/repositories/users.repository';
 import { AuthController } from './controllers/auth.controller';
@@ -43,6 +44,7 @@ import { SteamStrategy } from './strategies/steam/steam.strategy';
   imports: [
     TypeOrmModule.forFeature([User, Refresh, Auth]),
     JwtModule.register({}),
+    SenderModule,
   ],
   providers: [
     AuthService,

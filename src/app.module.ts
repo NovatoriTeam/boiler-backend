@@ -12,6 +12,7 @@ import { EmployeesModule } from './modules/employees/employees.module';
 import { ProductsModule } from './modules/products/products.module';
 import { ProjectsModule } from './modules/projects/projects.module';
 import { RolesModule } from './modules/roles/roles.module';
+import { SenderModule } from './modules/sender/sender.module';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { UsersModule } from './modules/users/users.module';
 import { HttpExceptionFilter } from './shared/filters/http-exception.filter';
@@ -28,6 +29,7 @@ import { HttpExceptionFilter } from './shared/filters/http-exception.filter';
     ProjectsModule,
     DepartmentsModule,
     EmployeesModule,
+    SenderModule,
     ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [AppController],

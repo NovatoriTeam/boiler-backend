@@ -1,8 +1,10 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { User } from '../../users/entities/user.entity';
+import { UserModel } from 'novatori/validators';
 import { Public } from '../decorators/public.decorator';
 import { AuthResponseDto } from '../dtos/auth-response.dto';
+import { PhoneDto } from '../dtos/phone.dto';
 import { RegisterUserDto } from '../dtos/register-user.dto';
+import { VerifyOtpDto } from '../dtos/verify-otp.dto';
 import { UsernamePasswordAuthGuard } from '../guards/local.guard';
 import { RefreshGuard } from '../guards/refresh.guard';
 import { AuthService } from '../services/auth.service';
@@ -23,7 +25,9 @@ export class AuthController {
   @UseGuards(UsernamePasswordAuthGuard)
   @Public()
   @Post('login')
-  async login(@Req() req: RequestInterface<User>): Promise<AuthResponseDto> {
+  async login(
+    @Req() req: RequestInterface<UserModel>,
+  ): Promise<AuthResponseDto> {
     return await this.authService.login(req.user);
   }
 
@@ -34,5 +38,22 @@ export class AuthController {
     @Req() req: { user: { id: number }; refreshToken: string },
   ): Promise<AuthResponseDto> {
     return await this.authService.refreshToken(req.user.id, req.refreshToken);
+  }
+
+  @Public()
+  @Post('otp')
+  async sendOTP(@Body() phoneDto: PhoneDto): Promise<void> {
+    return await this.authService.sendOTP(phoneDto);
+  }
+
+  @Public()
+  @Post('verify-otp')
+  async verifyOtp(
+    @Body() verifyOtpDto: VerifyOtpDto,
+  ): Promise<AuthResponseDto> {
+    return await this.authService.verifyOtp(
+      verifyOtpDto.phone,
+      verifyOtpDto.otp,
+    );
   }
 }

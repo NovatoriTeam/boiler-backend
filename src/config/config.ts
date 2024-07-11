@@ -6,6 +6,7 @@ import { DatabaseConfigInterface } from './interfaces/database-config.interface'
 import { JwtConfigInterface } from './interfaces/jwt-config.interface';
 import { OAuthConfigInterface } from './interfaces/oauth-config.interface';
 import { RedirectConfigInterface } from './interfaces/redirect-config.interface';
+import { SenderConfigInterface } from './interfaces/sender-config.interface';
 import { SteamOAuthConfig } from './interfaces/steam-oauth-config.interface';
 
 dotenv.config();
@@ -82,4 +83,12 @@ export const steamOAuth2Config: SteamOAuthConfig = {
   returnUrl: process.env.STEAM_CALLBACK_URL,
   realm: process.env.STEAM_REALM,
   apiKey: process.env.STEAM_API_KEY,
+};
+
+export const senderConfig: SenderConfigInterface = {
+  apiKey: process.env.SENDER_API_KEY ?? '',
+  apiUrl: process.env.SENDER_API_URL ?? '',
+  twilioSecretId: process.env.TWILIO_SID ?? '',
+  twilioToken: process.env.TWILIO_TOKEN ?? '',
+  twilioVerificationServiceId: process.env.TWILIO_VSID ?? '',
 };
