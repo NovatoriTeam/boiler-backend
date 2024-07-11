@@ -1,10 +1,12 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { UserModel } from 'novatori/validators';
+import {
+  AuthResponseDto,
+  PhoneDto,
+  UserModel,
+  VerifyOtpDto,
+} from 'novatori/validators';
 import { Public } from '../decorators/public.decorator';
-import { AuthResponseDto } from '../dtos/auth-response.dto';
-import { PhoneDto } from '../dtos/phone.dto';
 import { RegisterUserDto } from '../dtos/register-user.dto';
-import { VerifyOtpDto } from '../dtos/verify-otp.dto';
 import { UsernamePasswordAuthGuard } from '../guards/local.guard';
 import { RefreshGuard } from '../guards/refresh.guard';
 import { AuthService } from '../services/auth.service';

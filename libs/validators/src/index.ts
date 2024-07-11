@@ -16,3 +16,6 @@ export * from './auth/models/auth.model';
 export * from './auth/enums/auth-type.enum';
 export * from './roles/enums/role.enum';
 export * from './roles/models/role.model';
+export * from './auth/auth-response.dto';
+export * from './auth/phone.dto';
+export * from './auth/verify-otp.dto';
