@@ -69,3 +69,10 @@ export const githubOAuth2Config: OAuthConfigInterface = {
   callbackUrl: process.env.GITHUB_CALLBACK_URL,
   redirectUrl: process.env.REDIRECT_URL,
 };
+
+export const bnetOAuth2Config: OAuthConfigInterface = {
+  clientId: process.env.BNET_CLIENT_ID,
+  clientSecret: process.env.BNET_CLIENT_SECRET,
+  callbackUrl: process.env.BNET_CALLBACK_URL,
+  redirectUrl: process.env.REDIRECT_URL,
+};

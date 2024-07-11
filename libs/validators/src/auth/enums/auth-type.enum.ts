@@ -4,4 +4,5 @@ export enum AuthTypeEnum {
   Discord = 'discord',
   Facebook = 'facebook',
   Github = 'github',
+  Bnet = 'bnet',
 }
