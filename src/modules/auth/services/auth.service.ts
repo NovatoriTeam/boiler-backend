@@ -8,7 +8,12 @@ import * as bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 import * as dayjs from 'dayjs';
 import { Response } from 'express';
-import { AuthTypeEnum, UserModel } from 'novatori/validators';
+import {
+  AuthResponseDto,
+  AuthTypeEnum,
+  PhoneDto,
+  UserModel,
+} from 'novatori/validators';
 import twilio from 'twilio';
 import {
   corsConfig,
@@ -22,8 +27,6 @@ import { cookieConstants } from '../../../shared/operational-constants/cookie-co
 import { SmsTypeEnum } from '../../sender/enums/sms-type.enum';
 import { SenderService } from '../../sender/sender.service';
 import { UsersRepository } from '../../users/repositories/users.repository';
-import { AuthResponseDto } from '../dtos/auth-response.dto';
-import { PhoneDto } from '../dtos/phone.dto';
 import { RegisterUserDto } from '../dtos/register-user.dto';
 import { Auth } from '../entities/auth.entity';
 import { Refresh } from '../entities/refresh.entity';
