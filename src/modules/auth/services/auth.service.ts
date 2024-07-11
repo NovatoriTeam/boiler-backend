@@ -1,17 +1,29 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 import * as dayjs from 'dayjs';
 import { Response } from 'express';
 import { AuthTypeEnum, UserModel } from 'novatori/validators';
-import { corsConfig, jwtConfig, redirectConfig } from '../../../config/config';
+import twilio from 'twilio';
+import {
+  corsConfig,
+  jwtConfig,
+  redirectConfig,
+  senderConfig,
+} from '../../../config/config';
 import { generateRandomString } from '../../../shared/helpers/generateRandomString/generate-random-string';
 import { hashString } from '../../../shared/helpers/hashString/hashString';
 import { cookieConstants } from '../../../shared/operational-constants/cookie-constants';
-import { User } from '../../users/entities/user.entity';
+import { SmsTypeEnum } from '../../sender/enums/sms-type.enum';
+import { SenderService } from '../../sender/sender.service';
 import { UsersRepository } from '../../users/repositories/users.repository';
 import { AuthResponseDto } from '../dtos/auth-response.dto';
+import { PhoneDto } from '../dtos/phone.dto';
 import { RegisterUserDto } from '../dtos/register-user.dto';
 import { Auth } from '../entities/auth.entity';
 import { Refresh } from '../entities/refresh.entity';
@@ -21,6 +33,7 @@ import { GenerateJwtTokenParamsInterface } from '../types/interfaces/generate-jw
 import { JwtPayloadInterface } from '../types/interfaces/jwt-payload.interface';
 import { ILocalAuthData } from '../types/interfaces/local-auth-data.interface';
 import { OAuthRequestInterface } from '../types/interfaces/o-auth-request-interface';
+import { IPhoneAuthData } from '../types/interfaces/phone-auth-data.interface';
 import { RefreshTokenInterface } from '../types/interfaces/refresh-token.interface';
 
 @Injectable()
@@ -30,6 +43,7 @@ export class AuthService {
     private refreshRepository: RefreshRepository,
     private authRepository: AuthRepository,
     private jwtService: JwtService,
+    private senderService: SenderService,
   ) {}
 
   async findOne(userId: number, refreshToken: string): Promise<Refresh> {
@@ -66,7 +80,7 @@ export class AuthService {
     );
   }
 
-  async login(user: User): Promise<AuthResponseDto> {
+  async login(user: UserModel): Promise<AuthResponseDto> {
     const { refreshToken } = await this.generateAndInsertRefreshToken(user.id);
 
     return this.generateAuthResponse(
@@ -276,5 +290,70 @@ export class AuthService {
       : '';
 
     res.redirect(redirectConfig.homePageUrl + urlSubResource);
+  }
+
+  async sendOTP(phoneDto: PhoneDto): Promise<void> {
+    const isGeorgian = phoneDto.phone.startsWith('995');
+    const phone = isGeorgian ? phoneDto.phone.slice(3) : phoneDto.phone;
+
+    const user = await this.usersRepository.findByAuthIdentifier(
+      AuthTypeEnum.Phone,
+      phone,
+    );
+
+    if (!user) throw new NotFoundException();
+
+    const otp = Math.floor(1000 + Math.random() * 9000);
+
+    await this.senderService.sendSms({
+      content: String(otp),
+      phone,
+      type: SmsTypeEnum.Information,
+      isGeorgian,
+    });
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedOtp = await bcrypt.hash(String(otp), salt);
+    await this.authRepository.setOTP(user.id, hashedOtp);
+  }
+
+  async verifyOtp(phone: string, otp: string): Promise<AuthResponseDto> {
+    const isGeorgian = phone.startsWith('995');
+
+    const user = await this.usersRepository.findByAuthIdentifier(
+      AuthTypeEnum.Phone,
+      isGeorgian ? phone.slice(3) : phone,
+    );
+
+    if (!user) throw new UnauthorizedException();
+
+    const isOtpSet = !!(user.getAuths()[0].metadata as IPhoneAuthData)?.otp;
+    const isOtpCorrect = isGeorgian
+      ? await bcrypt.compare(
+          otp,
+          String((user.getAuths()[0].metadata as IPhoneAuthData)?.otp),
+        )
+      : await this.checkTwilioOTP(phone, otp);
+
+    const isOtpVerified = isOtpSet && isOtpCorrect;
+
+    if (!isOtpVerified) {
+      throw new UnauthorizedException();
+    }
+
+    await this.authRepository.clearOTP(phone.slice(3));
+    return await this.login(user);
+  }
+
+  async checkTwilioOTP(phone: string, otp: string): Promise<boolean> {
+    const client = twilio(
+      senderConfig.twilioSecretId,
+      senderConfig.twilioToken,
+    );
+
+    const result = await client.verify.v2
+      .services(senderConfig.twilioVerificationServiceId)
+      .verificationChecks.create({ to: `+${phone}`, code: otp });
+    return result.status === 'approved';
   }
 }

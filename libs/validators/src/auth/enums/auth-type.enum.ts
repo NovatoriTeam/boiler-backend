@@ -6,4 +6,5 @@ export enum AuthTypeEnum {
   Github = 'github',
   Bnet = 'bnet',
   Steam = 'steam',
+  Phone = 'phone',
 }
