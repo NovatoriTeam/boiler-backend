@@ -3,5 +3,5 @@ export interface SenderConfigInterface {
   readonly apiUrl: string;
   readonly twilioSecretId: string;
   readonly twilioToken: string;
-  twilioVerificationServiceId: string;
+  readonly twilioVerificationServiceId: string;
 }
