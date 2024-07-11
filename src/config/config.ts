@@ -62,3 +62,17 @@ export const redirectConfig: RedirectConfigInterface = {
   homePageUrl: process.env.HOME_PAGE_URL ?? '',
   accountLinkingPageUrl: process.env.ACCOUNT_LINKING_PAGE_URL ?? '',
 };
+
+export const githubOAuth2Config: OAuthConfigInterface = {
+  clientId: process.env.GITHUB_CLIENT_ID,
+  clientSecret: process.env.GITHUB_CLIENT_SECRET,
+  callbackUrl: process.env.GITHUB_CALLBACK_URL,
+  redirectUrl: process.env.REDIRECT_URL,
+};
+
+export const bnetOAuth2Config: OAuthConfigInterface = {
+  clientId: process.env.BNET_CLIENT_ID,
+  clientSecret: process.env.BNET_CLIENT_SECRET,
+  callbackUrl: process.env.BNET_CALLBACK_URL,
+  redirectUrl: process.env.REDIRECT_URL,
+};
