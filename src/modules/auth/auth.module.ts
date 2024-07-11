@@ -6,6 +6,7 @@ import { UsersRepository } from '../users/repositories/users.repository';
 import { AuthController } from './controllers/auth.controller';
 import { DiscordAuthController } from './controllers/discord-auth.controller';
 import { FacebookAuthController } from './controllers/facebook-auth.controller';
+import { GithubAuthController } from './controllers/github-auth.controller';
 import { GoogleAuthController } from './controllers/google-auth.controller';
 import { Auth } from './entities/auth.entity';
 import { Refresh } from './entities/refresh.entity';
@@ -17,6 +18,8 @@ import { DiscordLinkStrategy } from './strategies/discord/discord-link.strategy'
 import { DiscordStrategy } from './strategies/discord/discord.strategy';
 import { FacebookLinkStrategy } from './strategies/facebook/facebook-link.strategy';
 import { FacebookStrategy } from './strategies/facebook/facebook.strategy';
+import { GithubStrategy } from './strategies/github/github-link.strategy';
+import { GithubLinkStrategy } from './strategies/github/github.strategy';
 import { GoogleLinkStrategy } from './strategies/google/google-link.strategy';
 import { GoogleStrategy } from './strategies/google/google.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
@@ -27,6 +30,7 @@ import { LocalStrategy } from './strategies/local.strategy';
     GoogleAuthController,
     DiscordAuthController,
     FacebookAuthController,
+    GithubAuthController,
   ],
   imports: [
     TypeOrmModule.forFeature([User, Refresh, Auth]),
@@ -44,6 +48,8 @@ import { LocalStrategy } from './strategies/local.strategy';
     DiscordStrategy,
     DiscordLinkStrategy,
     FacebookStrategy,
+    GithubStrategy,
+    GithubLinkStrategy,
     { provide: 'APP_GUARD', useClass: AuthGuard },
   ],
 })
