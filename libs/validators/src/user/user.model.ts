@@ -1,6 +1,7 @@
 import { Expose, Type } from 'class-transformer';
-import { AuthModel, RoleModel } from 'novatori/validators';
+import { AuthModel } from '../auth/models/auth.model';
 import { BaseModel } from '../base/base.model';
+import { RoleModel } from '../roles/models/role.model';
 
 export class UserModel extends BaseModel {
   @Expose()

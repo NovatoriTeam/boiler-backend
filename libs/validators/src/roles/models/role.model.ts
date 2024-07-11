@@ -1,6 +1,7 @@
 import { Expose, Type } from 'class-transformer';
-import { BaseModel, UserModel } from 'novatori/validators';
-import { RoleEnum } from 'novatori/validators';
+import { BaseModel } from '../../base/base.model';
+import { RoleEnum } from '../../roles/enums/role.enum';
+import { UserModel } from '../../user/user.model';
 
 export class RoleModel extends BaseModel {
   @Expose()

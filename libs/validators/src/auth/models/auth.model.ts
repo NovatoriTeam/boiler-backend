@@ -1,6 +1,7 @@
 import { Expose, Type } from 'class-transformer';
-import { BaseModel, UserModel } from 'novatori/validators';
-import { AuthTypeEnum } from 'novatori/validators';
+import { AuthTypeEnum } from '../../auth/enums/auth-type.enum';
+import { BaseModel } from '../../base/base.model';
+import { UserModel } from '../../user/user.model';
 
 export class AuthModel extends BaseModel {
   @Expose()
