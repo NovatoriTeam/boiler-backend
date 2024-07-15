@@ -7,8 +7,6 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
-import * as session from 'express-session';
-import * as passport from 'passport';
 import { AppModule } from './app.module';
 import { corsConfig } from './config/config';
 import { ResponseInterceptor } from './modules/crud/interceptors/response.interceptor';
@@ -41,19 +39,6 @@ async function bootstrap(): Promise<void> {
 
   const document: OpenAPIObject = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-
-  app.use(
-    session({
-      secret: 'your-secret-key', // Replace with a strong secret key
-      resave: false,
-      saveUninitialized: false,
-      cookie: { secure: false }, // Set to true if using HTTPS
-    }),
-  );
-
-  // Initialize Passport and restore authentication state, if any, from the session.
-  app.use(passport.initialize());
-  app.use(passport.session());
 
   await app.listen(3001);
 }

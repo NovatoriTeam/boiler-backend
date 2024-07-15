@@ -14,8 +14,13 @@ export class BnetStrategy extends PassportStrategy(Strategy, 'bnet') {
       clientSecret: bnetOAuth2Config.clientSecret,
       callbackURL: bnetOAuth2Config.callbackUrl,
       scope: ['openid'],
-      state: 'bnet',
     });
+  }
+
+  authorizationParams(): { state: string } {
+    return {
+      state: 'bnet',
+    };
   }
 
   async validate(
